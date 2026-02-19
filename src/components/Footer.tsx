@@ -9,7 +9,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="space-y-4">
-            <img src={logo} alt="Pro-Bikers" className="h-8 brightness-0 invert" />
+            <img src={logo} alt="Pro-Bikers" className="h-8" />
             <p className="text-hero-foreground/60 text-sm font-body leading-relaxed">
               Your Friendly Neighbourhood Bike Shop. Premium cycling experience since 1975.
             </p>
