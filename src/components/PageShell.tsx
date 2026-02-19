@@ -7,9 +7,9 @@ interface PageShellProps {
 }
 
 const PageShell = ({ children }: PageShellProps) => (
-  <div className="min-h-screen">
+  <div className="min-h-screen bg-background">
     <Header />
-    <main className="pt-24">{children}</main>
+    <main className="pt-20 lg:pt-24">{children}</main>
     <Footer />
     <WhatsAppButton />
   </div>

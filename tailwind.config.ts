@@ -9,13 +9,31 @@ export default {
       center: true,
       padding: "2rem",
       screens: {
-        "2xl": "1400px",
+        "2xl": "1280px",
       },
     },
     extend: {
       fontFamily: {
-        heading: ['Montserrat', 'sans-serif'],
-        body: ['Inter', 'sans-serif'],
+        heading: ["Montserrat", "sans-serif"],
+        body: ["Inter", "sans-serif"],
+        micro: ["DM Sans", "sans-serif"],
+      },
+      fontSize: {
+        "hero": ["4.5rem", { lineHeight: "1.1", fontWeight: "800" }],
+        "hero-md": ["3.5rem", { lineHeight: "1.1", fontWeight: "800" }],
+        "hero-sm": ["2.5rem", { lineHeight: "1.1", fontWeight: "800" }],
+        "section": ["3rem", { lineHeight: "1.15", fontWeight: "700" }],
+        "section-sm": ["2rem", { lineHeight: "1.2", fontWeight: "700" }],
+        "h3": ["1.75rem", { lineHeight: "1.3", fontWeight: "600" }],
+        "body": ["1rem", { lineHeight: "1.6", fontWeight: "400" }],
+        "small": ["0.8125rem", { lineHeight: "1.5", fontWeight: "400" }],
+      },
+      spacing: {
+        "xs": "0.5rem",
+        "sm-space": "1rem",
+        "md-space": "2rem",
+        "lg-space": "4rem",
+        "xl-space": "7.5rem",
       },
       colors: {
         border: "hsl(var(--border))",
@@ -82,24 +100,19 @@ export default {
           to: { height: "0" },
         },
         "fade-in-up": {
-          from: { opacity: "0", transform: "translateY(30px)" },
+          from: { opacity: "0", transform: "translateY(20px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
         "fade-in": {
           from: { opacity: "0" },
           to: { opacity: "1" },
         },
-        "slide-in-right": {
-          from: { opacity: "0", transform: "translateX(30px)" },
-          to: { opacity: "1", transform: "translateX(0)" },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-in-up": "fade-in-up 0.8s ease-out forwards",
-        "fade-in": "fade-in 0.6s ease-out forwards",
-        "slide-in-right": "slide-in-right 0.6s ease-out forwards",
+        "fade-in-up": "fade-in-up 0.6s cubic-bezier(0.4,0,0.2,1) forwards",
+        "fade-in": "fade-in 0.4s cubic-bezier(0.4,0,0.2,1) forwards",
       },
     },
   },
