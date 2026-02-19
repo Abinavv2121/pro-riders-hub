@@ -1,21 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Search, ShoppingBag, User, ChevronDown } from "lucide-react";
+import { Menu, X, Search, ShoppingBag, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "@/assets/logo.png";
 
 const navLinks = [
-  {
-    label: "Bikes",
-    href: "/shop",
-    megaMenu: [
-      { label: "Road Bikes", href: "/shop/road" },
-      { label: "Mountain Bikes", href: "/shop/mtb" },
-      { label: "Hybrid Bikes", href: "/shop/hybrid" },
-      { label: "Kids Bikes", href: "/shop/kids" },
-      { label: "Pre-Owned", href: "/pre-owned" },
-    ],
-  },
+  { label: "Bikes", href: "/shop" },
   { label: "Brands", href: "/brands" },
   { label: "Services", href: "/services" },
   { label: "Community", href: "/community" },
@@ -26,7 +16,7 @@ const navLinks = [
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  
   const location = useLocation();
   const isHome = location.pathname === "/";
 
@@ -38,7 +28,6 @@ const Header = () => {
 
   useEffect(() => {
     setMobileOpen(false);
-    setActiveMenu(null);
   }, [location]);
 
   const headerBg = scrolled
@@ -80,43 +69,13 @@ const Header = () => {
           {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
-              <div
+              <Link
                 key={link.label}
-                className="relative"
-                onMouseEnter={() => link.megaMenu && setActiveMenu(link.label)}
-                onMouseLeave={() => setActiveMenu(null)}
+                to={link.href}
+                className="px-4 py-2 text-sm font-medium text-hero-foreground/80 hover:text-hero-foreground transition-colors uppercase tracking-wider font-heading"
               >
-                <Link
-                  to={link.href}
-                  className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-hero-foreground/80 hover:text-hero-foreground transition-colors uppercase tracking-wider font-heading"
-                >
-                  {link.label}
-                  {link.megaMenu && <ChevronDown className="w-3 h-3" />}
-                </Link>
-
-                {/* Mega menu dropdown */}
-                <AnimatePresence>
-                  {link.megaMenu && activeMenu === link.label && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 8 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute top-full left-0 bg-hero-bg/95 backdrop-blur-md border border-hero-foreground/10 rounded-sm min-w-[200px] py-2"
-                    >
-                      {link.megaMenu.map((item) => (
-                        <Link
-                          key={item.label}
-                          to={item.href}
-                          className="block px-5 py-2.5 text-sm text-hero-foreground/70 hover:text-hero-foreground hover:bg-hero-foreground/5 transition-colors font-body"
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                {link.label}
+              </Link>
             ))}
           </nav>
 
@@ -155,27 +114,13 @@ const Header = () => {
           >
             <nav className="container mx-auto px-6 py-4 space-y-1">
               {navLinks.map((link) => (
-                <div key={link.label}>
-                  <Link
-                    to={link.href}
-                    className="block py-3 text-hero-foreground/80 hover:text-hero-foreground text-base font-medium uppercase tracking-wider font-heading border-b border-hero-foreground/5"
-                  >
-                    {link.label}
-                  </Link>
-                  {link.megaMenu && (
-                    <div className="pl-4 space-y-0">
-                      {link.megaMenu.map((item) => (
-                        <Link
-                          key={item.label}
-                          to={item.href}
-                          className="block py-2 text-sm text-hero-foreground/50 hover:text-hero-foreground font-body"
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  className="block py-3 text-hero-foreground/80 hover:text-hero-foreground text-base font-medium uppercase tracking-wider font-heading border-b border-hero-foreground/5"
+                >
+                  {link.label}
+                </Link>
               ))}
             </nav>
           </motion.div>
