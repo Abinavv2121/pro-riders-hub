@@ -14,39 +14,37 @@ const services = [
 
 const Services = () => (
   <PageShell>
-    {/* Hero */}
     <section className="relative h-[50vh] flex items-center overflow-hidden">
       <div className="absolute inset-0">
         <img src={serviceFitting} alt="Bike servicing" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-hero-bg/70" />
+        <div className="absolute inset-0 bg-background/70" />
       </div>
-      <div className="relative z-10 container mx-auto px-6">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
+      <div className="relative z-10 container mx-auto px-5 md:px-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <p className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">Expert Services</p>
-          <h1 className="font-heading font-bold text-hero-foreground text-4xl md:text-6xl mb-4">Workshop & Services</h1>
-          <p className="text-hero-foreground/60 font-body text-lg max-w-xl">Precision engineering meets decades of expertise. Every bike deserves expert care.</p>
+          <h1 className="font-heading text-hero-sm md:text-section text-foreground mb-4">Workshop & Services</h1>
+          <p className="text-muted-foreground font-body text-body max-w-xl">Precision engineering meets decades of expertise. Every bike deserves expert care.</p>
         </motion.div>
       </div>
     </section>
 
-    {/* Services grid */}
-    <section className="container mx-auto px-6 py-20">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <section className="container mx-auto px-5 md:px-8 space-section">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {services.map((s, i) => (
           <motion.div
             key={s.title}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: i * 0.1 }}
-            className="p-8 border border-border rounded-sm hover:shadow-xl hover:border-primary/20 transition-all duration-300 group"
+            transition={{ delay: i * 0.08, duration: 0.4 }}
+            className="p-8 border border-border rounded-lg hover:border-primary/20 transition-all duration-200 group"
           >
-            <s.icon className="w-10 h-10 text-primary mb-5 group-hover:scale-110 transition-transform" />
-            <h3 className="font-heading font-bold text-foreground text-xl mb-3">{s.title}</h3>
-            <p className="text-muted-foreground font-body text-sm leading-relaxed mb-4">{s.description}</p>
+            <s.icon className="w-8 h-8 text-primary mb-5 group-hover:scale-110 transition-transform duration-200" />
+            <h3 className="font-heading font-bold text-foreground text-h3 mb-3">{s.title}</h3>
+            <p className="text-muted-foreground font-body text-small leading-relaxed mb-4">{s.description}</p>
             <div className="flex items-center justify-between">
               <span className="font-heading font-bold text-primary text-sm">{s.price}</span>
-              <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+              <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors duration-200" />
             </div>
           </motion.div>
         ))}
@@ -54,7 +52,7 @@ const Services = () => (
 
       <div className="text-center mt-16">
         <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer">
-          <Button variant="hero" size="lg" className="px-12">Book an Appointment</Button>
+          <Button size="lg">Book an Appointment</Button>
         </a>
       </div>
     </section>

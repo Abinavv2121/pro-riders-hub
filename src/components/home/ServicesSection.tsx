@@ -27,26 +27,27 @@ const services = [
 
 const ServicesSection = () => {
   return (
-    <section className="section-dark py-24">
-      <div className="container mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+    <section className="space-section">
+      <div className="container mx-auto px-5 md:px-8">
+        <div className="grid lg:grid-cols-2 gap-lg-space items-center">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
           >
             <p className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">Expert Services</p>
-            <h2 className="font-heading font-bold text-hero-foreground text-3xl md:text-5xl mb-6 leading-tight">
+            <h2 className="font-heading text-section-sm md:text-section text-foreground mb-6 leading-tight">
               More Than a Store.
               <br />
-              <span className="text-hero-foreground/50">A Workshop.</span>
+              <span className="text-muted-foreground">A Workshop.</span>
             </h2>
-            <p className="text-hero-foreground/60 font-body text-lg mb-8 max-w-lg">
+            <p className="text-muted-foreground font-body text-body mb-8 max-w-lg">
               Our team of certified mechanics brings decades of expertise to every bike that enters our workshop.
             </p>
             <Link
               to="/services"
-              className="inline-flex items-center gap-2 text-primary font-heading font-semibold text-sm uppercase tracking-wider hover:gap-3 transition-all"
+              className="inline-flex items-center gap-2 text-primary font-heading font-semibold text-small uppercase tracking-wider hover:gap-3 transition-all duration-200"
             >
               View All Services <ArrowRight className="w-4 h-4" />
             </Link>
@@ -59,14 +60,14 @@ const ServicesSection = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="p-6 border border-hero-foreground/10 rounded-sm hover:border-primary/30 transition-colors group"
+                transition={{ delay: i * 0.08, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                className="p-6 border border-border rounded-lg hover:border-primary/30 transition-all duration-200 group"
               >
-                <service.icon className="w-8 h-8 text-primary mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="font-heading font-bold text-hero-foreground text-base mb-2">
+                <service.icon className="w-7 h-7 text-primary mb-4 group-hover:scale-110 transition-transform duration-200" />
+                <h3 className="font-heading font-bold text-foreground text-base mb-2">
                   {service.title}
                 </h3>
-                <p className="text-hero-foreground/50 text-sm font-body leading-relaxed">
+                <p className="text-muted-foreground text-small font-body leading-relaxed">
                   {service.description}
                 </p>
               </motion.div>
