@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Search, ShoppingBag, Phone, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useCart } from "@/contexts/CartContext";
 import logo from "@/assets/logo.png";
 
 const navLinks = [
@@ -17,6 +18,7 @@ const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const { totalItems, setIsOpen } = useCart();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.7);
@@ -70,13 +72,11 @@ const Header = () => {
                   `}
                 >
                   {link.label}
-                  {/* Active cyan indicator */}
                   <span
                     className={`absolute bottom-0.5 left-1/2 -translate-x-1/2 h-px bg-primary transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]
                       ${isActive ? "w-4 opacity-100" : "w-0 opacity-0"}
                     `}
                   />
-                  {/* Hover underline grow from center */}
                   {!isActive && (
                     <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 h-px bg-foreground/40 w-0 opacity-0 group-hover:w-3 group-hover:opacity-60 transition-all duration-200" />
                   )}
@@ -90,9 +90,16 @@ const Header = () => {
             <button className="p-2 text-muted-foreground hover:text-foreground transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hidden sm:flex items-center justify-center hover:-translate-y-px hover:rotate-[-3deg] motion-reduce:hover:transform-none">
               <Search className="w-[18px] h-[18px]" />
             </button>
-            <button className="p-2 text-muted-foreground hover:text-foreground transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] relative flex items-center justify-center hover:-translate-y-px hover:rotate-[3deg] motion-reduce:hover:transform-none">
+            <button
+              onClick={() => setIsOpen(true)}
+              className="p-2 text-muted-foreground hover:text-foreground transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] relative flex items-center justify-center hover:-translate-y-px hover:rotate-[3deg] motion-reduce:hover:transform-none"
+            >
               <ShoppingBag className="w-[18px] h-[18px]" />
-              <span className="absolute top-0.5 right-0.5 w-3.5 h-3.5 bg-primary text-primary-foreground text-[9px] font-bold rounded-full flex items-center justify-center">0</span>
+              {totalItems > 0 && (
+                <span className="absolute top-0.5 right-0.5 w-3.5 h-3.5 bg-primary text-primary-foreground text-[9px] font-bold rounded-full flex items-center justify-center">
+                  {totalItems > 9 ? "9+" : totalItems}
+                </span>
+              )}
             </button>
             <button
               className="lg:hidden p-2 text-foreground z-50 relative flex items-center justify-center"

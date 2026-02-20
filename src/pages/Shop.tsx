@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { SlidersHorizontal, ShoppingBag } from "lucide-react";
 import PageShell from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/contexts/CartContext";
 
 import argon18 from "@/assets/bikes/argon18-nitrogen.png";
 import lapierre from "@/assets/bikes/lapierre-aircode-drs.png";
@@ -31,6 +32,7 @@ const categories = [
 const Shop = () => {
   const { category: routeCategory } = useParams();
   const [activeCategory, setActiveCategory] = useState(routeCategory || "all");
+  const { addItem } = useCart();
 
   const filtered = activeCategory === "all" ? bikes : bikes.filter((b) => b.category === activeCategory);
 
@@ -114,17 +116,18 @@ const Shop = () => {
                     <span>Size: {bike.size}</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Button size="sm" className="flex-1 text-xs">
-                      Enquire Now
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      size="icon"
-                      className="h-10 w-10"
-                    >
-                      <ShoppingBag className="w-4 h-4" />
-                    </Button>
-                  </div>
+                     <Button size="sm" className="flex-1 text-xs">
+                       Enquire Now
+                     </Button>
+                     <Button
+                       variant="secondary"
+                       size="icon"
+                       className="h-10 w-10"
+                       onClick={() => addItem({ id: bike.id, name: bike.name, brand: bike.brand, image: bike.image, color: bike.color, size: bike.size })}
+                     >
+                       <ShoppingBag className="w-4 h-4" />
+                     </Button>
+                   </div>
                 </div>
               </motion.div>
             ))}
