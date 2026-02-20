@@ -26,10 +26,6 @@ const HeroSection = () => {
         <div className="grid lg:grid-cols-2 gap-lg-space items-center min-h-screen py-32">
           {/* Left — Content Stack */}
           <div>
-            <ScrollReveal as="p" scanline delay={0.1} className="text-primary font-heading font-semibold tracking-[0.3em] uppercase text-small mb-6">
-              Est. 1975 — Chennai, India
-            </ScrollReveal>
-
             <ScrollReveal as="h1" mask delay={0.2} className="font-heading font-black text-foreground text-hero-sm md:text-hero-md lg:text-hero leading-[1.05] mb-6">
               PRECISION
               <br />
@@ -76,10 +72,7 @@ const HeroSection = () => {
                 transition={{ delay: 0.55, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
               >
                 <Link to="/shop">
-                  <Button size="lg" className="group relative overflow-hidden">
-                    <span className="relative z-10">Shop Bikes</span>
-                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
-                  </Button>
+                  <Button size="lg">Shop Bikes</Button>
                 </Link>
               </motion.div>
               <motion.div
@@ -89,10 +82,7 @@ const HeroSection = () => {
                 transition={{ delay: 0.65, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
               >
                 <Link to="/services">
-                  <Button variant="secondary" size="lg" className="group relative overflow-hidden">
-                    <span className="relative z-10">Our Services</span>
-                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
-                  </Button>
+                  <Button variant="secondary" size="lg">Our Services</Button>
                 </Link>
               </motion.div>
             </div>
