@@ -1,11 +1,24 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Instagram, Facebook, Youtube } from "lucide-react";
+import { motion } from "framer-motion";
 import logo from "@/assets/logo.png";
+
+const socialIcons = [
+  { Icon: Instagram, label: "Instagram" },
+  { Icon: Facebook, label: "Facebook" },
+  { Icon: Youtube, label: "YouTube" },
+];
 
 const Footer = () => {
   return (
     <footer className="border-t border-border bg-background">
-      <div className="container mx-auto px-5 md:px-8 py-16">
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+        className="container mx-auto px-5 md:px-8 py-16"
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="space-y-4">
@@ -14,10 +27,17 @@ const Footer = () => {
               Your Friendly Neighbourhood Bike Shop. Premium cycling experience since 1975.
             </p>
             <div className="flex gap-3 pt-2">
-              {[Instagram, Facebook, Youtube].map((Icon, i) => (
-                <a key={i} href="#" className="p-2 border border-border rounded-lg text-muted-foreground hover:text-primary hover:border-primary/30 transition-all duration-[240ms]">
+              {socialIcons.map(({ Icon, label }) => (
+                <motion.a
+                  key={label}
+                  href="#"
+                  aria-label={label}
+                  whileHover={{ y: -2, rotate: -3 }}
+                  transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+                  className="p-2 border border-border rounded-lg text-muted-foreground hover:text-primary hover:border-primary/30 transition-colors duration-[240ms]"
+                >
                   <Icon className="w-4 h-4" />
-                </a>
+                </motion.a>
               ))}
             </div>
           </div>
@@ -28,8 +48,9 @@ const Footer = () => {
             <ul className="space-y-2">
               {["Road Bikes", "Mountain Bikes", "Hybrid Bikes", "Pre-Owned", "Accessories", "Components"].map((item) => (
                 <li key={item}>
-                  <Link to="/shop" className="text-small text-muted-foreground hover:text-primary transition-colors duration-200 font-body">
+                  <Link to="/shop" className="text-small text-muted-foreground hover:text-primary transition-colors duration-200 font-body inline-block relative group">
                     {item}
+                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-px bg-primary w-0 group-hover:w-full transition-all duration-200" />
                   </Link>
                 </li>
               ))}
@@ -42,8 +63,9 @@ const Footer = () => {
             <ul className="space-y-2">
               {["Bike Fitting", "Servicing", "Suspension Tuning", "Custom Builds", "Pickup & Delivery"].map((item) => (
                 <li key={item}>
-                  <Link to="/services" className="text-small text-muted-foreground hover:text-primary transition-colors duration-200 font-body">
+                  <Link to="/services" className="text-small text-muted-foreground hover:text-primary transition-colors duration-200 font-body inline-block relative group">
                     {item}
+                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-px bg-primary w-0 group-hover:w-full transition-all duration-200" />
                   </Link>
                 </li>
               ))}
@@ -76,13 +98,14 @@ const Footer = () => {
           </p>
           <div className="flex gap-6">
             {["Privacy Policy", "Terms of Service", "Shipping", "Refund Policy"].map((item) => (
-              <Link key={item} to="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors duration-200 font-micro">
+              <Link key={item} to="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors duration-200 font-micro relative group inline-block">
                 {item}
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-px bg-foreground/40 w-0 group-hover:w-full transition-all duration-200" />
               </Link>
             ))}
           </div>
         </div>
-      </div>
+      </motion.div>
     </footer>
   );
 };

@@ -36,7 +36,7 @@ const TestimonialsSection = () => {
     <section className="space-section">
       <div className="container mx-auto px-5 md:px-8">
         <div className="text-center mb-16">
-          <ScrollReveal as="p" drift={8} className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">
+          <ScrollReveal as="p" scanline drift={8} className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">
             Testimonials
           </ScrollReveal>
           <ScrollReveal as="h2" delay={0.08} drift={12} className="font-heading text-section-sm md:text-section text-foreground">
@@ -49,7 +49,7 @@ const TestimonialsSection = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
           className="glass-card max-w-3xl mx-auto mb-8 p-8 md:p-10 rounded-lg"
         >
           <Quote className="w-8 h-8 text-primary/20 mb-4" />
@@ -63,11 +63,13 @@ const TestimonialsSection = () => {
           </p>
           <div className="flex items-center gap-4">
             {featured.avatar && (
-              <img
+              <motion.img
                 src={featured.avatar}
                 alt={featured.name}
                 className="w-12 h-12 rounded-full object-cover border-2 border-primary/20"
                 loading="lazy"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.2 }}
               />
             )}
             <div>
@@ -82,10 +84,10 @@ const TestimonialsSection = () => {
           {others.map((t, i) => (
             <motion.div
               key={t.name}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.08, duration: 0.4 }}
+              transition={{ delay: i * 0.1, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
               className="glass-card p-6 md:p-8 rounded-lg"
             >
               <Quote className="w-6 h-6 text-primary/20 mb-3" />

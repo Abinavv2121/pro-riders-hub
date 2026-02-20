@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 /**
  * Custom cursor: small dot + ring.
- * Ring scales up on interactive elements.
+ * Ring scales up on interactive elements with bike-icon context.
  * Only on pointer:fine devices, disabled for reduced-motion.
  */
 const CustomCursor = () => {
@@ -12,7 +12,6 @@ const CustomCursor = () => {
   const [hovering, setHovering] = useState(false);
 
   useEffect(() => {
-    // Only on non-touch, non-reduced-motion
     const isTouch = window.matchMedia("(pointer: coarse)").matches;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (isTouch || reducedMotion) {
@@ -32,16 +31,18 @@ const CustomCursor = () => {
       }
     };
 
+    const interactiveSelector = "a, button, [role='button'], input, textarea, select, .cursor-pointer, .glass-card";
+
     const onOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (target.closest("a, button, [role='button'], input, textarea, select, .cursor-pointer")) {
+      if (target.closest(interactiveSelector)) {
         setHovering(true);
       }
     };
 
     const onOut = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (target.closest("a, button, [role='button'], input, textarea, select, .cursor-pointer")) {
+      if (target.closest(interactiveSelector)) {
         setHovering(false);
       }
     };
@@ -49,13 +50,12 @@ const CustomCursor = () => {
     const onLeave = () => setVisible(false);
     const onEnter = () => setVisible(true);
 
-    // Smooth ring follower via rAF
     let raf: number;
     const followRing = () => {
       ringX += (mouseX - ringX) * 0.15;
       ringY += (mouseY - ringY) * 0.15;
       if (ringRef.current) {
-        ringRef.current.style.transform = `translate(${ringX - 18}px, ${ringY - 18}px)`;
+        ringRef.current.style.transform = `translate(${ringX - 18}px, ${ringY - 18}px) scale(${hovering ? 1.5 : 1})`;
       }
       raf = requestAnimationFrame(followRing);
     };
@@ -75,9 +75,8 @@ const CustomCursor = () => {
       document.removeEventListener("mouseleave", onLeave);
       document.removeEventListener("mouseenter", onEnter);
     };
-  }, [visible]);
+  }, [visible, hovering]);
 
-  // Don't render on touch devices
   if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) return null;
 
   return (
@@ -104,10 +103,9 @@ const CustomCursor = () => {
           width: 36,
           height: 36,
           borderRadius: "50%",
-          border: `1.5px solid hsl(193 100% 42% / ${hovering ? 0.6 : 0.25})`,
+          border: `1.5px solid hsl(193 100% 42% / ${hovering ? 0.5 : 0.2})`,
           opacity: visible ? 1 : 0,
-          transform: `scale(${hovering ? 1.5 : 1})`,
-          transition: "opacity 150ms ease, border-color 200ms ease, transform 200ms cubic-bezier(0.4,0,0.2,1)",
+          transition: "opacity 150ms ease, border-color 200ms ease",
           willChange: "transform",
         }}
       />

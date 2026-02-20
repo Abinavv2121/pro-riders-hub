@@ -42,7 +42,7 @@ const Header = () => {
           transition: "all 260ms cubic-bezier(0.4, 0, 0.2, 1)",
           transform: scrolled ? "scale(0.97)" : "scale(1)",
           background: scrolled
-            ? "hsl(var(--background) / 0.75)"
+            ? "hsl(var(--background) / 0.82)"
             : "hsl(var(--background) / 0.40)",
           backdropFilter: scrolled ? "blur(16px)" : "blur(24px)",
           WebkitBackdropFilter: scrolled ? "blur(16px)" : "blur(24px)",
@@ -70,12 +70,16 @@ const Header = () => {
                   `}
                 >
                   {link.label}
-                  {/* Active / hover indicator */}
+                  {/* Active cyan indicator */}
                   <span
                     className={`absolute bottom-0.5 left-1/2 -translate-x-1/2 h-px bg-primary transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]
-                      ${isActive ? "w-4 opacity-100" : "w-0 opacity-0 group-hover:w-3 group-hover:opacity-60"}
+                      ${isActive ? "w-4 opacity-100" : "w-0 opacity-0"}
                     `}
                   />
+                  {/* Hover underline grow from center */}
+                  {!isActive && (
+                    <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 h-px bg-foreground/40 w-0 opacity-0 group-hover:w-3 group-hover:opacity-60 transition-all duration-200" />
+                  )}
                 </Link>
               );
             })}
@@ -83,10 +87,10 @@ const Header = () => {
 
           {/* Right icons */}
           <div className="flex items-center gap-1">
-            <button className="p-2 text-muted-foreground hover:text-foreground hover:-translate-y-px transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hidden sm:flex items-center justify-center motion-reduce:hover:transform-none">
+            <button className="p-2 text-muted-foreground hover:text-foreground transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hidden sm:flex items-center justify-center hover:-translate-y-px hover:rotate-[-3deg] motion-reduce:hover:transform-none">
               <Search className="w-[18px] h-[18px]" />
             </button>
-            <button className="p-2 text-muted-foreground hover:text-foreground hover:-translate-y-px transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] relative flex items-center justify-center motion-reduce:hover:transform-none">
+            <button className="p-2 text-muted-foreground hover:text-foreground transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] relative flex items-center justify-center hover:-translate-y-px hover:rotate-[3deg] motion-reduce:hover:transform-none">
               <ShoppingBag className="w-[18px] h-[18px]" />
               <span className="absolute top-0.5 right-0.5 w-3.5 h-3.5 bg-primary text-primary-foreground text-[9px] font-bold rounded-full flex items-center justify-center">0</span>
             </button>
