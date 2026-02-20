@@ -1,34 +1,31 @@
 import { motion } from "framer-motion";
 import { Award } from "lucide-react";
+import ScrollReveal from "@/components/ScrollReveal";
 
 const GCNSection = () => {
   return (
     <section className="section-card space-section">
       <div className="container mx-auto px-5 md:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-          className="text-center mb-12"
-        >
-          <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-4 py-1.5 mb-6">
-            <Award className="w-4 h-4 text-primary" />
-            <span className="text-primary text-xs uppercase tracking-widest font-heading font-bold">
-              Global Recognition
-            </span>
-          </div>
-          <h2 className="font-heading text-section-sm md:text-section text-foreground mb-4">
+        <div className="text-center mb-12">
+          <ScrollReveal delay={0} drift={8}>
+            <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-4 py-1.5 mb-6">
+              <Award className="w-4 h-4 text-primary" />
+              <span className="text-primary text-xs uppercase tracking-widest font-heading font-bold">
+                Global Recognition
+              </span>
+            </div>
+          </ScrollReveal>
+          <ScrollReveal as="h2" delay={0.08} drift={12} className="font-heading text-section-sm md:text-section text-foreground mb-4">
             Global Recognition for Excellence!
-          </h2>
-          <p className="text-muted-foreground font-body text-body max-w-2xl mx-auto">
+          </ScrollReveal>
+          <ScrollReveal as="p" delay={0.16} drift={10} className="text-muted-foreground font-body text-body max-w-2xl mx-auto">
             Pro-Bikers proudly holds the title of{" "}
             <span className="text-primary font-semibold">
               The Best Bike Shop in the World
             </span>
             , awarded by GCN! 🌍🚴‍♀️
-          </p>
-        </motion.div>
+          </ScrollReveal>
+        </div>
 
         <motion.div
           initial={{ opacity: 0, scale: 0.97 }}

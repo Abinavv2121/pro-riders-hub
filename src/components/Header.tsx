@@ -19,8 +19,9 @@ const Header = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", onScroll);
+    const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.7);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -36,11 +37,19 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 px-4 md:px-6 pt-4">
       <div
-        className={`container mx-auto rounded-2xl transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
-          bg-background/40 backdrop-blur-xl border border-border/30
-          shadow-[0_2px_20px_-4px_rgba(0,0,0,0.4)]
-          ${scrolled ? "bg-background/60 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.5)]" : ""}
-        `}
+        className="container mx-auto rounded-2xl border border-border/30 motion-reduce:transition-none"
+        style={{
+          transition: "all 260ms cubic-bezier(0.4, 0, 0.2, 1)",
+          transform: scrolled ? "scale(0.97)" : "scale(1)",
+          background: scrolled
+            ? "hsl(var(--background) / 0.75)"
+            : "hsl(var(--background) / 0.40)",
+          backdropFilter: scrolled ? "blur(16px)" : "blur(24px)",
+          WebkitBackdropFilter: scrolled ? "blur(16px)" : "blur(24px)",
+          boxShadow: scrolled
+            ? "0 2px 12px -2px rgba(0,0,0,0.6)"
+            : "0 2px 20px -4px rgba(0,0,0,0.4)",
+        }}
       >
         <div className="flex items-center justify-between h-14 lg:h-16 px-5 lg:px-6">
           {/* Logo */}

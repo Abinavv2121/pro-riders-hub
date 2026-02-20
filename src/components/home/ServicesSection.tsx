@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Wrench, Ruler, Settings, Bike, ArrowRight } from "lucide-react";
+import ScrollReveal from "@/components/ScrollReveal";
 
 const services = [
   {
@@ -30,28 +31,25 @@ const ServicesSection = () => {
     <section className="space-section">
       <div className="container mx-auto px-5 md:px-8">
         <div className="grid lg:grid-cols-2 gap-lg-space items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-          >
-            <p className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">Expert Services</p>
-            <h2 className="font-heading text-section-sm md:text-section text-foreground mb-6 leading-tight">
+          <div>
+            <ScrollReveal as="p" drift={8} className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">Expert Services</ScrollReveal>
+            <ScrollReveal as="h2" delay={0.08} drift={14} className="font-heading text-section-sm md:text-section text-foreground mb-6 leading-tight">
               More Than a Store.
               <br />
               <span className="text-muted-foreground">A Workshop.</span>
-            </h2>
-            <p className="text-muted-foreground font-body text-body mb-8 max-w-lg">
+            </ScrollReveal>
+            <ScrollReveal as="p" delay={0.16} drift={10} className="text-muted-foreground font-body text-body mb-8 max-w-lg">
               Our team of certified mechanics brings decades of expertise to every bike that enters our workshop.
-            </p>
-            <Link
-              to="/services"
-              className="inline-flex items-center gap-2 text-primary font-heading font-semibold text-small uppercase tracking-wider hover:gap-3 transition-all duration-200"
-            >
-              View All Services <ArrowRight className="w-4 h-4" />
-            </Link>
-          </motion.div>
+            </ScrollReveal>
+            <ScrollReveal delay={0.24} drift={10}>
+              <Link
+                to="/services"
+                className="inline-flex items-center gap-2 text-primary font-heading font-semibold text-small uppercase tracking-wider hover:gap-3 transition-all duration-200"
+              >
+                View All Services <ArrowRight className="w-4 h-4" />
+              </Link>
+            </ScrollReveal>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {services.map((service, i) => (
