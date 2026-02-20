@@ -12,18 +12,29 @@ import scottLogo from "@/assets/brands/scott.jpeg";
 import bianchiLogo from "@/assets/brands/bianchi.jpeg";
 import bmcLogo from "@/assets/brands/bmc.jpeg";
 
-const brands = [
-  { name: "Lapierre", logo: lapierreLogo, scale: 1.0, plate: false },
-  { name: "Giant", logo: giantLogo, scale: 0.94, plate: true },
-  { name: "Trek", logo: trekLogo, scale: 0.96, plate: true },
-  { name: "Argon 18", logo: argon18Logo, scale: 1.08, plate: false },
-  { name: "Avanti", logo: avantiLogo, scale: 1.0, plate: false },
-  { name: "Specialized", logo: specializedLogo, scale: 0.93, plate: true },
-  { name: "Cannondale", logo: cannondaleLogo, scale: 0.95, plate: true },
-  { name: "Scott", logo: scottLogo, scale: 1.0, plate: false },
-  { name: "Bianchi", logo: bianchiLogo, scale: 1.05, plate: true },
-  { name: "BMC", logo: bmcLogo, scale: 0.94, plate: true },
+// Bucket A: Wide wordmarks — max-h 47%, max-w 85%
+// Bucket B: Medium/balanced — max-h 55%, max-w 76%
+// Bucket C: Compact/mark-heavy — max-h 63%, max-w 73%
+type Bucket = "A" | "B" | "C";
+
+const brands: { name: string; logo: string; bucket: Bucket; plate: boolean }[] = [
+  { name: "Lapierre", logo: lapierreLogo, bucket: "A", plate: false },
+  { name: "Giant", logo: giantLogo, bucket: "B", plate: true },
+  { name: "Trek", logo: trekLogo, bucket: "A", plate: true },
+  { name: "Argon 18", logo: argon18Logo, bucket: "A", plate: false },
+  { name: "Avanti", logo: avantiLogo, bucket: "B", plate: false },
+  { name: "Specialized", logo: specializedLogo, bucket: "A", plate: true },
+  { name: "Cannondale", logo: cannondaleLogo, bucket: "A", plate: true },
+  { name: "Scott", logo: scottLogo, bucket: "B", plate: false },
+  { name: "Bianchi", logo: bianchiLogo, bucket: "C", plate: true },
+  { name: "BMC", logo: bmcLogo, bucket: "A", plate: true },
 ];
+
+const bucketStyles: Record<Bucket, string> = {
+  A: "max-h-[47%] max-w-[85%]",
+  B: "max-h-[55%] max-w-[76%]",
+  C: "max-h-[63%] max-w-[73%]",
+};
 
 const BrandTile = ({ brand, i }: { brand: typeof brands[number]; i: number }) => {
   return (
@@ -38,20 +49,19 @@ const BrandTile = ({ brand, i }: { brand: typeof brands[number]; i: number }) =>
       {/* Logo wrap – consistent padding & centering */}
       <div className="flex items-center justify-center w-full h-full p-5">
         <div
-          className={`flex items-center justify-center w-[78%] h-[56%] ${
+          className={`flex items-center justify-center ${
             brand.plate
-              ? "bg-[#f3f4f6]/[0.92] rounded-md shadow-[0_1px_4px_rgba(0,0,0,0.08)]"
+              ? "bg-[#f3f4f6]/[0.92] rounded-md shadow-[0_1px_4px_rgba(0,0,0,0.08)] p-2"
               : ""
           }`}
-          style={{ padding: brand.plate ? "8px" : undefined }}
         >
           <img
             src={brand.logo}
             alt={brand.name}
-            className="w-full h-full object-contain transition-[filter,opacity] duration-[240ms] ease-out
+            className={`object-contain transition-[filter,opacity] duration-[240ms] ease-out
               group-hover:blur-[2px] group-hover:opacity-[0.8]
-              group-focus-visible:blur-[2px] group-focus-visible:opacity-[0.8]"
-            style={{ transform: `scale(${brand.scale})` }}
+              group-focus-visible:blur-[2px] group-focus-visible:opacity-[0.8]
+              ${bucketStyles[brand.bucket]}`}
             draggable={false}
           />
         </div>
