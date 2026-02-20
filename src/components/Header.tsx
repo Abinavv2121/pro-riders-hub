@@ -11,6 +11,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { bikes } from "@/data/bikes";
 
 const navLinks = [
   { label: "Bikes", href: "/shop" },
@@ -24,6 +33,7 @@ const navLinks = [
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { totalItems, setIsOpen } = useCart();
@@ -96,7 +106,10 @@ const Header = () => {
 
           {/* Right icons */}
           <div className="flex items-center gap-1">
-            <button className="p-2 text-muted-foreground hover:text-foreground transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hidden sm:flex items-center justify-center hover:-translate-y-px hover:rotate-[-3deg] motion-reduce:hover:transform-none">
+            <button
+              onClick={() => setSearchOpen(true)}
+              className="p-2 text-muted-foreground hover:text-foreground transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hidden sm:flex items-center justify-center hover:-translate-y-px hover:rotate-[-3deg] motion-reduce:hover:transform-none"
+            >
               <Search className="w-[18px] h-[18px]" />
             </button>
             {/* User Account */}
@@ -207,6 +220,34 @@ const Header = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Search Dialog */}
+      <CommandDialog open={searchOpen} onOpenChange={setSearchOpen}>
+        <CommandInput placeholder="Search bikes, brands, categories..." />
+        <CommandList>
+          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandGroup heading="Bikes">
+            {bikes.map((bike) => (
+              <CommandItem
+                key={bike.id}
+                onSelect={() => {
+                  setSearchOpen(false);
+                  navigate(`/shop`);
+                }}
+                className="flex items-center gap-4 cursor-pointer py-3"
+              >
+                <div className="w-12 h-12 bg-muted/30 rounded-md flex items-center justify-center flex-shrink-0">
+                  <img src={bike.image} alt={bike.name} className="w-10 h-10 object-contain" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-heading font-semibold text-foreground text-sm">{bike.name}</span>
+                  <span className="text-xs text-muted-foreground uppercase tracking-wider font-heading mt-0.5">{bike.brand} · {bike.category}</span>
+                </div>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </CommandList>
+      </CommandDialog>
     </header>
   );
 };
