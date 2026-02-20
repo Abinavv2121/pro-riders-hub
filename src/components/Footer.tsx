@@ -97,6 +97,10 @@ const Footer = () => {
             © {new Date().getFullYear()} Pro-Bikers. All rights reserved.
           </p>
           <div className="flex gap-6">
+            <Link to="/admin" className="text-xs text-muted-foreground hover:text-foreground transition-colors duration-200 font-micro relative group inline-block">
+              Admin Portal
+              <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-px bg-foreground/40 w-0 group-hover:w-full transition-all duration-200" />
+            </Link>
             {["Privacy Policy", "Terms of Service", "Shipping", "Refund Policy"].map((item) => (
               <Link key={item} to="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors duration-200 font-micro relative group inline-block">
                 {item}

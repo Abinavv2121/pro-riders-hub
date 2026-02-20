@@ -1,17 +1,78 @@
+import { useState } from "react";
 import { Minus, Plus, Trash2, X, ShoppingBag } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
+import { supabase } from "@/lib/supabase";
+import { sendCustomerAutoReply } from "@/lib/emailjs";
 
 const CartDrawer = () => {
   const { items, removeItem, updateQuantity, clearCart, totalItems, isOpen, setIsOpen } = useCart();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleCartEnquiry = async () => {
+    if (!user) {
+      setIsOpen(false);
+      navigate("/auth?redirect=/shop");
+      return;
+    }
+
+    if (items.length === 0) return;
+
+    setIsSubmitting(true);
+
+    // Generate cart summary message
+    const subject = `Cart Enquiry - ${totalItems} Items`;
+    const message = items.map(item => `- ${item.name} (${item.brand}) | Color: ${item.color} | Size: ${item.size} | Qty: ${item.quantity}`).join('\n');
+
+    try {
+      // 1. Save to Supabase
+      const { error: supabaseError } = await supabase
+        .from('enquiries')
+        .insert([{
+          name: user.email?.split('@')[0] || 'Customer', // best effort extraction from email
+          email: user.email,
+          subject: subject,
+          message: message
+        }]);
+
+      if (supabaseError) throw supabaseError;
+
+      // 2. Send Email
+      try {
+        await sendCustomerAutoReply({
+          to_name: user.email?.split('@')[0] || 'Customer',
+          to_email: user.email!,
+          subject: subject,
+          message: message
+        });
+      } catch (emailError) {
+        console.error("EmailJS Error:", emailError);
+        toast.warning("Enquiry saved, but email notification failed.");
+      }
+
+      toast.success("Cart enquiry sent! We'll reply shortly.");
+      clearCart();
+      setIsOpen(false);
+    } catch (error) {
+      console.error("Submission Error:", error);
+      toast.error("Failed to send enquiry. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetContent className="w-full sm:max-w-md bg-background border-border flex flex-col">
+      <SheetContent className="w-full sm:max-w-md bg-background border-border flex flex-col" aria-describedby="cart-description">
         <SheetHeader className="border-b border-border pb-4">
-          <SheetTitle className="font-heading text-foreground flex items-center gap-2">
+          <SheetTitle id="cart-description" className="font-heading text-foreground flex items-center gap-2">
             <ShoppingBag className="w-5 h-5" />
             Cart ({totalItems})
           </SheetTitle>
@@ -71,8 +132,13 @@ const CartDrawer = () => {
             </div>
 
             <div className="border-t border-border pt-4 space-y-3">
-              <Button className="w-full" size="lg">
-                Enquire About Cart
+              <Button
+                className="w-full"
+                size="lg"
+                onClick={handleCartEnquiry}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Sending..." : "Enquire About Cart"}
               </Button>
               <Button variant="ghost" size="sm" className="w-full text-muted-foreground" onClick={clearCart}>
                 Clear Cart

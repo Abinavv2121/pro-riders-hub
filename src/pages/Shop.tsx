@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { SlidersHorizontal, ShoppingBag } from "lucide-react";
 import PageShell from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 import argon18 from "@/assets/bikes/argon18-nitrogen.png";
 import lapierre from "@/assets/bikes/lapierre-aircode-drs.png";
@@ -33,6 +34,8 @@ const Shop = () => {
   const { category: routeCategory } = useParams();
   const [activeCategory, setActiveCategory] = useState(routeCategory || "all");
   const { addItem } = useCart();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const filtered = activeCategory === "all" ? bikes : bikes.filter((b) => b.category === activeCategory);
 
@@ -61,11 +64,10 @@ const Shop = () => {
               <button
                 key={cat.key}
                 onClick={() => setActiveCategory(cat.key)}
-                className={`pb-3 text-small font-heading font-semibold uppercase tracking-wider whitespace-nowrap transition-colors duration-200 border-b-2 ${
-                  activeCategory === cat.key
-                    ? "text-primary border-primary"
-                    : "text-muted-foreground border-transparent hover:text-foreground"
-                }`}
+                className={`pb-3 text-small font-heading font-semibold uppercase tracking-wider whitespace-nowrap transition-colors duration-200 border-b-2 ${activeCategory === cat.key
+                  ? "text-primary border-primary"
+                  : "text-muted-foreground border-transparent hover:text-foreground"
+                  }`}
               >
                 {cat.label}
               </button>
@@ -116,18 +118,22 @@ const Shop = () => {
                     <span>Size: {bike.size}</span>
                   </div>
                   <div className="flex items-center gap-3">
-                     <Button size="sm" className="flex-1 text-xs">
-                       Enquire Now
-                     </Button>
-                     <Button
-                       variant="secondary"
-                       size="icon"
-                       className="h-10 w-10"
-                       onClick={() => addItem({ id: bike.id, name: bike.name, brand: bike.brand, image: bike.image, color: bike.color, size: bike.size })}
-                     >
-                       <ShoppingBag className="w-4 h-4" />
-                     </Button>
-                   </div>
+                    <Button
+                      size="sm"
+                      className="flex-1 text-xs"
+                      onClick={() => addItem({ id: bike.id, name: bike.name, brand: bike.brand, image: bike.image, color: bike.color, size: bike.size })}
+                    >
+                      Enquire Now
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="icon"
+                      className="h-10 w-10"
+                      onClick={() => addItem({ id: bike.id, name: bike.name, brand: bike.brand, image: bike.image, color: bike.color, size: bike.size })}
+                    >
+                      <ShoppingBag className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
               </motion.div>
             ))}
