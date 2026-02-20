@@ -32,7 +32,7 @@ const ServicesSection = () => {
       <div className="container mx-auto px-5 md:px-8">
         <div className="grid lg:grid-cols-2 gap-lg-space items-center">
           <div>
-            <ScrollReveal as="p" drift={8} className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">Expert Services</ScrollReveal>
+            <ScrollReveal as="p" scanline drift={8} className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">Expert Services</ScrollReveal>
             <ScrollReveal as="h2" delay={0.08} drift={14} className="font-heading text-section-sm md:text-section text-foreground mb-6 leading-tight">
               More Than a Store.
               <br />
@@ -44,9 +44,13 @@ const ServicesSection = () => {
             <ScrollReveal delay={0.24} drift={10}>
               <Link
                 to="/services"
-                className="inline-flex items-center gap-2 text-primary font-heading font-semibold text-small uppercase tracking-wider hover:gap-3 transition-all duration-200"
+                className="inline-flex items-center gap-2 text-primary font-heading font-semibold text-small uppercase tracking-wider group"
               >
-                View All Services <ArrowRight className="w-4 h-4" />
+                <span className="relative">
+                  View All Services
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-px bg-primary w-0 group-hover:w-full transition-all duration-200" />
+                </span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
               </Link>
             </ScrollReveal>
           </div>
@@ -58,15 +62,19 @@ const ServicesSection = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.08, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                transition={{ delay: i * 0.1, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
                 whileHover={{ y: -4 }}
-                className="glass-card p-6 rounded-lg hover:border-primary/30 transition-all duration-[240ms] group"
+                className="glass-card p-6 rounded-lg hover:border-primary/30 transition-all duration-[240ms] group relative overflow-hidden"
               >
-                <service.icon className="w-7 h-7 text-primary mb-4 group-hover:scale-110 transition-transform duration-200" />
-                <h3 className="font-heading font-bold text-foreground text-base mb-2">
+                {/* Radial glow on hover */}
+                <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-[240ms] pointer-events-none"
+                  style={{ background: "radial-gradient(circle at 30% 20%, hsl(193 100% 42% / 0.06) 0%, transparent 60%)" }}
+                />
+                <service.icon className="relative w-7 h-7 text-primary mb-4 group-hover:scale-110 transition-transform duration-200" />
+                <h3 className="relative font-heading font-bold text-foreground text-base mb-2">
                   {service.title}
                 </h3>
-                <p className="text-muted-foreground text-small font-body leading-relaxed">
+                <p className="relative text-muted-foreground text-small font-body leading-relaxed">
                   {service.description}
                 </p>
               </motion.div>

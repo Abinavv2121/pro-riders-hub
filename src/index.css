@@ -7,23 +7,23 @@
 @layer base {
   :root {
     /* ── Color Tokens ── */
-    --background: 216 16% 7%;         /* #0E1114 */
-    --foreground: 0 0% 100%;          /* #FFFFFF */
+    --background: 216 16% 7%;
+    --foreground: 0 0% 100%;
 
-    --card: 213 14% 10%;              /* #15191D */
+    --card: 213 14% 10%;
     --card-foreground: 0 0% 100%;
 
     --popover: 213 14% 10%;
     --popover-foreground: 0 0% 100%;
 
-    --primary: 193 100% 42%;          /* #00A6D6 */
+    --primary: 193 100% 42%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 213 14% 10%;
     --secondary-foreground: 0 0% 100%;
 
     --muted: 216 10% 14%;
-    --muted-foreground: 217 10% 64%;  /* #9CA3AF */
+    --muted-foreground: 217 10% 64%;
 
     --accent: 193 100% 42%;
     --accent-foreground: 0 0% 100%;
@@ -31,7 +31,7 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 215 10% 18%;            /* #262B31 */
+    --border: 215 10% 18%;
     --input: 215 10% 18%;
     --ring: 193 100% 42%;
 
@@ -54,16 +54,18 @@
     --glass-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.4);
 
     /* ── Spacing Tokens ── */
-    --space-xs: 0.5rem;    /* 8px */
-    --space-sm: 1rem;      /* 16px */
-    --space-md: 2rem;      /* 32px */
-    --space-lg: 4rem;      /* 64px */
-    --space-xl: 7.5rem;    /* 120px */
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 2rem;
+    --space-lg: 4rem;
+    --space-xl: 7.5rem;
 
     /* ── Motion Tokens ── */
     --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
     --duration-micro: 240ms;
     --duration-section: 400ms;
+    --duration-reveal: 600ms;
 
     /* ── Sidebar ── */
     --sidebar-background: 216 16% 7%;
@@ -121,7 +123,6 @@
     background-clip: text;
   }
 
-  /* Keep old class name for backward compat */
   .text-gradient-red {
     background: linear-gradient(135deg, hsl(193 100% 42%), hsl(193 80% 55%));
     -webkit-background-clip: text;
@@ -137,7 +138,6 @@
     background: var(--gradient-primary);
   }
 
-  /* Keep old class name */
   .bg-gradient-red {
     background: var(--gradient-primary);
   }
@@ -164,6 +164,18 @@
   /* Micro-interaction easing */
   .ease-pro {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Unified link hover underline */
+  .link-underline {
+    @apply relative inline-block;
+  }
+  .link-underline::after {
+    content: '';
+    @apply absolute bottom-0 left-1/2 -translate-x-1/2 h-px bg-primary w-0 transition-all duration-200;
+  }
+  .link-underline:hover::after {
+    @apply w-full;
   }
 }
 
@@ -206,12 +218,26 @@ html {
   }
 }
 
-/* Reduced motion: disable custom cursor */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   body {
     cursor: auto !important;
   }
   body a, body button, body [role="button"] {
     cursor: auto !important;
+  }
+  /* Disable all custom animations */
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── Mobile responsive section spacing ── */
+@media (max-width: 640px) {
+  .space-section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
   }
 }

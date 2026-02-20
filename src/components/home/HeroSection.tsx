@@ -26,11 +26,11 @@ const HeroSection = () => {
         <div className="grid lg:grid-cols-2 gap-lg-space items-center min-h-screen py-32">
           {/* Left — Content Stack */}
           <div>
-            <ScrollReveal as="p" delay={0.1} drift={8} className="text-primary font-heading font-semibold tracking-[0.3em] uppercase text-small mb-6">
+            <ScrollReveal as="p" scanline delay={0.1} className="text-primary font-heading font-semibold tracking-[0.3em] uppercase text-small mb-6">
               Est. 1975 — Chennai, India
             </ScrollReveal>
 
-            <ScrollReveal as="h1" delay={0.2} drift={14} className="font-heading font-black text-foreground text-hero-sm md:text-hero-md lg:text-hero leading-[1.05] mb-6">
+            <ScrollReveal as="h1" mask delay={0.2} className="font-heading font-black text-foreground text-hero-sm md:text-hero-md lg:text-hero leading-[1.05] mb-6">
               PRECISION
               <br />
               <span className="text-gradient-primary">ENGINEERING</span>
@@ -43,32 +43,62 @@ const HeroSection = () => {
             </ScrollReveal>
 
             {/* Trust Badges */}
-            <ScrollReveal delay={0.35} drift={10} className="flex flex-wrap items-center gap-4 mb-10">
-              <div className="flex items-center gap-2 text-small text-muted-foreground font-micro">
+            <ScrollReveal delay={0.35} drift={12} className="flex flex-wrap items-center gap-4 mb-10">
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                className="flex items-center gap-2 text-small text-muted-foreground font-micro"
+              >
                 <Shield className="w-4 h-4 text-primary" />
                 Trusted by 50,000+ Riders
-              </div>
+              </motion.div>
               <span className="w-px h-4 bg-border" />
-              <div className="flex items-center gap-1.5 text-small text-muted-foreground font-micro">
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                className="flex items-center gap-1.5 text-small text-muted-foreground font-micro"
+              >
                 <Star className="w-4 h-4 fill-primary text-primary" />
                 4.9 Google Rating
-              </div>
+              </motion.div>
             </ScrollReveal>
 
             {/* CTA Group */}
-            <ScrollReveal delay={0.45} drift={10} className="flex flex-col sm:flex-row gap-4">
-              <Link to="/shop">
-                <Button size="lg">Shop Bikes</Button>
-              </Link>
-              <Link to="/services">
-                <Button variant="secondary" size="lg">
-                  Our Services
-                </Button>
-              </Link>
-            </ScrollReveal>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.55, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+              >
+                <Link to="/shop">
+                  <Button size="lg" className="group relative overflow-hidden">
+                    <span className="relative z-10">Shop Bikes</span>
+                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
+                  </Button>
+                </Link>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.65, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+              >
+                <Link to="/services">
+                  <Button variant="secondary" size="lg" className="group relative overflow-hidden">
+                    <span className="relative z-10">Our Services</span>
+                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
+                  </Button>
+                </Link>
+              </motion.div>
+            </div>
           </div>
 
-          {/* Right — intentionally empty for hero visual (background image) */}
+          {/* Right — intentionally empty for hero visual */}
           <div className="hidden lg:block" />
         </div>
       </div>
