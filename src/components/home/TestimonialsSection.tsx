@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
+import ScrollReveal from "@/components/ScrollReveal";
 import reviewerRamesh from "@/assets/reviewer-ramesh.png";
 
 const testimonials = [
@@ -34,20 +35,14 @@ const TestimonialsSection = () => {
   return (
     <section className="space-section">
       <div className="container mx-auto px-5 md:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-          className="text-center mb-16"
-        >
-          <p className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">
+        <div className="text-center mb-16">
+          <ScrollReveal as="p" drift={8} className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">
             Testimonials
-          </p>
-          <h2 className="font-heading text-section-sm md:text-section text-foreground">
+          </ScrollReveal>
+          <ScrollReveal as="h2" delay={0.08} drift={12} className="font-heading text-section-sm md:text-section text-foreground">
             What Our Customers Say...
-          </h2>
-        </motion.div>
+          </ScrollReveal>
+        </div>
 
         {/* Featured review */}
         <motion.div

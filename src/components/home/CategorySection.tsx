@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import ScrollReveal from "@/components/ScrollReveal";
 import categoryRoad from "@/assets/category-road.jpg";
 import categoryMtb from "@/assets/category-mtb.jpg";
 import categoryHybrid from "@/assets/category-hybrid.jpg";
@@ -17,20 +18,14 @@ const CategorySection = () => {
   return (
     <section className="space-section">
       <div className="container mx-auto px-5 md:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-          className="text-center mb-16"
-        >
-          <h2 className="font-heading text-section-sm md:text-section text-foreground mb-4">
+        <div className="text-center mb-16">
+          <ScrollReveal as="h2" drift={12} className="font-heading text-section-sm md:text-section text-foreground mb-4">
             Find Your Ride
-          </h2>
-          <p className="text-muted-foreground font-body text-body max-w-xl mx-auto">
+          </ScrollReveal>
+          <ScrollReveal as="p" delay={0.1} drift={10} className="text-muted-foreground font-body text-body max-w-xl mx-auto">
             From road racing to trail blazing — discover the perfect bike for every terrain.
-          </p>
-        </motion.div>
+          </ScrollReveal>
+        </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {categories.map((cat, i) => (

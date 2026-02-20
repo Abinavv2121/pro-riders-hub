@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Shield, Award, Users, Clock } from "lucide-react";
+import ScrollReveal from "@/components/ScrollReveal";
 
 const stats = [
   { icon: Clock, value: "50+", label: "Years of Excellence" },
@@ -13,25 +14,20 @@ const LegacySection = () => {
     <section className="section-card space-section">
       <div className="container mx-auto px-5 md:px-8">
         <div className="grid lg:grid-cols-2 gap-lg-space items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-          >
-            <p className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">Our Legacy</p>
-            <h2 className="font-heading text-section-sm md:text-section text-foreground mb-6 leading-tight">
+          <div>
+            <ScrollReveal as="p" drift={8} className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">Our Legacy</ScrollReveal>
+            <ScrollReveal as="h2" delay={0.08} drift={14} className="font-heading text-section-sm md:text-section text-foreground mb-6 leading-tight">
               Since 1975.
               <br />
               <span className="text-muted-foreground">A Legacy of Cycling.</span>
-            </h2>
-            <p className="text-muted-foreground font-body text-body mb-4 leading-relaxed">
+            </ScrollReveal>
+            <ScrollReveal as="p" delay={0.16} drift={10} className="text-muted-foreground font-body text-body mb-4 leading-relaxed">
               From our humble beginnings as Balaji Cycles, ProBikers has evolved into India's premier cycling destination. Five decades of passion, precision, and an unwavering commitment to the cycling community.
-            </p>
-            <p className="text-muted-foreground font-body text-body leading-relaxed">
+            </ScrollReveal>
+            <ScrollReveal as="p" delay={0.22} drift={10} className="text-muted-foreground font-body text-body leading-relaxed">
               Recognized by the Global Cycling Network and trusted by over 50,000 riders, we continue to bring the world's finest bicycles and expert service to every cyclist who walks through our doors.
-            </p>
-          </motion.div>
+            </ScrollReveal>
+          </div>
 
           <div className="grid grid-cols-2 gap-4">
             {stats.map((stat, i) => (
