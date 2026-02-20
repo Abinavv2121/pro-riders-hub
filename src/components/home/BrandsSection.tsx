@@ -1,31 +1,64 @@
 import { motion } from "framer-motion";
 import ScrollReveal from "@/components/ScrollReveal";
 
+import lapierreLogo from "@/assets/brands/lapierre.jpeg";
+import giantLogo from "@/assets/brands/giant.jpeg";
+import trekLogo from "@/assets/brands/trek.jpeg";
+import argon18Logo from "@/assets/brands/argon18.jpeg";
+import avantiLogo from "@/assets/brands/avanti.jpeg";
+import specializedLogo from "@/assets/brands/specialized.jpeg";
+import cannondaleLogo from "@/assets/brands/cannondale.jpeg";
+import scottLogo from "@/assets/brands/scott.jpeg";
+import bianchiLogo from "@/assets/brands/bianchi.jpeg";
+import bmcLogo from "@/assets/brands/bmc.jpeg";
+
 const brands = [
-  "Lapierre", "Giant", "Trek", "Argon 18", "Avanti",
-  "Specialized", "Cannondale", "Scott", "Bianchi", "BMC",
+  { name: "Lapierre", logo: lapierreLogo },
+  { name: "Giant", logo: giantLogo },
+  { name: "Trek", logo: trekLogo },
+  { name: "Argon 18", logo: argon18Logo },
+  { name: "Avanti", logo: avantiLogo },
+  { name: "Specialized", logo: specializedLogo },
+  { name: "Cannondale", logo: cannondaleLogo },
+  { name: "Scott", logo: scottLogo },
+  { name: "Bianchi", logo: bianchiLogo },
+  { name: "BMC", logo: bmcLogo },
 ];
 
-const BrandTile = ({ brand, i }: { brand: string; i: number }) => {
+const BrandTile = ({ brand, i }: { brand: typeof brands[number]; i: number }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: i * 0.05, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-      className="relative flex items-center justify-center py-8 px-4 rounded-lg group overflow-hidden
-        glass-card hover:border-primary/20 transition-colors duration-200"
+      className="relative flex items-center justify-center aspect-[4/3] rounded-lg overflow-hidden
+        glass-card hover:border-primary/20 transition-colors duration-200 group"
     >
-      {/* Top highlight */}
-      <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent pointer-events-none" />
-      {/* Hover radial glow */}
-      <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-[240ms] pointer-events-none"
-        style={{ background: "radial-gradient(circle at 50% 50%, hsl(193 100% 42% / 0.08) 0%, transparent 70%)" }}
+      {/* Logo */}
+      <img
+        src={brand.logo}
+        alt={brand.name}
+        className="w-[75%] h-[55%] object-contain transition-[filter,opacity] duration-[240ms] ease-out
+          group-hover:blur-[3px] group-hover:opacity-50
+          group-focus-visible:blur-[3px] group-focus-visible:opacity-50"
+        draggable={false}
       />
-      {/* Cyan edge accent on hover */}
-      <span className="absolute inset-x-0 bottom-0 h-px bg-primary/0 group-hover:bg-primary/40 transition-colors duration-[240ms] pointer-events-none" />
-      <span className="relative font-heading font-bold text-muted-foreground group-hover:text-foreground transition-colors duration-[240ms] text-lg tracking-wide uppercase">
-        {brand}
+
+      {/* Hover overlay with brand name */}
+      <div
+        className="absolute inset-0 flex items-center justify-center
+          opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100
+          transition-opacity duration-[240ms] ease-out pointer-events-none"
+      >
+        <span className="font-heading font-bold text-foreground text-base md:text-lg tracking-wide uppercase">
+          {brand.name}
+        </span>
+      </div>
+
+      {/* Mobile: small label below logo (always visible) */}
+      <span className="absolute bottom-2 left-0 right-0 text-center text-[10px] uppercase tracking-widest text-muted-foreground font-heading font-semibold md:hidden">
+        {brand.name}
       </span>
     </motion.div>
   );
@@ -44,7 +77,7 @@ const BrandsSection = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {brands.map((brand, i) => (
-            <BrandTile key={brand} brand={brand} i={i} />
+            <BrandTile key={brand.name} brand={brand} i={i} />
           ))}
         </div>
       </div>
