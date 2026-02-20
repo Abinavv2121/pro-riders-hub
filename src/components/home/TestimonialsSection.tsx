@@ -50,7 +50,7 @@ const TestimonialsSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="max-w-3xl mx-auto mb-8 p-8 md:p-10 border border-border rounded-lg"
+          className="glass-card max-w-3xl mx-auto mb-8 p-8 md:p-10 rounded-lg"
         >
           <Quote className="w-8 h-8 text-primary/20 mb-4" />
           <div className="flex gap-1 mb-5">
@@ -67,6 +67,7 @@ const TestimonialsSection = () => {
                 src={featured.avatar}
                 alt={featured.name}
                 className="w-12 h-12 rounded-full object-cover border-2 border-primary/20"
+                loading="lazy"
               />
             )}
             <div>
@@ -85,7 +86,7 @@ const TestimonialsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08, duration: 0.4 }}
-              className="p-6 md:p-8 border border-border rounded-lg"
+              className="glass-card p-6 md:p-8 rounded-lg"
             >
               <Quote className="w-6 h-6 text-primary/20 mb-3" />
               <div className="flex gap-1 mb-3">

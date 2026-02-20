@@ -9,13 +9,13 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="space-y-4">
-            <img src={logo} alt="Pro-Bikers" className="h-8" />
+            <img src={logo} alt="Pro-Bikers" className="h-8" loading="lazy" />
             <p className="text-muted-foreground text-small font-body leading-relaxed">
               Your Friendly Neighbourhood Bike Shop. Premium cycling experience since 1975.
             </p>
             <div className="flex gap-3 pt-2">
               {[Instagram, Facebook, Youtube].map((Icon, i) => (
-                <a key={i} href="#" className="p-2 border border-border rounded-lg text-muted-foreground hover:text-primary hover:border-primary/30 transition-all duration-200">
+                <a key={i} href="#" className="p-2 border border-border rounded-lg text-muted-foreground hover:text-primary hover:border-primary/30 transition-all duration-[240ms]">
                   <Icon className="w-4 h-4" />
                 </a>
               ))}

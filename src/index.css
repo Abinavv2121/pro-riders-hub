@@ -47,12 +47,23 @@
     --gradient-hero: linear-gradient(180deg, hsl(216 16% 7% / 0.7) 0%, hsl(216 16% 7% / 0.3) 50%, hsl(216 16% 7% / 0.8) 100%);
     --gradient-primary: linear-gradient(135deg, hsl(193 100% 42%), hsl(193 80% 32%));
 
+    /* ── Glass Tokens ── */
+    --glass-bg: 213 14% 10% / 0.5;
+    --glass-border: 215 10% 22%;
+    --glass-blur: 12px;
+    --glass-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.4);
+
     /* ── Spacing Tokens ── */
     --space-xs: 0.5rem;    /* 8px */
     --space-sm: 1rem;      /* 16px */
     --space-md: 2rem;      /* 32px */
     --space-lg: 4rem;      /* 64px */
     --space-xl: 7.5rem;    /* 120px */
+
+    /* ── Motion Tokens ── */
+    --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --duration-micro: 240ms;
+    --duration-section: 400ms;
 
     /* ── Sidebar ── */
     --sidebar-background: 216 16% 7%;
@@ -79,6 +90,21 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Montserrat', sans-serif;
     letter-spacing: 0.02em;
+  }
+
+  /* ── Focus styles ── */
+  *:focus-visible {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* ── Minimum tap targets on mobile ── */
+  @media (pointer: coarse) {
+    button, a, [role="button"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
   }
 }
 
@@ -126,6 +152,15 @@
     color: hsl(var(--card-foreground));
   }
 
+  /* Glass card utility */
+  .glass-card {
+    background: hsl(var(--glass-bg));
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid hsl(var(--glass-border));
+    box-shadow: var(--glass-shadow);
+  }
+
   /* Micro-interaction easing */
   .ease-pro {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -153,4 +188,30 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--muted-foreground) / 0.4);
+}
+
+/* ── Custom cursor ── */
+@media (pointer: fine) and (hover: hover) {
+  body:not(.reduced-motion) {
+    cursor: none;
+  }
+
+  body:not(.reduced-motion) a,
+  body:not(.reduced-motion) button,
+  body:not(.reduced-motion) [role="button"],
+  body:not(.reduced-motion) input,
+  body:not(.reduced-motion) textarea,
+  body:not(.reduced-motion) select {
+    cursor: none;
+  }
+}
+
+/* Reduced motion: disable custom cursor */
+@media (prefers-reduced-motion: reduce) {
+  body {
+    cursor: auto !important;
+  }
+  body a, body button, body [role="button"] {
+    cursor: auto !important;
+  }
 }

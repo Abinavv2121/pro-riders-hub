@@ -59,7 +59,8 @@ const ServicesSection = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-                className="p-6 border border-border rounded-lg hover:border-primary/30 transition-all duration-200 group"
+                whileHover={{ y: -4 }}
+                className="glass-card p-6 rounded-lg hover:border-primary/30 transition-all duration-[240ms] group"
               >
                 <service.icon className="w-7 h-7 text-primary mb-4 group-hover:scale-110 transition-transform duration-200" />
                 <h3 className="font-heading font-bold text-foreground text-base mb-2">
