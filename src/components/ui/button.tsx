@@ -9,9 +9,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground hover:bg-primary/92 hover:shadow-[0_4px_16px_hsl(193_100%_42%/0.3)] hover:-translate-y-[2px] active:translate-y-0",
+          "bg-primary text-primary-foreground active:scale-[0.98] transition-transform duration-150",
         secondary:
-          "bg-transparent border border-foreground/20 text-foreground hover:bg-foreground/10 hover:-translate-y-[1px]",
+          "bg-transparent border border-foreground/20 text-foreground active:scale-[0.98] transition-transform duration-150",
         ghost:
           "text-muted-foreground hover:text-foreground bg-transparent",
         destructive:

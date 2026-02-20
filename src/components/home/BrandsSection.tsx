@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { useState, useCallback } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
 
 const brands = [
@@ -8,34 +7,14 @@ const brands = [
 ];
 
 const BrandTile = ({ brand, i }: { brand: string; i: number }) => {
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
-    setTilt({ x: y * -7, y: x * 7 });
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    setTilt({ x: 0, y: 0 });
-  }, []);
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: i * 0.05, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-      whileHover={{ y: -5 }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className="relative flex items-center justify-center py-8 px-4 rounded-lg cursor-pointer group overflow-hidden
-        glass-card hover:border-primary/30 transition-all duration-[240ms] ease-[cubic-bezier(0.4,0,0.2,1)]"
-      style={{
-        transform: `perspective(600px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-        transition: "transform 200ms ease-out",
-      }}
+      className="relative flex items-center justify-center py-8 px-4 rounded-lg group overflow-hidden
+        glass-card hover:border-primary/20 transition-colors duration-200"
     >
       {/* Top highlight */}
       <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent pointer-events-none" />

@@ -2,64 +2,77 @@ import { useEffect, useRef, useState } from "react";
 
 /**
  * Custom cursor: small dot + ring.
- * Ring scales up on interactive elements with bike-icon context.
+ * Ring scales slightly on interactive elements.
  * Only on pointer:fine devices, disabled for reduced-motion.
+ * Cursor is always positioned at pointer — no origin teleport.
  */
 const CustomCursor = () => {
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  const [hovering, setHovering] = useState(false);
+  const pos = useRef({ x: -100, y: -100 });
+  const ringPos = useRef({ x: -100, y: -100 });
+  const hoveringRef = useRef(false);
+  const visibleRef = useRef(false);
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
     const isTouch = window.matchMedia("(pointer: coarse)").matches;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (isTouch || reducedMotion) {
-      document.body.classList.add("reduced-motion");
-      return;
-    }
+    if (isTouch || reducedMotion) return;
 
-    let mouseX = 0, mouseY = 0;
-    let ringX = 0, ringY = 0;
+    setEnabled(true);
 
     const onMove = (e: MouseEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      if (!visible) setVisible(true);
+      pos.current.x = e.clientX;
+      pos.current.y = e.clientY;
+      if (!visibleRef.current) {
+        visibleRef.current = true;
+        // Jump ring to cursor immediately on first move (no teleport from 0,0)
+        ringPos.current.x = e.clientX;
+        ringPos.current.y = e.clientY;
+        if (dotRef.current) dotRef.current.style.opacity = "1";
+        if (ringRef.current) ringRef.current.style.opacity = "1";
+      }
       if (dotRef.current) {
-        dotRef.current.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px)`;
+        dotRef.current.style.transform = `translate3d(${e.clientX - 4}px, ${e.clientY - 4}px, 0)`;
       }
     };
 
-    const interactiveSelector = "a, button, [role='button'], input, textarea, select, .cursor-pointer, .glass-card";
+    const interactiveSelector = "a, button, [role='button'], input, textarea, select, .cursor-pointer";
 
     const onOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.closest(interactiveSelector)) {
-        setHovering(true);
+      if ((e.target as HTMLElement).closest(interactiveSelector)) {
+        hoveringRef.current = true;
       }
     };
 
     const onOut = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.closest(interactiveSelector)) {
-        setHovering(false);
+      if ((e.target as HTMLElement).closest(interactiveSelector)) {
+        hoveringRef.current = false;
       }
     };
 
-    const onLeave = () => setVisible(false);
-    const onEnter = () => setVisible(true);
+    const onLeave = () => {
+      visibleRef.current = false;
+      if (dotRef.current) dotRef.current.style.opacity = "0";
+      if (ringRef.current) ringRef.current.style.opacity = "0";
+    };
+
+    const onEnter = () => {
+      // Don't set visible here — wait for first mousemove to avoid teleport
+    };
 
     let raf: number;
-    const followRing = () => {
-      ringX += (mouseX - ringX) * 0.15;
-      ringY += (mouseY - ringY) * 0.15;
+    const tick = () => {
+      ringPos.current.x += (pos.current.x - ringPos.current.x) * 0.15;
+      ringPos.current.y += (pos.current.y - ringPos.current.y) * 0.15;
+      const scale = hoveringRef.current ? 1.15 : 1;
       if (ringRef.current) {
-        ringRef.current.style.transform = `translate(${ringX - 18}px, ${ringY - 18}px) scale(${hovering ? 1.5 : 1})`;
+        ringRef.current.style.transform = `translate3d(${ringPos.current.x - 18}px, ${ringPos.current.y - 18}px, 0) scale(${scale})`;
       }
-      raf = requestAnimationFrame(followRing);
+      raf = requestAnimationFrame(tick);
     };
-    raf = requestAnimationFrame(followRing);
+    raf = requestAnimationFrame(tick);
 
     document.addEventListener("mousemove", onMove, { passive: true });
     document.addEventListener("mouseover", onOver, { passive: true });
@@ -75,13 +88,12 @@ const CustomCursor = () => {
       document.removeEventListener("mouseleave", onLeave);
       document.removeEventListener("mouseenter", onEnter);
     };
-  }, [visible, hovering]);
+  }, []);
 
-  if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) return null;
+  if (!enabled) return null;
 
   return (
     <>
-      {/* Dot */}
       <div
         ref={dotRef}
         className="fixed top-0 left-0 pointer-events-none z-[9999] mix-blend-difference"
@@ -90,12 +102,10 @@ const CustomCursor = () => {
           height: 8,
           borderRadius: "50%",
           background: "white",
-          opacity: visible ? 1 : 0,
-          transition: "opacity 150ms ease",
+          opacity: 0,
           willChange: "transform",
         }}
       />
-      {/* Ring */}
       <div
         ref={ringRef}
         className="fixed top-0 left-0 pointer-events-none z-[9998]"
@@ -103,10 +113,10 @@ const CustomCursor = () => {
           width: 36,
           height: 36,
           borderRadius: "50%",
-          border: `1.5px solid hsl(193 100% 42% / ${hovering ? 0.5 : 0.2})`,
-          opacity: visible ? 1 : 0,
-          transition: "opacity 150ms ease, border-color 200ms ease",
+          border: "1.5px solid hsl(193 100% 42% / 0.2)",
+          opacity: 0,
           willChange: "transform",
+          transition: "border-color 200ms ease",
         }}
       />
     </>

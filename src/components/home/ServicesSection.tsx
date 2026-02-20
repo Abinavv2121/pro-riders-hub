@@ -63,8 +63,7 @@ const ServicesSection = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-                whileHover={{ y: -4 }}
-                className="glass-card p-6 rounded-lg hover:border-primary/30 transition-all duration-[240ms] group relative overflow-hidden"
+                className="glass-card p-6 rounded-lg hover:border-primary/20 transition-colors duration-200 group relative overflow-hidden"
               >
                 {/* Radial glow on hover */}
                 <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-[240ms] pointer-events-none"
