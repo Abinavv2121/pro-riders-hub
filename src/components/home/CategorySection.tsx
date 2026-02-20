@@ -38,7 +38,7 @@ const CategorySection = () => {
             >
               <Link
                 to={cat.href}
-                className="group relative block aspect-[3/4] overflow-hidden rounded-lg"
+                className="group relative block aspect-[3/4] overflow-hidden rounded-lg border border-border/50 hover:border-primary/30 transition-colors duration-[240ms]"
               >
                 <img
                   src={cat.image}

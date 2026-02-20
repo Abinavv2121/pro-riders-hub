@@ -21,13 +21,21 @@ const BrandsSection = () => {
           {brands.map((brand, i) => (
             <motion.div
               key={brand}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.04, duration: 0.4 }}
-              className="flex items-center justify-center py-8 px-4 border border-border rounded-lg hover:border-primary/30 transition-all duration-200 cursor-pointer group"
+              transition={{ delay: i * 0.05, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+              whileHover={{ y: -5 }}
+              className="relative flex items-center justify-center py-8 px-4 rounded-lg cursor-pointer group overflow-hidden
+                glass-card hover:border-primary/30 transition-all duration-[240ms] ease-[cubic-bezier(0.4,0,0.2,1)]"
             >
-              <span className="font-heading font-bold text-muted-foreground group-hover:text-foreground transition-colors duration-200 text-lg tracking-wide uppercase">
+              {/* Top highlight */}
+              <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent pointer-events-none" />
+              {/* Hover radial glow */}
+              <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-[240ms] pointer-events-none"
+                style={{ background: "radial-gradient(circle at 50% 50%, hsl(193 100% 42% / 0.06) 0%, transparent 70%)" }}
+              />
+              <span className="relative font-heading font-bold text-muted-foreground group-hover:text-foreground transition-colors duration-[240ms] text-lg tracking-wide uppercase">
                 {brand}
               </span>
             </motion.div>
