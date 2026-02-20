@@ -19,10 +19,8 @@ const StatCard = ({ icon: Icon, value, suffix, label, delay }: {
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
       transition={{ delay, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-      className="glass-card p-6 sm:p-8 rounded-lg text-center hover:border-primary/30 transition-colors duration-[240ms] group relative overflow-hidden"
+      className="glass-card p-6 sm:p-8 rounded-lg text-center hover:border-primary/20 transition-colors duration-200 relative overflow-hidden"
     >
-      {/* Specular sweep on enter */}
-      <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.03] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 pointer-events-none" />
       <Icon className="relative w-6 h-6 sm:w-7 sm:h-7 text-primary mx-auto mb-3" />
       <p className="relative font-heading font-black text-foreground text-2xl sm:text-3xl mb-1">
         {count.toLocaleString()}{suffix}
