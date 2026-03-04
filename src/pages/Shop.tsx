@@ -1,27 +1,27 @@
-import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { SlidersHorizontal, ShoppingBag } from "lucide-react";
+import { BikeCard } from "@/components/BikeCard";
 import PageShell from "@/components/PageShell";
-import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
-import { useAuth } from "@/contexts/AuthContext";
-
+import { motion } from "framer-motion";
+import { SlidersHorizontal } from "lucide-react";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { bikes } from "@/data/bikes";
+
+import { Navigate } from "react-router-dom";
 
 const categories = [
   { key: "all", label: "All Bikes" },
-  { key: "road", label: "Road" },
-  { key: "hybrid", label: "Hybrid" },
-  { key: "mtb", label: "Mountain" },
+  { key: "race-road", label: "Race Road" },
+  { key: "endurance-road", label: "Endurance Road" },
+  { key: "gravel", label: "Gravel & Adventure" },
+  { key: "mtb", label: "MTB (XC & Trail)" },
+  { key: "city-fitness", label: "City & Fitness" },
 ];
 
 const Shop = () => {
   const { category: routeCategory } = useParams();
   const [activeCategory, setActiveCategory] = useState(routeCategory || "all");
   const { addItem } = useCart();
-  const { user } = useAuth();
-  const navigate = useNavigate();
 
   const filtered = activeCategory === "all" ? bikes : bikes.filter((b) => b.category === activeCategory);
 
@@ -69,59 +69,12 @@ const Shop = () => {
           {/* Product grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {filtered.map((bike, i) => (
-              <motion.div
+              <BikeCard
                 key={bike.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: i * 0.06, ease: [0.4, 0, 0.2, 1] }}
-                className="group relative bg-card rounded-lg overflow-hidden border border-border hover:border-primary/20 transition-all duration-200"
-              >
-                {bike.tag && (
-                  <span className="absolute top-4 left-4 z-10 bg-primary text-primary-foreground text-[10px] font-heading font-bold uppercase tracking-widest px-3 py-1 rounded-md">
-                    {bike.tag}
-                  </span>
-                )}
-
-                <div className="relative aspect-[4/3] flex items-center justify-center p-8 bg-muted/30">
-                  <img
-                    src={bike.image}
-                    alt={bike.name}
-                    className="max-h-full max-w-full object-contain transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:scale-[1.03]"
-                    loading="lazy"
-                  />
-                </div>
-
-                <div className="p-5">
-                  <p className="text-muted-foreground text-xs uppercase tracking-widest font-heading mb-1">
-                    {bike.brand}
-                  </p>
-                  <h3 className="font-heading font-bold text-foreground text-lg mb-2 group-hover:text-primary transition-colors duration-200">
-                    {bike.name}
-                  </h3>
-                  <div className="flex items-center gap-3 text-muted-foreground text-xs font-micro mb-4">
-                    <span>{bike.color}</span>
-                    <span className="w-1 h-1 rounded-full bg-border" />
-                    <span>Size: {bike.size}</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Button
-                      size="sm"
-                      className="flex-1 text-xs"
-                      onClick={() => addItem({ id: bike.id, name: bike.name, brand: bike.brand, image: bike.image, color: bike.color, size: bike.size })}
-                    >
-                      Enquire Now
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      size="icon"
-                      className="h-10 w-10"
-                      onClick={() => addItem({ id: bike.id, name: bike.name, brand: bike.brand, image: bike.image, color: bike.color, size: bike.size })}
-                    >
-                      <ShoppingBag className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-              </motion.div>
+                bike={bike}
+                index={i}
+                onAddItem={addItem}
+              />
             ))}
           </div>
         </div>

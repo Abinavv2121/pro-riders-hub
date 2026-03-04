@@ -1,33 +1,34 @@
-import { motion } from "framer-motion";
 import ScrollReveal from "@/components/ScrollReveal";
+import { motion } from "framer-motion";
 
-import lapierreLogo from "@/assets/brands/lapierre.jpeg";
-import giantLogo from "@/assets/brands/giant.jpeg";
-import trekLogo from "@/assets/brands/trek.jpeg";
 import argon18Logo from "@/assets/brands/argon18.jpeg";
 import avantiLogo from "@/assets/brands/avanti.jpeg";
-import specializedLogo from "@/assets/brands/specialized.jpeg";
-import cannondaleLogo from "@/assets/brands/cannondale.jpeg";
-import scottLogo from "@/assets/brands/scott.jpeg";
 import bianchiLogo from "@/assets/brands/bianchi.jpeg";
 import bmcLogo from "@/assets/brands/bmc.jpeg";
+import cannondaleLogo from "@/assets/brands/cannondale.jpeg";
+import giantLogo from "@/assets/brands/giant.jpeg";
+import lapierreLogo from "@/assets/brands/lapierre.jpeg";
+import scottLogo from "@/assets/brands/scott.jpeg";
+import specializedLogo from "@/assets/brands/specialized.jpeg";
+import trekLogo from "@/assets/brands/trek.jpeg";
+import { Link } from "react-router-dom";
 
 // Bucket A: Wide wordmarks — max-h 47%, max-w 85%
 // Bucket B: Medium/balanced — max-h 55%, max-w 76%
 // Bucket C: Compact/mark-heavy — max-h 63%, max-w 73%
 type Bucket = "A" | "B" | "C";
 
-const brands: { name: string; logo: string; bucket: Bucket; plate: boolean }[] = [
-  { name: "Lapierre", logo: lapierreLogo, bucket: "A", plate: false },
-  { name: "Giant", logo: giantLogo, bucket: "B", plate: true },
-  { name: "Trek", logo: trekLogo, bucket: "A", plate: true },
-  { name: "Argon 18", logo: argon18Logo, bucket: "A", plate: false },
-  { name: "Avanti", logo: avantiLogo, bucket: "B", plate: false },
-  { name: "Specialized", logo: specializedLogo, bucket: "A", plate: true },
-  { name: "Cannondale", logo: cannondaleLogo, bucket: "A", plate: true },
-  { name: "Scott", logo: scottLogo, bucket: "B", plate: false },
-  { name: "Bianchi", logo: bianchiLogo, bucket: "C", plate: true },
-  { name: "BMC", logo: bmcLogo, bucket: "A", plate: true },
+const brands: { name: string; link?: string;logo: string; bucket: Bucket; plate: boolean }[] = [
+  { name: "Lapierre",link:"https://www.lapierrebikes.com/", logo: lapierreLogo, bucket: "A", plate: false },
+  { name: "Giant", link:"https://www.giant-bicycles.com/",logo: giantLogo, bucket: "B", plate: true },
+  { name: "Trek", link:"https://www.trekbikes.com/", logo: trekLogo, bucket: "A", plate: true },
+  { name: "Argon 18", link:"https://www.argon18.com/", logo: argon18Logo, bucket: "A", plate: false },
+  { name: "Avanti", link:"https://www.avantibikes.com/",logo: avantiLogo, bucket: "B", plate: false },
+  { name: "Specialized", link:"https://www.specialized.com/", logo: specializedLogo, bucket: "A", plate: true },
+  { name: "Cannondale", link:"https://www.cannondale.com/", logo: cannondaleLogo, bucket: "A", plate: true },
+  { name: "Scott", link:"https://www.scott-sports.com/in/en/", logo: scottLogo, bucket: "B", plate: false },
+  { name: "Bianchi", link:"https://www.bianchi.com/", logo: bianchiLogo, bucket: "C", plate: true },
+  { name: "BMC", link:"https://bmc-switzerland.com/", logo: bmcLogo, bucket: "A", plate: true },
 ];
 
 const bucketStyles: Record<Bucket, string> = {
@@ -47,6 +48,7 @@ const BrandTile = ({ brand, i }: { brand: typeof brands[number]; i: number }) =>
         glass-card hover:border-primary/20 transition-colors duration-200 group"
     >
       {/* Logo wrap – consistent padding & centering */}
+    <Link to={brand.link || "#"} target="_blank" className="absolute inset-0">  
       <div className="flex items-center justify-center w-full h-full p-5">
         <div
           className={`flex items-center justify-center ${
@@ -82,6 +84,7 @@ const BrandTile = ({ brand, i }: { brand: typeof brands[number]; i: number }) =>
       <span className="absolute bottom-2 left-0 right-0 text-center text-[10px] uppercase tracking-widest text-muted-foreground font-heading font-semibold md:hidden">
         {brand.name}
       </span>
+    </Link>
     </motion.div>
   );
 };

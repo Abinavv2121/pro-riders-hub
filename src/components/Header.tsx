@@ -1,16 +1,4 @@
-import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Search, ShoppingBag, Phone, MessageCircle, User as UserIcon } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useCart } from "@/contexts/CartContext";
-import { useAuth } from "@/contexts/AuthContext";
 import logo from "@/assets/logo.png";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   CommandDialog,
   CommandEmpty,
@@ -19,7 +7,19 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { bikes } from "@/data/bikes";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/contexts/AuthContext";
+import { useCart } from "@/contexts/CartContext";
+import { bikes, bikeCategories, bikeBrands } from "@/data/bikes";
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronRight, Menu, MessageCircle, Phone, Search, ShoppingBag, User as UserIcon, X } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const navLinks = [
   { label: "Bikes", href: "/shop" },
@@ -34,10 +34,53 @@ const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+  const [hoveredBrand, setHoveredBrand] = useState<string | null>(null);
+  const dropdownTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const subTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const { totalItems, setIsOpen } = useCart();
   const { user, signOut } = useAuth();
+
+  const openDropdown = useCallback((key: string) => {
+    if (dropdownTimeout.current) clearTimeout(dropdownTimeout.current);
+    setActiveDropdown(key);
+    setHoveredCategory(null);
+    setHoveredBrand(null);
+  }, []);
+
+  const closeDropdown = useCallback(() => {
+    dropdownTimeout.current = setTimeout(() => {
+      setActiveDropdown(null);
+      setHoveredCategory(null);
+      setHoveredBrand(null);
+    }, 150);
+  }, []);
+
+  const keepDropdownOpen = useCallback(() => {
+    if (dropdownTimeout.current) clearTimeout(dropdownTimeout.current);
+  }, []);
+
+  const openSub = useCallback((key: string, type: "category" | "brand") => {
+    if (subTimeout.current) clearTimeout(subTimeout.current);
+    if (type === "category") setHoveredCategory(key);
+    else setHoveredBrand(key);
+  }, []);
+
+  const closeSub = useCallback((type: "category" | "brand") => {
+    subTimeout.current = setTimeout(() => {
+      if (type === "category") setHoveredCategory(null);
+      else setHoveredBrand(null);
+    }, 100);
+  }, []);
+
+  const keepSubOpen = useCallback(() => {
+    if (subTimeout.current) clearTimeout(subTimeout.current);
+    if (dropdownTimeout.current) clearTimeout(dropdownTimeout.current);
+  }, []);
+
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.7);
@@ -48,6 +91,7 @@ const Header = () => {
 
   useEffect(() => {
     setMobileOpen(false);
+    setActiveDropdown(null);
   }, [location]);
 
   useEffect(() => {
@@ -58,19 +102,10 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 px-4 md:px-6 pt-4">
       <div
-        className="container mx-auto rounded-2xl border border-border/30 motion-reduce:transition-none"
-        style={{
-          transition: "all 260ms cubic-bezier(0.4, 0, 0.2, 1)",
-          transform: scrolled ? "scale(0.97)" : "scale(1)",
-          background: scrolled
-            ? "hsl(var(--background) / 0.82)"
-            : "hsl(var(--background) / 0.40)",
-          backdropFilter: scrolled ? "blur(16px)" : "blur(24px)",
-          WebkitBackdropFilter: scrolled ? "blur(16px)" : "blur(24px)",
-          boxShadow: scrolled
-            ? "0 2px 12px -2px rgba(0,0,0,0.6)"
-            : "0 2px 20px -4px rgba(0,0,0,0.4)",
-        }}
+        className={`container mx-auto rounded-2xl border border-border/30 motion-reduce:transition-none transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] ${scrolled
+          ? "scale-95 bg-background/80 backdrop-blur-md shadow-xl"
+          : "scale-100 bg-background/40 backdrop-blur-lg shadow-lg"
+          }`}
       >
         <div className="flex items-center justify-between h-14 lg:h-16 px-5 lg:px-6">
           {/* Logo */}
@@ -82,32 +117,239 @@ const Header = () => {
           <nav className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => {
               const isActive = location.pathname === link.href;
+              const hasDropdown = link.label === "Bikes" || link.label === "Brands";
               return (
-                <Link
+                <div
                   key={link.label}
-                  to={link.href}
-                  className={`relative px-4 py-2 text-xs font-heading font-medium uppercase tracking-[0.15em] transition-colors duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]
-                    ${isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"}
-                  `}
+                  className="relative"
+                  onMouseEnter={hasDropdown ? () => openDropdown(link.label) : undefined}
+                  onMouseLeave={hasDropdown ? closeDropdown : undefined}
                 >
-                  {link.label}
-                  <span
-                    className={`absolute bottom-0.5 left-1/2 -translate-x-1/2 h-px bg-primary transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]
-                      ${isActive ? "w-4 opacity-100" : "w-0 opacity-0"}
+                  <Link
+                    to={link.href}
+                    className={`relative px-4 py-2 text-xs font-heading font-medium uppercase tracking-[0.15em] transition-colors duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] flex items-center gap-1
+                      ${isActive || activeDropdown === link.label ? "text-primary" : "text-muted-foreground hover:text-foreground"}
                     `}
-                  />
-                  {!isActive && (
-                    <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 h-px bg-foreground/40 w-0 opacity-0 group-hover:w-3 group-hover:opacity-60 transition-all duration-200" />
-                  )}
-                </Link>
+                  >
+                    {link.label}
+                    <span
+                      className={`absolute bottom-0.5 left-1/2 -translate-x-1/2 h-px bg-primary transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]
+                        ${isActive ? "w-4 opacity-100" : "w-0 opacity-0"}
+                      `}
+                    />
+                    {!isActive && (
+                      <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 h-px bg-foreground/40 w-0 opacity-0 group-hover:w-3 group-hover:opacity-60 transition-all duration-200" />
+                    )}
+                  </Link>
+                </div>
               );
             })}
           </nav>
+
+          {/* Bikes Mega Dropdown */}
+          <AnimatePresence>
+            {activeDropdown === "Bikes" && (
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
+                className="absolute top-full left-0 right-0 mt-2 z-50"
+                onMouseEnter={keepDropdownOpen}
+                onMouseLeave={closeDropdown}
+              >
+                <div className="container mx-auto px-6">
+                  <div className="bg-background/95 backdrop-blur-xl border border-border/40 rounded-xl shadow-2xl p-1 flex min-h-[200px]">
+                    {/* Category list */}
+                    <div className="w-56 border-r border-border/30 p-3">
+                      <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-muted-foreground/60 mb-2 px-3">Categories</p>
+                      {bikeCategories.map((cat) => (
+                        <div
+                          key={cat.key}
+                          onMouseEnter={() => openSub(cat.key, "category")}
+                          onMouseLeave={() => closeSub("category")}
+                        >
+                          <Link
+                            to={`/shop/${cat.key}`}
+                            onClick={() => setActiveDropdown(null)}
+                            className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-heading font-medium uppercase tracking-wider transition-all duration-150
+                              ${hoveredCategory === cat.key
+                                ? "bg-primary/10 text-primary"
+                                : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                              }
+                            `}
+                          >
+                            {cat.label}
+                            <ChevronRight className="w-3.5 h-3.5 opacity-40" />
+                          </Link>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Bikes sub-panel */}
+                    <div className="flex-1 p-4">
+                      <AnimatePresence mode="wait">
+                        {hoveredCategory ? (
+                          <motion.div
+                            key={hoveredCategory}
+                            initial={{ opacity: 0, x: 8 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 8 }}
+                            transition={{ duration: 0.12 }}
+                            onMouseEnter={keepSubOpen}
+                            onMouseLeave={() => closeSub("category")}
+                          >
+                            <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-muted-foreground/60 mb-3">
+                              {bikeCategories.find((c) => c.key === hoveredCategory)?.label}
+                            </p>
+                            <div className="grid grid-cols-2 xl:grid-cols-3 gap-2">
+                              {bikes
+                                .filter((b) => b.category === hoveredCategory)
+                                .map((bike) => (
+                                  <Link
+                                    key={bike.id}
+                                    to={`/product/${bike.id}`}
+                                    onClick={() => setActiveDropdown(null)}
+                                    className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-muted/40 transition-all duration-150 group/bike"
+                                  >
+                                    <div className="w-12 h-12 bg-muted/20 rounded-md flex items-center justify-center flex-shrink-0 group-hover/bike:bg-muted/40 transition-colors">
+                                      <img src={bike.image} alt={bike.name} className="w-10 h-10 object-contain" />
+                                    </div>
+                                    <div className="flex flex-col min-w-0">
+                                      <span className="text-xs font-heading font-semibold text-foreground truncate">{bike.name}</span>
+                                      <span className="text-[10px] text-muted-foreground font-heading uppercase tracking-wider">{bike.brand}</span>
+                                    </div>
+                                  </Link>
+                                ))}
+                            </div>
+                          </motion.div>
+                        ) : (
+                          <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="h-full flex items-center justify-center"
+                          >
+                            <p className="text-xs text-muted-foreground/50 font-heading uppercase tracking-widest">Hover a category to see bikes</p>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Brands Mega Dropdown */}
+          <AnimatePresence>
+            {activeDropdown === "Brands" && (
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
+                className="absolute top-full left-0 right-0 mt-2 z-50"
+                onMouseEnter={keepDropdownOpen}
+                onMouseLeave={closeDropdown}
+              >
+                <div className="container mx-auto px-6">
+                  <div className="bg-background/95 backdrop-blur-xl border border-border/40 rounded-xl shadow-2xl p-1 flex min-h-[200px]">
+                    {/* Brand list */}
+                    <div className="w-56 border-r border-border/30 p-3">
+                      <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-muted-foreground/60 mb-2 px-3">Brands</p>
+                      {bikeBrands.map((brand) => (
+                        <div
+                          key={brand.name}
+                          onMouseEnter={() => openSub(brand.name, "brand")}
+                          onMouseLeave={() => closeSub("brand")}
+                        >
+                          <div
+                            className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-heading font-medium uppercase tracking-wider transition-all duration-150 cursor-default
+                              ${hoveredBrand === brand.name
+                                ? "bg-primary/10 text-primary"
+                                : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                              }
+                            `}
+                          >
+                            {brand.name}
+                            <ChevronRight className="w-3.5 h-3.5 opacity-40" />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Brand categories sub-panel */}
+                    <div className="flex-1 p-4">
+                      <AnimatePresence mode="wait">
+                        {hoveredBrand ? (
+                          <motion.div
+                            key={hoveredBrand}
+                            initial={{ opacity: 0, x: 8 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 8 }}
+                            transition={{ duration: 0.12 }}
+                            onMouseEnter={keepSubOpen}
+                            onMouseLeave={() => closeSub("brand")}
+                          >
+                            <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-muted-foreground/60 mb-3">{hoveredBrand}</p>
+                            <div className="space-y-1">
+                              {bikeBrands
+                                .find((b) => b.name === hoveredBrand)
+                                ?.categories.map((catKey) => {
+                                  const cat = bikeCategories.find((c) => c.key === catKey);
+                                  const brandBikes = bikes.filter((b) => b.brand === hoveredBrand && b.category === catKey);
+                                  return (
+                                    <div key={catKey}>
+                                      <Link
+                                        to={`/shop/${catKey}`}
+                                        onClick={() => setActiveDropdown(null)}
+                                        className="block px-3 py-2 rounded-lg text-xs font-heading font-semibold uppercase tracking-wider text-foreground hover:bg-muted/40 transition-all duration-150"
+                                      >
+                                        {cat?.label || catKey}
+                                      </Link>
+                                      <div className="ml-4 space-y-0.5">
+                                        {brandBikes.map((bike) => (
+                                          <Link
+                                            key={bike.id}
+                                            to={`/product/${bike.id}`}
+                                            onClick={() => setActiveDropdown(null)}
+                                            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[11px] text-muted-foreground hover:text-foreground hover:bg-muted/30 transition-all duration-150 group/bike"
+                                          >
+                                            <div className="w-8 h-8 bg-muted/20 rounded flex items-center justify-center flex-shrink-0">
+                                              <img src={bike.image} alt={bike.name} className="w-6 h-6 object-contain" />
+                                            </div>
+                                            <span className="font-heading font-medium">{bike.name}</span>
+                                          </Link>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                            </div>
+                          </motion.div>
+                        ) : (
+                          <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="h-full flex items-center justify-center"
+                          >
+                            <p className="text-xs text-muted-foreground/50 font-heading uppercase tracking-widest">Hover a brand to see categories</p>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Right icons */}
           <div className="flex items-center gap-1">
             <button
               onClick={() => setSearchOpen(true)}
+              aria-label="Open search"
+              title="Search"
               className="p-2 text-muted-foreground hover:text-foreground transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hidden sm:flex items-center justify-center hover:-translate-y-px hover:rotate-[-3deg] motion-reduce:hover:transform-none"
             >
               <Search className="w-[18px] h-[18px]" />
@@ -116,7 +358,7 @@ const Header = () => {
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="p-2 text-muted-foreground hover:text-foreground transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] relative flex items-center justify-center hover:-translate-y-px hover:rotate-[-3deg] motion-reduce:hover:transform-none">
+                  <button aria-label="Account menu" title="Account" className="p-2 text-muted-foreground hover:text-foreground transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] relative flex items-center justify-center hover:-translate-y-px hover:rotate-[-3deg] motion-reduce:hover:transform-none">
                     <UserIcon className="w-[18px] h-[18px]" />
                   </button>
                 </DropdownMenuTrigger>
@@ -132,6 +374,8 @@ const Header = () => {
             ) : (
               <button
                 onClick={() => navigate("/auth")}
+                aria-label="Sign in"
+                title="Sign in"
                 className="p-2 text-muted-foreground hover:text-foreground transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] relative flex items-center justify-center hover:-translate-y-px hover:rotate-[-3deg] motion-reduce:hover:transform-none"
               >
                 <UserIcon className="w-[18px] h-[18px]" />
@@ -140,6 +384,8 @@ const Header = () => {
 
             <button
               onClick={() => setIsOpen(true)}
+              aria-label="Open cart"
+              title="Cart"
               className="p-2 text-muted-foreground hover:text-foreground transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] relative flex items-center justify-center hover:-translate-y-px hover:rotate-[3deg] motion-reduce:hover:transform-none"
             >
               <ShoppingBag className="w-[18px] h-[18px]" />
@@ -152,6 +398,8 @@ const Header = () => {
             <button
               className="lg:hidden p-2 text-foreground z-50 relative flex items-center justify-center"
               onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label="Toggle navigation menu"
+              title={mobileOpen ? "Close menu" : "Open menu"}
             >
               <AnimatePresence mode="wait">
                 {mobileOpen ? (

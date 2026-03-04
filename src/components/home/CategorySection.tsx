@@ -1,11 +1,11 @@
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
-import ScrollReveal from "@/components/ScrollReveal";
-import categoryRoad from "@/assets/category-road.jpg";
-import categoryMtb from "@/assets/category-mtb.jpg";
 import categoryHybrid from "@/assets/category-hybrid.jpg";
+import categoryMtb from "@/assets/Mountain_bike.png";
 import categoryPreowned from "@/assets/category-preowned.jpg";
+import categoryRoad from "@/assets/category-road.jpg";
+import ScrollReveal from "@/components/ScrollReveal";
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const categories = [
   { title: "Road", subtitle: "Speed & Performance", image: categoryRoad, href: "/shop/road" },
@@ -20,7 +20,7 @@ const CategorySection = () => {
       <div className="container mx-auto px-5 md:px-8">
         <div className="text-center mb-16">
           <ScrollReveal as="h2" drift={12} className="font-heading text-section-sm md:text-section text-foreground mb-4">
-            Find Your Ride
+            Find Your Bike
           </ScrollReveal>
           <ScrollReveal as="p" delay={0.1} drift={10} className="text-muted-foreground font-body text-body max-w-xl mx-auto">
             From road racing to trail blazing — discover the perfect bike for every terrain.

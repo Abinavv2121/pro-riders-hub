@@ -43,7 +43,7 @@ const Auth = () => {
                     navigate(redirect);
                 }
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             error = err;
         }
 

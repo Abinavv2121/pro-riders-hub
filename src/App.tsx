@@ -16,7 +16,7 @@ import Contact from "./pages/Contact";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
-
+import ProductPage from "./pages/ProductPage";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Auth from "./pages/Auth";
 import UserDashboard from "./pages/UserDashboard";
@@ -54,6 +54,7 @@ const App = () => {
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/dashboard" element={<UserDashboard />} />
                 <Route path="*" element={<NotFound />} />
+                <Route path="/product/:id" element={<ProductPage />} />
               </Routes>
             </BrowserRouter>
           </CartProvider>
