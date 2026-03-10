@@ -36,9 +36,9 @@ const TestimonialsSection = () => {
     <section className="space-section">
       <div className="container mx-auto px-5 md:px-8">
         <div className="text-center mb-16">
-          <ScrollReveal as="p" scanline drift={8} className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">
+          {/* <ScrollReveal as="p" scanline drift={8} className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">
             Testimonials
-          </ScrollReveal>
+          </ScrollReveal> */}
           <ScrollReveal as="h2" delay={0.08} drift={12} className="font-heading text-section-sm md:text-section text-foreground">
             What Our Customers Say...
           </ScrollReveal>
@@ -52,7 +52,7 @@ const TestimonialsSection = () => {
           transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
           className="glass-card max-w-3xl mx-auto mb-8 p-8 md:p-10 rounded-lg"
         >
-          <Quote className="w-8 h-8 text-primary/20 mb-4" />
+          <Quote className="w-8 h-8 text-white fill-white mb-4" />
           <div className="flex gap-1 mb-5">
             {Array.from({ length: featured.rating }).map((_, j) => (
               <Star key={j} className="w-4 h-4 fill-primary text-primary" />
@@ -90,7 +90,7 @@ const TestimonialsSection = () => {
               transition={{ delay: i * 0.1, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
               className="glass-card p-6 md:p-8 rounded-lg"
             >
-              <Quote className="w-6 h-6 text-primary/20 mb-3" />
+              <Quote className="w-6 h-6 text-white fill-white mb-3" />
               <div className="flex gap-1 mb-3">
                 {Array.from({ length: t.rating }).map((_, j) => (
                   <Star key={j} className="w-3.5 h-3.5 fill-primary text-primary" />

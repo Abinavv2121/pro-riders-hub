@@ -1,6 +1,7 @@
+import coolBicycleOutdoors from "@/assets/cool-bicycle-outdoors.jpg.jpeg";
 import PageShell from "@/components/PageShell";
 import { motion } from "framer-motion";
-import { Shield, Award, Users, Clock } from "lucide-react";
+import { Award, Clock, Shield, Users } from "lucide-react";
 
 const stats = [
   { icon: Clock, value: "50+", label: "Years of Excellence" },
@@ -11,18 +12,26 @@ const stats = [
 
 const About = () => (
   <PageShell>
-    <section className="container mx-auto px-5 md:px-8 space-section">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="max-w-3xl">
-        <p className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">Our Story</p>
-        <h1 className="font-heading text-hero-sm md:text-section text-foreground mb-8">About Pro-Bikers</h1>
-        <div className="space-y-6 text-muted-foreground font-body text-body leading-relaxed">
-          <p>Founded in 1975 as Balaji Cycles, Pro-Bikers has evolved from a humble neighbourhood bike shop into India's premier cycling destination. For over five decades, we've been at the heart of Chennai's cycling community.</p>
-          <p>Our journey has been one of continuous evolution — from servicing everyday commuter bikes to becoming authorized dealers for the world's most prestigious cycling brands. Today, we bring together precision engineering, expert service, and genuine passion for cycling.</p>
-          <p>Recognized by the Global Cycling Network and trusted by over 50,000 riders, Pro-Bikers stands as a testament to what happens when expertise meets dedication. Every bike that leaves our workshop carries our promise of excellence.</p>
-        </div>
-      </motion.div>
+    <section className="relative min-h-screen flex items-center overflow-hidden">
+      <div className="absolute inset-0 -m-8 md:-m-16">
+        <img src={coolBicycleOutdoors} alt="Bicycle outdoors" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-background/80" />
+      </div>
+      <div className="relative z-10 container mx-auto px-5 md:px-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="max-w-3xl">
+          <p className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">Our Story</p>
+          <h1 className="font-heading text-hero-sm md:text-section text-foreground mb-8">About Pro-Bikers</h1>
+          <div className="space-y-6 text-muted-foreground font-body text-body leading-relaxed">
+            <p>Founded in 1975 as Balaji Cycles, Pro-Bikers has evolved from a humble neighbourhood bike shop into India's premier cycling destination. For over five decades, we've been at the heart of Chennai's cycling community.</p>
+            <p>Our journey has been one of continuous evolution — from servicing everyday commuter bikes to becoming authorized dealers for the world's most prestigious cycling brands. Today, we bring together precision engineering, expert service, and genuine passion for cycling.</p>
+            <p>Recognized by the Global Cycling Network and trusted by over 50,000 riders, Pro-Bikers stands as a testament to what happens when expertise meets dedication. Every bike that leaves our workshop carries our promise of excellence.</p>
+          </div>
+        </motion.div>
+      </div>
+    </section>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16">
+    <section className="container mx-auto px-5 md:px-8 space-section">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {stats.map((stat, i) => (
           <motion.div
             key={stat.label}

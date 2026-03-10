@@ -1,19 +1,12 @@
 import { Button } from "@/components/ui/button";
+import { Bike } from "@/data/bikes";
 import { motion } from "framer-motion";
 import { ShoppingBag } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface BikeCardProps {
-  bike: {
-    id: number;
-    image: string;
-    name: string;
-    brand: string;
-    color: string;
-    size: string;
-    tag: string | null;
-  };
+  bike: Bike;
   index: number;
   onAddItem: (item: {
     id: number;
@@ -37,17 +30,11 @@ export const BikeCard = ({ bike, index, onAddItem }: BikeCardProps) => {
       transition={{ duration: 0.4, delay: index * 0.06, ease: [0.4, 0, 0.2, 1] }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="group relative rounded-lg overflow-hidden bg-white border-2 transition-all duration-300"
-      style={{
-        perspective: 1000,
-        borderColor: isHovered ? 'rgba(59, 130, 246, 0.8)' : 'rgb(229, 231, 235)',
-        boxShadow: isHovered
-          ? '0 0 20px rgba(59, 130, 246, 0.5), 0 0 40px rgba(59, 130, 246, 0.3), inset 0 0 20px rgba(59, 130, 246, 0.1)'
-          : 'none',
-      }}
+      onClick={() => navigate(`/product/${bike.id}`)}
+      className="group relative rounded-lg overflow-hidden bg-white border border-gray-200 transition-all duration-300 cursor-pointer"
     >
       {/* Electric shimmer effect */}
-      {isHovered && (
+      {false && (
         <motion.div
           className="absolute inset-0 pointer-events-none"
           initial={{ opacity: 0 }}
@@ -80,11 +67,9 @@ export const BikeCard = ({ bike, index, onAddItem }: BikeCardProps) => {
         <p className="text-muted-foreground text-xs uppercase tracking-widest font-heading mb-1">
           {bike.brand}
         </p>
-        <div onClick={() => navigate(`/product/${bike.id}`)} className="cursor-pointer">
-          <h3 className="font-heading font-bold text-foreground text-lg mb-2 group-hover:text-primary transition-colors duration-200">
-            {bike.name}
-          </h3>
-        </div>
+        <h3 className="font-heading font-bold text-primary text-lg mb-2 transition-colors duration-200">
+          {bike.name}
+        </h3>
         <div className="flex items-center gap-3 text-muted-foreground text-xs font-micro mb-4">
           <span>{bike.color}</span>
           <span className="w-1 h-1 rounded-full bg-border" />
@@ -93,7 +78,7 @@ export const BikeCard = ({ bike, index, onAddItem }: BikeCardProps) => {
         <div className="flex items-center gap-3">
           <Button
             size="sm"
-            className="flex-1 text-xs"
+            className="flex-1 text-xs bg-primary text-primary-foreground hover:bg-primary/70 hover:outline hover:outline-2 hover:outline-primary/40 transition-all duration-200"
             onClick={() =>
               onAddItem({
                 id: bike.id,
@@ -110,7 +95,7 @@ export const BikeCard = ({ bike, index, onAddItem }: BikeCardProps) => {
           <Button
             /* use primary/default style so the icon button has a blue background */
             size="icon"
-            className="h-10 w-10 bg-primary text-primary-foreground hover:bg-primary/90"
+            className="h-10 w-10 bg-primary text-primary-foreground hover:bg-primary/70 hover:outline hover:outline-2 hover:outline-primary/40 transition-all duration-200"
             onClick={() =>
               onAddItem({
                 id: bike.id,

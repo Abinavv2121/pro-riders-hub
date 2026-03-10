@@ -54,7 +54,11 @@ const ProductPage = () => {
                                     key={idx}
                                     src={img}
                                     alt={`${bike.name} view ${idx + 1}`}
-                                    className={`w-16 h-16 object-contain rounded cursor-pointer border ${idx === currentIndex ? 'border-primary' : 'border-transparent'}`}
+                                    className={`w-16 h-16 object-contain rounded cursor-pointer border-2 transition-all duration-200 ${
+                                        idx === currentIndex 
+                                            ? 'border-primary outline outline-2 outline-primary/30 shadow-lg' 
+                                            : 'border-gray-300 hover:border-primary/50 outline outline-1 outline-gray-200'
+                                    }`}
                                     onClick={() => selectImage(idx)}
                                 />
                             ))}
