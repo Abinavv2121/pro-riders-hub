@@ -15,7 +15,7 @@ const About = () => (
     <section className="relative min-h-screen flex items-center overflow-hidden">
       <div className="absolute inset-0 -m-8 md:-m-16">
         <img src={coolBicycleOutdoors} alt="Bicycle outdoors" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-background/80" />
+        <div className="absolute inset-0 bg-[hsl(216,16%,7%)]/80" />
       </div>
       <div className="relative z-10 container mx-auto px-5 md:px-8">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="max-w-3xl">

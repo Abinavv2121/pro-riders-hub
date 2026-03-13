@@ -18,17 +18,17 @@ import { Link } from "react-router-dom";
 // Bucket C: Compact/mark-heavy — max-h 63%, max-w 73%
 type Bucket = "A" | "B" | "C";
 
-const brands: { name: string; link?: string;logo: string; bucket: Bucket; plate: boolean }[] = [
-  { name: "Lapierre",link:"https://www.lapierrebikes.com/", logo: lapierreLogo, bucket: "A", plate: false },
-  { name: "Giant", link:"https://www.giant-bicycles.com/",logo: giantLogo, bucket: "B", plate: true },
-  { name: "Trek", link:"https://www.trekbikes.com/", logo: trekLogo, bucket: "A", plate: true },
-  { name: "Argon 18", link:"https://www.argon18.com/", logo: argon18Logo, bucket: "A", plate: false },
-  { name: "Avanti", link:"https://www.avantibikes.com/",logo: avantiLogo, bucket: "B", plate: false },
-  { name: "Specialized", link:"https://www.specialized.com/", logo: specializedLogo, bucket: "A", plate: true },
-  { name: "Cannondale", link:"https://www.cannondale.com/", logo: cannondaleLogo, bucket: "A", plate: true },
-  { name: "Scott", link:"https://www.scott-sports.com/in/en/", logo: scottLogo, bucket: "B", plate: false },
-  { name: "Bianchi", link:"https://www.bianchi.com/", logo: bianchiLogo, bucket: "C", plate: true },
-  { name: "BMC", link:"https://bmc-switzerland.com/", logo: bmcLogo, bucket: "A", plate: true },
+const brands: { name: string; slug: string; logo: string; bucket: Bucket; plate: boolean }[] = [
+  { name: "Lapierre", slug: "lapierre", logo: lapierreLogo, bucket: "A", plate: false },
+  { name: "Giant", slug: "giant", logo: giantLogo, bucket: "B", plate: true },
+  { name: "Trek", slug: "trek", logo: trekLogo, bucket: "A", plate: true },
+  { name: "Argon 18", slug: "argon-18", logo: argon18Logo, bucket: "A", plate: false },
+  { name: "Avanti", slug: "avanti", logo: avantiLogo, bucket: "B", plate: false },
+  { name: "Specialized", slug: "specialized", logo: specializedLogo, bucket: "A", plate: true },
+  { name: "Cannondale", slug: "cannondale", logo: cannondaleLogo, bucket: "A", plate: true },
+  { name: "Scott", slug: "scott", logo: scottLogo, bucket: "B", plate: false },
+  { name: "Bianchi", slug: "bianchi", logo: bianchiLogo, bucket: "C", plate: true },
+  { name: "BMC", slug: "bmc", logo: bmcLogo, bucket: "A", plate: true },
 ];
 
 const bucketStyles: Record<Bucket, string> = {
@@ -48,7 +48,7 @@ const BrandTile = ({ brand, i }: { brand: typeof brands[number]; i: number }) =>
         glass-card hover:border-primary/20 transition-colors duration-200 group"
     >
       {/* Logo wrap – consistent padding & centering */}
-    <Link to={brand.link || "#"} target="_blank" className="absolute inset-0">  
+    <Link to={`/brand/${brand.slug}`} className="absolute inset-0">
       <div className="flex items-center justify-center w-full h-full p-5">
         <div
           className={`flex items-center justify-center ${
@@ -71,7 +71,7 @@ const BrandTile = ({ brand, i }: { brand: typeof brands[number]; i: number }) =>
 
       {/* Hover overlay with brand name */}
       <div
-        className="absolute inset-0 flex items-center justify-center bg-background/[0.3]
+        className="absolute inset-0 flex items-center justify-center bg-[hsl(216,16%,7%)]/[0.3]
           opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100
           transition-opacity duration-[240ms] ease-out pointer-events-none"
       >

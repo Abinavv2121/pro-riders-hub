@@ -12,6 +12,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminLogin from "./pages/AdminLogin";
 import Auth from "./pages/Auth";
 import BikeServicing from "./pages/BikeServicing";
+import BrandGallery from "./pages/BrandGallery";
 import Brands from "./pages/Brands";
 import Community from "./pages/Community";
 import Contact from "./pages/Contact";
@@ -59,6 +60,7 @@ const App = () => {
                 <Route path="/dashboard" element={<UserDashboard />} />
                 <Route path="*" element={<NotFound />} />
                 <Route path="/product/:id" element={<ProductPage />} />
+                <Route path="/brand/:brandSlug" element={<BrandGallery />} />
               </Routes>
             </BrowserRouter>
           </CartProvider>

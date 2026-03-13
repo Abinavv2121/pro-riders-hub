@@ -7,7 +7,7 @@ const Community = () => (
     <section className="relative h-[50vh] flex items-center overflow-hidden">
       <div className="absolute inset-0">
         <img src={communityImage} alt="Community ride" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-background/70" />
+        <div className="absolute inset-0 bg-[hsl(216,16%,7%)]/70" />
       </div>
       <div className="relative z-10 container mx-auto px-5 md:px-8">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>

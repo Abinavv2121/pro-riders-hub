@@ -7,8 +7,8 @@
 @layer base {
   :root {
     /* ── Color Tokens ── */
-    --background: 216 16% 7%;
-    --foreground: 0 0% 100%;
+    --background: 0 0% 100%;
+    --foreground: 216 16% 7%;
 
     --card: 213 14% 10%;
     --card-foreground: 0 0% 100%;
@@ -159,6 +159,17 @@
     -webkit-backdrop-filter: blur(var(--glass-blur));
     border: 1px solid hsl(var(--glass-border));
     box-shadow: var(--glass-shadow);
+  }
+
+  /* Footer dark override – preserves original dark footer appearance */
+  .footer-dark {
+    --background: 216 16% 7%;
+    --foreground: 0 0% 100%;
+    --muted-foreground: 217 10% 64%;
+    --border: 215 10% 18%;
+    --primary: 193 100% 42%;
+    background-color: hsl(216 16% 7%);
+    color: hsl(0 0% 100%);
   }
 
   /* Micro-interaction easing */

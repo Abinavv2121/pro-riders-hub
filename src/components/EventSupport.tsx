@@ -100,34 +100,36 @@ _Requested from Pro Riders Hub Website_
               viewport={{ once: true }}
               transition={{ delay: index * 0.1, duration: 0.4 }}
             >
-              <Card className="h-full hover:shadow-lg transition-shadow duration-300 border-t-4 border-t-primary">
+              <Card className="h-full hover:shadow-lg transition-shadow duration-300 border-t-4 border-t-[#0ea5e9] bg-white text-black border-2 border-[#0ea5e9] shadow-sm">
                 <CardHeader>
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <option.icon className="w-6 h-6 text-primary" />
+                    <div className="p-2 bg-[#f0f9ff] rounded-lg">
+                      <option.icon className="w-6 h-6 text-[#0ea5e9]" />
                     </div>
-                    <CardTitle className="text-xl font-heading">{option.title}</CardTitle>
+                    <CardTitle className="text-xl font-heading text-black">{option.title}</CardTitle>
                   </div>
-                  <p className="text-muted-foreground text-sm">{option.description}</p>
+                  <p className="text-black/70 text-sm">{option.description}</p>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2">
                     {option.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-sm">
-                        <Users className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                      <li key={idx} className="flex items-start gap-2 text-sm text-black">
+                        <Users className="w-4 h-4 text-[#0ea5e9] mt-0.5 flex-shrink-0" />
                         <span>{feature}</span>
                       </li>
                     ))}
                   </ul>
                   <div className="mt-6">
-                    <Button
-                      className="w-full"
-                      variant="outline"
+                    <button
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-md text-sm font-medium
+                        bg-white text-black border-2 border-[#0ea5e9]
+                        hover:bg-[#0ea5e9] hover:text-white
+                        transition-all duration-300 cursor-pointer"
                       onClick={() => handleEnquire(option.id)}
                     >
-                      <MessageCircle className="w-4 h-4 mr-2" />
+                      <MessageCircle className="w-4 h-4" />
                       {option.cta}
-                    </Button>
+                    </button>
                   </div>
                 </CardContent>
               </Card>
@@ -138,9 +140,9 @@ _Requested from Pro Riders Hub Website_
 
       {/* Additional Info */}
       <div className="container mx-auto px-5 md:px-8">
-        <div className="bg-muted/50 rounded-xl p-8 text-center">
-          <h3 className="font-heading text-h3 mb-3">Need a Custom Package?</h3>
-          <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
+        <div className="bg-white rounded-xl p-8 text-center border border-gray-200 shadow-sm">
+          <h3 className="font-heading text-h3 mb-3 text-black">Need a Custom Package?</h3>
+          <p className="text-black/70 mb-6 max-w-xl mx-auto">
             We understand that every event is unique. Contact us to discuss your specific 
             requirements and we'll create a tailored support package for you.
           </p>

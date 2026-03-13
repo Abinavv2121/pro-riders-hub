@@ -11,7 +11,7 @@ const CommunitySection = () => {
     <section ref={ref as React.RefObject<HTMLElement>} className="relative space-section overflow-hidden">
       <div className="absolute inset-0" style={{ transform: `translateY(${offset}px)`, willChange: "transform" }}>
         <img src={communityImage} alt="Community ride" className="w-full h-full object-cover" loading="lazy" />
-        <div className="absolute inset-0 bg-background/85" />
+        <div className="absolute inset-0 bg-[hsl(216,16%,7%)]/85" />
       </div>
 
       <div className="relative z-10 container mx-auto px-5 md:px-8 text-center">
