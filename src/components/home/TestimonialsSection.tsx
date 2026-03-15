@@ -50,7 +50,7 @@ const TestimonialsSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-          className="glass-card max-w-3xl mx-auto mb-8 p-8 md:p-10 rounded-lg"
+          className="glass-card max-w-3xl mx-auto mb-8 p-8 md:p-10 rounded-lg bg-[#FFFFFF]"
         >
           <Quote className="w-8 h-8 text-white fill-white mb-4" />
           <div className="flex gap-1 mb-5">
@@ -58,7 +58,7 @@ const TestimonialsSection = () => {
               <Star key={j} className="w-4 h-4 fill-primary text-primary" />
             ))}
           </div>
-          <p className="text-muted-foreground font-body text-body leading-relaxed mb-8">
+          <p className="text-[#000000] font-body text-body leading-relaxed mb-8">
             "{featured.text}"
           </p>
           <div className="flex items-center gap-4">
@@ -73,8 +73,8 @@ const TestimonialsSection = () => {
               />
             )}
             <div>
-              <p className="font-heading font-bold text-foreground text-sm">{featured.name}</p>
-              <p className="text-muted-foreground text-small font-micro">{featured.role}</p>
+              <p className="font-heading font-bold text-[#000000] text-sm">{featured.name}</p>
+              <p className="text-[#000000] text-small font-micro">{featured.role}</p>
             </div>
           </div>
         </motion.div>
@@ -88,7 +88,7 @@ const TestimonialsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-              className="glass-card p-6 md:p-8 rounded-lg"
+              className="glass-card p-6 md:p-8 rounded-lg bg-[#FFFFFF]"
             >
               <Quote className="w-6 h-6 text-white fill-white mb-3" />
               <div className="flex gap-1 mb-3">
@@ -96,12 +96,12 @@ const TestimonialsSection = () => {
                   <Star key={j} className="w-3.5 h-3.5 fill-primary text-primary" />
                 ))}
               </div>
-              <p className="text-muted-foreground font-body text-small leading-relaxed mb-5">
+              <p className="text-[#000000] font-body text-small leading-relaxed mb-5">
                 "{t.text}"
               </p>
               <div>
-                <p className="font-heading font-bold text-foreground text-sm">{t.name}</p>
-                <p className="text-muted-foreground text-xs font-micro">{t.role}</p>
+                <p className="font-heading font-bold text-[#000000] text-sm">{t.name}</p>
+                <p className="text-[#000000] text-xs font-micro">{t.role}</p>
               </div>
             </motion.div>
           ))}

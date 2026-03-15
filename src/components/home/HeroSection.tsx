@@ -27,11 +27,11 @@ const HeroSection = () => {
           {/* Left — Content Stack */}
           <div>
             <ScrollReveal as="h1" mask delay={0.2} className="font-heading font-black text-foreground text-hero-sm md:text-hero-md lg:text-hero leading-[1.05] mb-6">
-              PRECISION
+              <span className="text-[#FFFFFF]">PRECISION</span>
               <br />
               <span className="text-gradient-primary">ENGINEERING</span>
               <br />
-              MEETS EXPERTISE
+              <span className="text-[#FFFFFF]">MEETS EXPERTISE</span>
             </ScrollReveal>
 
             <ScrollReveal as="p" stagger delay={0} className="text-muted-foreground text-body max-w-lg mb-8 font-body">

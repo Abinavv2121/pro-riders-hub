@@ -63,17 +63,17 @@ const ServicesSection = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-                className="glass-card p-6 rounded-lg hover:border-primary/20 transition-colors duration-200 group relative overflow-hidden"
+                className="glass-card p-6 rounded-lg hover:border-primary/20 transition-colors duration-200 group relative overflow-hidden bg-[#FFFFFF]"
               >
                 {/* Radial glow on hover */}
                 <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-[240ms] pointer-events-none"
                   style={{ background: "radial-gradient(circle at 30% 20%, hsl(193 100% 42% / 0.06) 0%, transparent 60%)" }}
                 />
                 <service.icon className="relative w-7 h-7 text-primary mb-4 group-hover:scale-110 transition-transform duration-200" />
-                <h3 className="relative font-heading font-bold text-foreground text-base mb-2">
+                <h3 className="relative font-heading font-bold text-[#000000] text-base mb-2">
                   {service.title}
                 </h3>
-                <p className="relative text-muted-foreground text-small font-body leading-relaxed">
+                <p className="relative text-[#000000] text-small font-body leading-relaxed">
                   {service.description}
                 </p>
               </motion.div>

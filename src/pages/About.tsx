@@ -20,7 +20,7 @@ const About = () => (
       <div className="relative z-10 container mx-auto px-5 md:px-8">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="max-w-3xl">
           <p className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">Our Story</p>
-          <h1 className="font-heading text-hero-sm md:text-section text-foreground mb-8">About Pro-Bikers</h1>
+          <h1 className="font-heading text-hero-sm md:text-section text-[#FFFFFF] mb-8">About Pro-Bikers</h1>
           <div className="space-y-6 text-muted-foreground font-body text-body leading-relaxed">
             <p>Founded in 1975 as Balaji Cycles, Pro-Bikers has evolved from a humble neighbourhood bike shop into India's premier cycling destination. For over five decades, we've been at the heart of Chennai's cycling community.</p>
             <p>Our journey has been one of continuous evolution — from servicing everyday commuter bikes to becoming authorized dealers for the world's most prestigious cycling brands. Today, we bring together precision engineering, expert service, and genuine passion for cycling.</p>

@@ -95,7 +95,7 @@ const BrandsSection = () => {
       <div className="container mx-auto px-5 md:px-8">
         <div className="text-center mb-12">
           <ScrollReveal as="p" scanline drift={8} className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">Authorized Dealer</ScrollReveal>
-          <ScrollReveal as="h2" delay={0.08} drift={12} className="font-heading text-section-sm md:text-section text-foreground">
+          <ScrollReveal as="h2" delay={0.08} drift={12} className="font-heading text-section-sm md:text-section text-[#FFFFFF]">
             World-Class Brands
           </ScrollReveal>
         </div>
