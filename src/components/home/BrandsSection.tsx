@@ -91,7 +91,7 @@ const BrandTile = ({ brand, i }: { brand: typeof brands[number]; i: number }) =>
 
 const BrandsSection = () => {
   return (
-    <section className="section-card space-section">
+    <section className="section-card space-section" style={{ backgroundColor: "#FFFFFF" }}>
       <div className="container mx-auto px-5 md:px-8">
         <div className="text-center mb-12">
           <ScrollReveal as="p" scanline drift={8} className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">Authorized Dealer</ScrollReveal>

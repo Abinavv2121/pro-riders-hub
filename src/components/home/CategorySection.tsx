@@ -22,7 +22,7 @@ const CategorySection = () => {
           <ScrollReveal as="h2" drift={12} className="font-heading text-section-sm md:text-section text-foreground mb-4">
             Find Your Bike
           </ScrollReveal>
-          <ScrollReveal as="p" delay={0.1} drift={10} className="text-muted-foreground font-body text-body max-w-xl mx-auto">
+          <ScrollReveal as="p" delay={0.1} drift={10} className="text-[#000000] font-body text-body max-w-xl mx-auto">
             From road racing to trail blazing — discover the perfect bike for every terrain.
           </ScrollReveal>
         </div>

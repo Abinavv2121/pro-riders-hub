@@ -4,7 +4,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 
 const GCNSection = () => {
   return (
-    <section className="section-card space-section">
+    <section className="section-card space-section" style={{ backgroundColor: "#FFFFFF" }}>
       <div className="container mx-auto px-5 md:px-8">
         <div className="text-center mb-12">
           <ScrollReveal delay={0} drift={8}>
@@ -15,7 +15,7 @@ const GCNSection = () => {
               </span>
             </div>
           </ScrollReveal>
-          <ScrollReveal as="h2" delay={0.08} drift={12} className="font-heading text-section-sm md:text-section text-foreground mb-4">
+          <ScrollReveal as="h2" delay={0.08} drift={12} className="font-heading text-section-sm md:text-section text-[#FFFFFF] mb-4">
             Global Recognition for Excellence!
           </ScrollReveal>
           <ScrollReveal as="p" delay={0.16} drift={10} className="text-muted-foreground font-body text-body max-w-2xl mx-auto">

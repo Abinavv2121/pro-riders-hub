@@ -19,7 +19,7 @@ const CommunitySection = () => {
           <ScrollReveal as="p" drift={8} className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">
             Join the Community
           </ScrollReveal>
-          <ScrollReveal as="h2" delay={0.08} drift={14} className="font-heading text-section-sm md:text-section text-foreground mb-6">
+          <ScrollReveal as="h2" delay={0.08} drift={14} className="font-heading text-section-sm md:text-section text-[#FFFFFF] mb-6">
             Ride Together. Grow Together.
           </ScrollReveal>
           <ScrollReveal as="p" delay={0.16} drift={10} className="text-muted-foreground font-body text-body mb-10 max-w-xl mx-auto">

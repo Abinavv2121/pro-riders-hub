@@ -38,7 +38,7 @@ const ServicesSection = () => {
               <br />
               <span className="text-muted-foreground">A Workshop.</span>
             </ScrollReveal>
-            <ScrollReveal as="p" delay={0.16} drift={10} className="text-muted-foreground font-body text-body mb-8 max-w-lg">
+            <ScrollReveal as="p" delay={0.16} drift={10} className="text-[#000000] font-body text-body mb-8 max-w-lg">
               Our team of certified mechanics brings decades of expertise to every bike that enters our workshop.
             </ScrollReveal>
             <ScrollReveal delay={0.24} drift={10}>
@@ -63,7 +63,7 @@ const ServicesSection = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-                className="glass-card p-6 rounded-lg hover:border-primary/20 transition-colors duration-200 group relative overflow-hidden bg-[#FFFFFF]"
+                className="glass-card p-6 rounded-lg hover:border-primary/20 transition-colors duration-200 group relative overflow-hidden !bg-[#FFFFFF]"
               >
                 {/* Radial glow on hover */}
                 <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-[240ms] pointer-events-none"

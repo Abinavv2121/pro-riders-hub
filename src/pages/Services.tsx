@@ -27,7 +27,7 @@ const Services = () => (
       <div className="relative z-10 container mx-auto px-5 md:px-8">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <p className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">Expert Services</p>
-          <h1 className="font-heading text-hero-sm md:text-section text-foreground mb-4">Workshop & Services</h1>
+          <h1 className="font-heading text-hero-sm md:text-section text-[#FFFFFF] mb-4">Workshop & Services</h1>
           <p className="text-muted-foreground font-body text-body max-w-xl">Precision engineering meets decades of expertise. Every bike deserves expert care.</p>
         </motion.div>
       </div>

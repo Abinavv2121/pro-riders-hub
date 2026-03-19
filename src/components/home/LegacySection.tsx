@@ -20,12 +20,13 @@ const StatCard = ({ icon: Icon, value, suffix, label, delay }: {
       viewport={{ once: true }}
       transition={{ delay, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
       className="glass-card p-6 sm:p-8 rounded-lg text-center hover:border-primary/20 transition-colors duration-200 relative overflow-hidden"
+      style={{ backgroundColor: "#FFFFFF" }}
     >
       <Icon className="relative w-6 h-6 sm:w-7 sm:h-7 text-primary mx-auto mb-3" />
-      <p className="relative font-heading font-black text-foreground text-2xl sm:text-3xl mb-1">
+      <p className="relative font-heading font-black text-[#000000] text-2xl sm:text-3xl mb-1">
         {count.toLocaleString()}{suffix}
       </p>
-      <p className="relative text-muted-foreground text-[10px] sm:text-xs uppercase tracking-wider font-heading">{label}</p>
+      <p className="relative text-[#000000] text-[10px] sm:text-xs uppercase tracking-wider font-heading">{label}</p>
     </motion.div>
   );
 };
@@ -39,20 +40,20 @@ const stats = [
 
 const LegacySection = () => {
   return (
-    <section className="section-card space-section">
+    <section className="section-card space-section" style={{ backgroundColor: "#FFFFFF" }}>
       <div className="container mx-auto px-5 md:px-8">
         <div className="grid lg:grid-cols-2 gap-lg-space items-center">
           <div>
             <ScrollReveal as="p" scanline drift={8} className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">Our Legacy</ScrollReveal>
-            <ScrollReveal as="h2" delay={0.08} drift={14} className="font-heading text-section-sm md:text-section text-foreground mb-6 leading-tight">
+            <ScrollReveal as="h2" delay={0.08} drift={14} className="font-heading text-section-sm md:text-section text-[#000000] mb-6 leading-tight">
               Since 1975.
               <br />
-              <span className="text-muted-foreground">A Legacy of Cycling.</span>
+              <span className="text-[#000000]">A Legacy of Cycling.</span>
             </ScrollReveal>
-            <ScrollReveal as="p" delay={0.16} drift={10} className="text-muted-foreground font-body text-body mb-4 leading-relaxed">
+            <ScrollReveal as="p" delay={0.16} drift={10} className="text-[#000000] font-body text-body mb-4 leading-relaxed">
               From our humble beginnings as Balaji Cycles, ProBikers has evolved into India's premier cycling destination. Five decades of passion, precision, and an unwavering commitment to the cycling community.
             </ScrollReveal>
-            <ScrollReveal as="p" delay={0.22} drift={10} className="text-muted-foreground font-body text-body leading-relaxed">
+            <ScrollReveal as="p" delay={0.22} drift={10} className="text-[#000000] font-body text-body leading-relaxed">
               Recognized by the Global Cycling Network and trusted by over 50,000 riders, we continue to bring the world's finest bicycles and expert service to every cyclist who walks through our doors.
             </ScrollReveal>
           </div>
@@ -67,10 +68,11 @@ const LegacySection = () => {
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.08, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
                   className="glass-card p-6 sm:p-8 rounded-lg text-center hover:border-primary/30 transition-colors duration-[240ms]"
+                  style={{ backgroundColor: "#FFFFFF" }}
                 >
                   <stat.icon className="w-6 h-6 sm:w-7 sm:h-7 text-primary mx-auto mb-3" />
-                  <p className="font-heading font-black text-foreground text-2xl sm:text-3xl mb-1">GCN</p>
-                  <p className="text-muted-foreground text-[10px] sm:text-xs uppercase tracking-wider font-heading">{stat.label}</p>
+                  <p className="font-heading font-black text-[#000000] text-2xl sm:text-3xl mb-1">GCN</p>
+                  <p className="text-[#000000] text-[10px] sm:text-xs uppercase tracking-wider font-heading">{stat.label}</p>
                 </motion.div>
               ) : (
                 <StatCard
