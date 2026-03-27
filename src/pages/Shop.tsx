@@ -303,6 +303,9 @@ const Shop = () => {
           <p className="text-muted-foreground font-body text-body max-w-xl">
             Browse our curated collection of premium bicycles from the world's finest brands.
           </p>
+          <p className="mt-4 text-[#111111] text-left leading-relaxed font-body w-full max-w-none">
+            Browse a wide range of high-performance bicycles designed for every type of rider, from beginners to professionals. Explore road bikes built for speed, mountain bikes made for adventure, and city bikes perfect for everyday commuting. Each bike is carefully selected from trusted global brands to ensure quality, durability, and top performance. Use our category filters to quickly find the perfect bike based on your riding style and needs. Whether you ride for fitness, competition, or leisure, we have options tailored for every journey. Start your cycling experience today with bikes that combine innovation, comfort, and reliability.
+          </p>
         </div>
       </section>
 

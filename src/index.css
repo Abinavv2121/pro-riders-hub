@@ -7,7 +7,7 @@
 @layer base {
   :root {
     /* ── Color Tokens ── */
-    --background: 0 0% 100%;
+    --background: 0 0% 98%;
     --foreground: 216 16% 7%;
 
     --card: 213 14% 10%;
@@ -216,7 +216,7 @@ html {
 /* ── Custom cursor ── */
 @media (pointer: fine) and (hover: hover) {
   body:not(.reduced-motion) {
-    cursor: none;
+    cursor: url('data:image/svg+xml;utf8,<svg width="28" height="28" viewBox="0 0 28 28" fill="%2300bad6" stroke="white" stroke-width="2" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M3 2L20 10L13 12L10 21L3 2Z"/></svg>') 3 2, auto;
   }
 
   body:not(.reduced-motion) a,
@@ -225,7 +225,7 @@ html {
   body:not(.reduced-motion) input,
   body:not(.reduced-motion) textarea,
   body:not(.reduced-motion) select {
-    cursor: none;
+    cursor: url('data:image/svg+xml;utf8,<svg width="28" height="28" viewBox="0 0 28 28" fill="%2300bad6" stroke="white" stroke-width="2" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M3 2L20 10L13 12L10 21L3 2Z"/></svg>') 3 2, pointer;
   }
 }
 

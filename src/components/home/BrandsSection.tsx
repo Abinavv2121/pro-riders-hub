@@ -1,16 +1,16 @@
 import ScrollReveal from "@/components/ScrollReveal";
 import { motion } from "framer-motion";
 
-import argon18Logo from "@/assets/brands/argon18.jpeg";
-import avantiLogo from "@/assets/brands/avanti.jpeg";
-import bianchiLogo from "@/assets/brands/bianchi.jpeg";
-import bmcLogo from "@/assets/brands/bmc.jpeg";
-import cannondaleLogo from "@/assets/brands/cannondale.jpeg";
-import giantLogo from "@/assets/brands/giant.jpeg";
-import lapierreLogo from "@/assets/brands/lapierre.jpeg";
-import scottLogo from "@/assets/brands/scott.jpeg";
-import specializedLogo from "@/assets/brands/specialized.jpeg";
-import trekLogo from "@/assets/brands/trek.jpeg";
+import argon18Logo from "@/assets/brands/logo images/argon-logo.jpg";
+import avantiLogo from "@/assets/brands/logo images/download.png";
+import bianchiLogo from "@/assets/brands/logo images/Bianchi_logo.svg.png";
+import bmcLogo from "@/assets/brands/logo images/BMC_Switzerland_logo.svg.png";
+import cannondaleLogo from "@/assets/brands/logo images/Cannondale_logo.svg.png";
+import giantLogo from "@/assets/brands/logo images/Giant_bycicles_logo.svg.png";
+import lapierreLogo from "@/assets/brands/logo images/Lapierre_logo.svg.png";
+import scottLogo from "@/assets/brands/logo images/Scott_Sports_logo.svg.png";
+import specializedLogo from "@/assets/brands/logo images/specialized-logoquake_54a369.png";
+import trekLogo from "@/assets/brands/logo images/Trek_Bicycle_Corporation_logo.svg.png";
 import { Link } from "react-router-dom";
 
 // Bucket A: Wide wordmarks — max-h 47%, max-w 85%
@@ -20,15 +20,15 @@ type Bucket = "A" | "B" | "C";
 
 const brands: { name: string; slug: string; logo: string; bucket: Bucket; plate: boolean }[] = [
   { name: "Lapierre", slug: "lapierre", logo: lapierreLogo, bucket: "A", plate: false },
-  { name: "Giant", slug: "giant", logo: giantLogo, bucket: "B", plate: true },
-  { name: "Trek", slug: "trek", logo: trekLogo, bucket: "A", plate: true },
+  { name: "Giant", slug: "giant", logo: giantLogo, bucket: "B", plate: false },
+  { name: "Trek", slug: "trek", logo: trekLogo, bucket: "A", plate: false },
   { name: "Argon 18", slug: "argon-18", logo: argon18Logo, bucket: "A", plate: false },
   { name: "Avanti", slug: "avanti", logo: avantiLogo, bucket: "B", plate: false },
-  { name: "Specialized", slug: "specialized", logo: specializedLogo, bucket: "A", plate: true },
-  { name: "Cannondale", slug: "cannondale", logo: cannondaleLogo, bucket: "A", plate: true },
+  { name: "Specialized", slug: "specialized", logo: specializedLogo, bucket: "A", plate: false },
+  { name: "Cannondale", slug: "cannondale", logo: cannondaleLogo, bucket: "A", plate: false },
   { name: "Scott", slug: "scott", logo: scottLogo, bucket: "B", plate: false },
-  { name: "Bianchi", slug: "bianchi", logo: bianchiLogo, bucket: "C", plate: true },
-  { name: "BMC", slug: "bmc", logo: bmcLogo, bucket: "A", plate: true },
+  { name: "Bianchi", slug: "bianchi", logo: bianchiLogo, bucket: "C", plate: false },
+  { name: "BMC", slug: "bmc", logo: bmcLogo, bucket: "A", plate: false },
 ];
 
 const bucketStyles: Record<Bucket, string> = {
@@ -44,14 +44,13 @@ const BrandTile = ({ brand, i }: { brand: typeof brands[number]; i: number }) =>
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: i * 0.05, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-      className="relative flex items-center justify-center aspect-[4/3] rounded-lg overflow-hidden
-        glass-card hover:border-primary/20 transition-colors duration-200 group"
+      className="relative flex items-center justify-center aspect-[4/3] group"
     >
       {/* Logo wrap – consistent padding & centering */}
     <Link to={`/brand/${brand.slug}`} className="absolute inset-0">
       <div className="flex items-center justify-center w-full h-full p-5">
         <div
-          className={`flex items-center justify-center ${
+          className={`flex items-center justify-center w-full h-full ${
             brand.plate
               ? "bg-[#f3f4f6]/[0.92] rounded-md shadow-[0_1px_4px_rgba(0,0,0,0.08)] p-2"
               : ""
@@ -63,7 +62,7 @@ const BrandTile = ({ brand, i }: { brand: typeof brands[number]; i: number }) =>
             className={`object-contain transition-[filter,opacity] duration-[240ms] ease-out
               group-hover:blur-[2px] group-hover:opacity-[0.8]
               group-focus-visible:blur-[2px] group-focus-visible:opacity-[0.8]
-              ${bucketStyles[brand.bucket]}`}
+              ${bucketStyles[brand.bucket]} w-full h-full`}
             draggable={false}
           />
         </div>

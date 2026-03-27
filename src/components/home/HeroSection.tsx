@@ -82,7 +82,7 @@ const HeroSection = () => {
                 transition={{ delay: 0.65, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
               >
                 <Link to="/services">
-                  <Button variant="secondary" size="lg">Our Services</Button>
+                  <Button size="lg">Our Services</Button>
                 </Link>
               </motion.div>
             </div>

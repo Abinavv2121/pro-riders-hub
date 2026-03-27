@@ -95,13 +95,13 @@ const BookingCalendar = ({ selectedDate, onDateSelect, priorityBooking = false, 
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full" style={{ backgroundColor: "#FFFFFF", color: "#000000" }}>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-2 text-[#000000]">
           <CalendarIcon className="w-5 h-5" />
           Select Appointment Date
         </CardTitle>
-        <CardDescription>Choose a weekday for your service appointment</CardDescription>
+        <CardDescription className="text-[#000000]">Choose a weekday for your service appointment</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Calendar Header */}
@@ -109,7 +109,7 @@ const BookingCalendar = ({ selectedDate, onDateSelect, priorityBooking = false, 
           <Button variant="outline" size="icon" onClick={goToPreviousMonth}>
             <ChevronLeft className="w-4 h-4" />
           </Button>
-          <span className="font-heading font-semibold text-lg">
+          <span className="font-heading font-semibold text-lg text-[#000000]">
             {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
           </span>
           <Button variant="outline" size="icon" onClick={goToNextMonth}>
@@ -120,7 +120,7 @@ const BookingCalendar = ({ selectedDate, onDateSelect, priorityBooking = false, 
         {/* Days of Week Header */}
         <div className="grid grid-cols-7 gap-1 text-center">
           {daysOfWeek.map((day) => (
-            <div key={day} className="text-xs font-medium text-muted-foreground py-2">
+            <div key={day} className="text-xs font-medium text-[#000000] py-2">
               {day}
             </div>
           ))}
@@ -170,29 +170,29 @@ const BookingCalendar = ({ selectedDate, onDateSelect, priorityBooking = false, 
             animate={{ opacity: 1, y: 0 }}
             className="bg-muted rounded-lg p-4 text-center"
           >
-            <p className="text-sm text-muted-foreground">Selected Date</p>
+            <p className="text-sm text-[#000000]">Selected Date</p>
             <p className="font-heading font-semibold text-primary">{formatDate(selectedDate)}</p>
           </motion.div>
         )}
 
         {/* Priority Booking Option */}
-        <div className="flex items-center space-x-3 p-4 bg-muted rounded-lg">
+        <div className="flex items-center space-x-3 p-4 bg-muted rounded-lg" style={{ backgroundColor: "#FFFFFF", border: "1px solid #000000" }}>
           <Checkbox
             id="priority"
             checked={priorityBooking}
             onCheckedChange={(checked) => onPriorityChange?.(checked as boolean)}
           />
           <div className="flex-1">
-            <Label htmlFor="priority" className="flex items-center gap-2 cursor-pointer">
+            <Label htmlFor="priority" className="flex items-center gap-2 cursor-pointer text-[#000000]">
               <Zap className="w-4 h-4 text-yellow-500" />
-              <span className="font-medium">Priority Booking</span>
+              <span className="font-medium text-[#000000]">Priority Booking</span>
             </Label>
-            <p className="text-xs text-muted-foreground">Get faster service with priority scheduling (+₹199)</p>
+            <p className="text-xs text-[#000000]">Get faster service with priority scheduling (+₹199)</p>
           </div>
         </div>
 
         {/* Info Text */}
-        <div className="text-xs text-muted-foreground text-center">
+        <div className="text-xs text-[#000000] text-center">
           <p>• Only weekdays (Monday - Friday) are available for booking</p>
           <p>• Past dates are not selectable</p>
         </div>

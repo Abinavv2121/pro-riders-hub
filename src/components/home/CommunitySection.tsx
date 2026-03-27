@@ -30,7 +30,7 @@ const CommunitySection = () => {
               <Button size="lg">Join a Ride</Button>
             </Link>
             <Link to="/community">
-              <Button variant="secondary" size="lg">View Events</Button>
+              <Button variant="secondary" size="lg" style={{ backgroundColor: "#FFFFFF", color: "#000000" }}>View Events</Button>
             </Link>
           </ScrollReveal>
         </div>

@@ -334,7 +334,7 @@ const RentalBikes = () => {
           <h2 className="font-heading font-bold text-hero-sm md:text-section text-foreground mb-3">
             Rental Bikes
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-[#000000] max-w-2xl mx-auto">
             Choose from our premium selection of rental bikes. Whether you're planning a 
             weekend ride or a cycling vacation, we have the perfect bike for you.
           </p>
@@ -366,7 +366,9 @@ const RentalBikes = () => {
           {rentalCategories.map((category) => (
             <TabsContent key={category.key} value={category.key} className="mt-0">
               <div className="text-center mb-6">
-                <p className="text-muted-foreground">{category.description}</p>
+                <p className={category.description === "Performance bikes for speed on paved roads." ? "text-[#111111]" : "text-muted-foreground"}>
+                  {category.description}
+                </p>
               </div>
               {/* Grid with proper spacing - like Shop.tsx */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

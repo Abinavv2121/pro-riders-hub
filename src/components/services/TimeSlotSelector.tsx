@@ -28,13 +28,13 @@ const TimeSlotSelector = ({ selectedSlot, onSlotSelect }: TimeSlotSelectorProps)
   const [slots] = useState<TimeSlot[]>(defaultTimeSlots);
 
   return (
-    <Card className="w-full">
+    <Card className="w-full" style={{ backgroundColor: "#FFFFFF", color: "#000000" }}>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-2 text-[#000000]">
           <Clock className="w-5 h-5" />
           Select Time Slot
         </CardTitle>
-        <CardDescription>Choose a convenient time for your appointment</CardDescription>
+        <CardDescription className="text-[#000000]">Choose a convenient time for your appointment</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
@@ -61,7 +61,7 @@ const TimeSlotSelector = ({ selectedSlot, onSlotSelect }: TimeSlotSelectorProps)
                     {slot.displayTime}
                   </span>
                   {!slot.available && (
-                    <p className="text-xs text-muted-foreground mt-1">Unavailable</p>
+                    <p className="text-xs text-[#000000] mt-1">Unavailable</p>
                   )}
                 </div>
               </motion.button>
@@ -75,14 +75,14 @@ const TimeSlotSelector = ({ selectedSlot, onSlotSelect }: TimeSlotSelectorProps)
             animate={{ opacity: 1, y: 0 }}
             className="mt-4 bg-muted rounded-lg p-3 text-center"
           >
-            <p className="text-sm text-muted-foreground">Selected Time</p>
+            <p className="text-sm text-[#000000]">Selected Time</p>
             <p className="font-heading font-semibold text-primary">
               {slots.find((s) => s.id === selectedSlot)?.displayTime}
             </p>
           </motion.div>
         )}
 
-        <p className="text-xs text-muted-foreground text-center mt-4">
+        <p className="text-xs text-[#000000] text-center mt-4">
           Select a time slot to proceed with your booking
         </p>
       </CardContent>

@@ -82,7 +82,7 @@ _Requested from Pro Riders Hub Website_
           <h2 className="font-heading font-bold text-hero-sm md:text-section text-foreground mb-3">
             Supporting Events
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-[#000000] max-w-2xl mx-auto">
             We provide comprehensive support for cycling events, races, and community rides. 
             Make your event a success with our professional support services.
           </p>
@@ -140,13 +140,13 @@ _Requested from Pro Riders Hub Website_
 
       {/* Additional Info */}
       <div className="container mx-auto px-5 md:px-8">
-        <div className="bg-white rounded-xl p-8 text-center border border-gray-200 shadow-sm">
-          <h3 className="font-heading text-h3 mb-3 text-black">Need a Custom Package?</h3>
-          <p className="text-black/70 mb-6 max-w-xl mx-auto">
+        <div className="bg-primary rounded-xl p-8 text-center shadow-sm">
+          <h3 className="font-heading text-h3 mb-3 text-white">Need a Custom Package?</h3>
+          <p className="text-white/90 mb-6 max-w-xl mx-auto">
             We understand that every event is unique. Contact us to discuss your specific 
             requirements and we'll create a tailored support package for you.
           </p>
-          <Button size="lg" asChild>
+          <Button variant="outline" size="lg" className="border-none shadow-sm" asChild>
             <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer">
               <MessageCircle className="w-5 h-5 mr-2" />
               Discuss Your Event

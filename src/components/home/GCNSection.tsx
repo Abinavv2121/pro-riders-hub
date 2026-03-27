@@ -18,7 +18,7 @@ const GCNSection = () => {
           <ScrollReveal as="h2" delay={0.08} drift={12} className="font-heading text-section-sm md:text-section text-[#FFFFFF] mb-4">
             Global Recognition for Excellence!
           </ScrollReveal>
-          <ScrollReveal as="p" delay={0.16} drift={10} className="text-muted-foreground font-body text-body max-w-2xl mx-auto">
+          <ScrollReveal as="p" delay={0.16} drift={10} className="text-[#000000] font-body text-body max-w-2xl mx-auto">
             Pro-Bikers proudly holds the title of{" "}
             <span className="text-primary font-semibold">
               The Best Bike Shop in the World

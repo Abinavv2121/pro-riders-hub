@@ -59,6 +59,7 @@ const ServicePackages = ({ packages, onSelectPackage, selectedPackageId }: Servi
                     : "border-border hover:border-primary/50"
                 } ${pkg.popular ? "md:-mt-4 md:mb-4" : ""}`}
                 onClick={() => onSelectPackage(pkg)}
+                style={{ backgroundColor: "#FFFFFF", color: "#000000" }}
               >
                 {pkg.popular && (
                   <div className="absolute top-0 right-0">
@@ -72,21 +73,21 @@ const ServicePackages = ({ packages, onSelectPackage, selectedPackageId }: Servi
                   <div className={`mx-auto w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4 ${colorMap[pkg.icon]}`}>
                     <Icon className="w-8 h-8" />
                   </div>
-                  <CardTitle className="font-heading text-xl">{pkg.name}</CardTitle>
-                  <CardDescription className="text-xs mt-1">{pkg.description}</CardDescription>
+                  <CardTitle className="font-heading text-xl text-[#000000]">{pkg.name}</CardTitle>
+                  <CardDescription className="text-xs mt-1 text-[#000000]">{pkg.description}</CardDescription>
                 </CardHeader>
 
                 <CardContent className="space-y-4">
                   <div className="text-center">
                     <span className="font-heading text-3xl font-bold text-primary">₹{pkg.price}</span>
-                    <span className="text-muted-foreground text-sm">/service</span>
+                    <span className="text-[#000000] text-sm">/service</span>
                   </div>
 
                   <ul className="space-y-2">
                     {pkg.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-sm">
+                      <li key={idx} className="flex items-start gap-2 text-sm text-[#000000]">
                         <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                        <span className="text-muted-foreground">{feature}</span>
+                        <span className="text-[#000000]">{feature}</span>
                       </li>
                     ))}
                   </ul>

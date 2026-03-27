@@ -51,13 +51,13 @@ const ReminderSettings = ({ onSave }: ReminderSettingsProps) => {
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full" style={{ backgroundColor: "#FFFFFF", color: "#000000" }}>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-2 text-[#000000]">
           <Bell className="w-5 h-5" />
           Service Reminders
         </CardTitle>
-        <CardDescription>Set up automatic reminders for your next service</CardDescription>
+        <CardDescription className="text-[#000000]">Set up automatic reminders for your next service</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Time-based Reminder */}
@@ -71,11 +71,11 @@ const ReminderSettings = ({ onSave }: ReminderSettingsProps) => {
                 className="mt-1"
               />
               <div>
-                <Label htmlFor="timeReminder" className="flex items-center gap-2 cursor-pointer">
+                <Label htmlFor="timeReminder" className="flex items-center gap-2 cursor-pointer text-[#000000]">
                   <Calendar className="w-4 h-4" />
-                  <span className="font-medium">Time-based Reminder</span>
+                  <span className="font-medium text-[#000000]">Time-based Reminder</span>
                 </Label>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="text-sm text-[#000000] mt-1">
                   Get reminded after a certain period
                 </p>
               </div>
@@ -89,7 +89,7 @@ const ReminderSettings = ({ onSave }: ReminderSettingsProps) => {
               className="ml-7 pl-7 space-y-3"
             >
               <div className="flex items-center gap-4">
-                <span className="text-sm text-muted-foreground">Remind me every</span>
+                <span className="text-sm text-[#000000]">Remind me every</span>
                 <Input
                   type="number"
                   min="1"
@@ -98,7 +98,7 @@ const ReminderSettings = ({ onSave }: ReminderSettingsProps) => {
                   onChange={(e) => handleNumberChange("reminderMonths", e.target.value)}
                   className="w-20"
                 />
-                <span className="text-sm text-muted-foreground">month(s)</span>
+                <span className="text-sm text-[#000000]">month(s)</span>
               </div>
             </motion.div>
           )}
@@ -115,11 +115,11 @@ const ReminderSettings = ({ onSave }: ReminderSettingsProps) => {
                 className="mt-1"
               />
               <div>
-                <Label htmlFor="kilometerReminder" className="flex items-center gap-2 cursor-pointer">
+                <Label htmlFor="kilometerReminder" className="flex items-center gap-2 cursor-pointer text-[#000000]">
                   <Bike className="w-4 h-4" />
-                  <span className="font-medium">Kilometer-based Reminder</span>
+                  <span className="font-medium text-[#000000]">Kilometer-based Reminder</span>
                 </Label>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="text-sm text-[#000000] mt-1">
                   Get reminded after riding a certain distance
                 </p>
               </div>
@@ -133,7 +133,7 @@ const ReminderSettings = ({ onSave }: ReminderSettingsProps) => {
               className="ml-7 pl-7 space-y-3"
             >
               <div className="flex items-center gap-4">
-                <span className="text-sm text-muted-foreground">Remind me after</span>
+                <span className="text-sm text-[#000000]">Remind me after</span>
                 <Input
                   type="number"
                   min="100"
@@ -143,7 +143,7 @@ const ReminderSettings = ({ onSave }: ReminderSettingsProps) => {
                   onChange={(e) => handleNumberChange("reminderKilometers", e.target.value)}
                   className="w-24"
                 />
-                <span className="text-sm text-muted-foreground">km</span>
+                <span className="text-sm text-[#000000]">km</span>
               </div>
             </motion.div>
           )}
@@ -151,7 +151,7 @@ const ReminderSettings = ({ onSave }: ReminderSettingsProps) => {
 
         {/* Notification Preferences */}
         <div className="border-t pt-6">
-          <p className="font-medium mb-4">Notification Preferences</p>
+          <p className="font-medium mb-4 text-[#000000]">Notification Preferences</p>
           <div className="space-y-3">
             <div className="flex items-center gap-3">
               <Checkbox
@@ -159,9 +159,9 @@ const ReminderSettings = ({ onSave }: ReminderSettingsProps) => {
                 checked={settings.notifyEmail}
                 onCheckedChange={() => handleToggle("notifyEmail")}
               />
-              <Label htmlFor="notifyEmail" className="flex items-center gap-2 cursor-pointer">
+              <Label htmlFor="notifyEmail" className="flex items-center gap-2 cursor-pointer text-[#000000]">
                 <Mail className="w-4 h-4" />
-                <span>Email notifications</span>
+                <span className="text-[#000000]">Email notifications</span>
               </Label>
             </div>
             <div className="flex items-center gap-3">
@@ -170,9 +170,9 @@ const ReminderSettings = ({ onSave }: ReminderSettingsProps) => {
                 checked={settings.notifyWhatsApp}
                 onCheckedChange={() => handleToggle("notifyWhatsApp")}
               />
-              <Label htmlFor="notifyWhatsApp" className="flex items-center gap-2 cursor-pointer">
+              <Label htmlFor="notifyWhatsApp" className="flex items-center gap-2 cursor-pointer text-[#000000]">
                 <MessageSquare className="w-4 h-4" />
-                <span>WhatsApp notifications</span>
+                <span className="text-[#000000]">WhatsApp notifications</span>
               </Label>
             </div>
           </div>

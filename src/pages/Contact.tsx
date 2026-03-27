@@ -99,11 +99,11 @@ const Contact = () => {
 
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your Name *" className="w-full px-4 py-3 border border-border rounded-lg bg-card text-foreground font-body text-sm focus:outline-none focus:border-primary transition-colors duration-200" required />
-              <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email Address *" className="w-full px-4 py-3 border border-border rounded-lg bg-card text-foreground font-body text-sm focus:outline-none focus:border-primary transition-colors duration-200" required />
+              <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your Name *" className="w-full px-4 py-3 border border-border rounded-lg bg-[#FAFAFA] text-[#111111] placeholder:text-gray-500 font-body text-sm focus:outline-none focus:border-primary transition-colors duration-200" required />
+              <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email Address *" className="w-full px-4 py-3 border border-border rounded-lg bg-[#FAFAFA] text-[#111111] placeholder:text-gray-500 font-body text-sm focus:outline-none focus:border-primary transition-colors duration-200" required />
             </div>
-            <input type="text" name="subject" value={formData.subject} onChange={handleChange} placeholder="Subject" className="w-full px-4 py-3 border border-border rounded-lg bg-card text-foreground font-body text-sm focus:outline-none focus:border-primary transition-colors duration-200" />
-            <textarea name="message" value={formData.message} onChange={handleChange} placeholder="Your Message *" rows={5} className="w-full px-4 py-3 border border-border rounded-lg bg-card text-foreground font-body text-sm focus:outline-none focus:border-primary transition-colors duration-200 resize-none" required />
+            <input type="text" name="subject" value={formData.subject} onChange={handleChange} placeholder="Subject" className="w-full px-4 py-3 border border-border rounded-lg bg-[#FAFAFA] text-[#111111] placeholder:text-gray-500 font-body text-sm focus:outline-none focus:border-primary transition-colors duration-200" />
+            <textarea name="message" value={formData.message} onChange={handleChange} placeholder="Your Message *" rows={5} className="w-full px-4 py-3 border border-border rounded-lg bg-[#FAFAFA] text-[#111111] placeholder:text-gray-500 font-body text-sm focus:outline-none focus:border-primary transition-colors duration-200 resize-none" required />
             <Button size="lg" disabled={isSubmitting}>
               {isSubmitting ? "Sending..." : "Send Message"}
             </Button>

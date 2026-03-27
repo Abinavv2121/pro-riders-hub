@@ -128,7 +128,7 @@ const Header = () => {
                   <Link
                     to={link.href}
                     className={`relative px-4 py-2 text-xs font-heading font-medium uppercase tracking-[0.15em] transition-colors duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] flex items-center gap-1
-                      ${isActive || activeDropdown === link.label ? "text-primary" : "text-muted-foreground hover:text-foreground"}
+                      ${isActive ? "text-primary" : activeDropdown === link.label ? "text-[#111111]" : "text-muted-foreground hover:text-[#111111]"}
                     `}
                   >
                     {link.label}

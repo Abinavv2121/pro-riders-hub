@@ -36,15 +36,15 @@ const ServiceStatusTracker = ({ currentStage, showLabels = true }: ServiceStatus
   const currentStageIndex = stages.findIndex((s) => s.id === currentStage);
 
   return (
-    <Card className="w-full">
+    <Card className="w-full" style={{ backgroundColor: "#FFFFFF", color: "#000000" }}>
       <CardHeader>
-        <CardTitle>Service Status</CardTitle>
-        <CardDescription>Track the progress of your bike service</CardDescription>
+        <CardTitle className="text-[#000000]">Service Status</CardTitle>
+        <CardDescription className="text-[#000000]">Track the progress of your bike service</CardDescription>
       </CardHeader>
       <CardContent>
         {/* Desktop View - Horizontal */}
         <div className="hidden md:block">
-          <div className="flex items-center justify-between relative">
+          <div className="flex items-start justify-between relative">
             {/* Progress Line */}
             <div className="absolute top-6 left-0 right-0 h-1 bg-muted rounded-full">
               <motion.div
@@ -80,10 +80,10 @@ const ServiceStatusTracker = ({ currentStage, showLabels = true }: ServiceStatus
                   </motion.div>
                   {showLabels && (
                     <div className="mt-3 text-center">
-                      <p className={`text-sm font-medium ${isCurrent ? "text-primary" : ""}`}>
+                      <p className={`text-sm font-medium ${isCurrent ? "text-primary" : "text-[#000000]"}`}>
                         {stage.label}
                       </p>
-                      <p className="text-xs text-muted-foreground hidden lg:block">
+                      <p className="text-xs text-[#000000] hidden lg:block">
                         {stage.description}
                       </p>
                     </div>
@@ -123,10 +123,10 @@ const ServiceStatusTracker = ({ currentStage, showLabels = true }: ServiceStatus
                   )}
                 </div>
                 <div>
-                  <p className={`font-medium ${isCurrent ? "text-primary" : ""}`}>
+                  <p className={`font-medium ${isCurrent ? "text-primary" : "text-[#000000]"}`}>
                     {stage.label}
                   </p>
-                  <p className="text-xs text-muted-foreground">{stage.description}</p>
+                  <p className="text-xs text-[#000000]">{stage.description}</p>
                 </div>
               </motion.div>
             );
@@ -136,11 +136,11 @@ const ServiceStatusTracker = ({ currentStage, showLabels = true }: ServiceStatus
         {/* Current Status Summary */}
         {currentStage && (
           <div className="mt-6 p-4 bg-muted rounded-lg">
-            <p className="text-sm text-muted-foreground">Current Status</p>
+            <p className="text-sm text-[#000000]">Current Status</p>
             <p className="font-heading font-semibold text-primary">
               {stages[currentStageIndex]?.label}
             </p>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-[#000000] mt-1">
               {stages[currentStageIndex]?.description}
             </p>
           </div>
