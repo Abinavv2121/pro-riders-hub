@@ -39,11 +39,11 @@ const About = () => (
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.08, duration: 0.4 }}
-            className="p-8 border border-border rounded-lg text-center"
+            className="p-8 bg-primary rounded-lg text-center shadow-sm"
           >
-            <stat.icon className="w-7 h-7 text-primary mx-auto mb-3" />
-            <p className="font-heading font-black text-foreground text-3xl mb-1">{stat.value}</p>
-            <p className="text-muted-foreground text-xs uppercase tracking-wider font-heading">{stat.label}</p>
+            <stat.icon className="w-7 h-7 text-black mx-auto mb-3" />
+            <p className="font-heading font-black text-white text-3xl mb-1">{stat.value}</p>
+            <p className="text-black font-bold text-xs uppercase tracking-wider font-heading">{stat.label}</p>
           </motion.div>
         ))}
       </div>

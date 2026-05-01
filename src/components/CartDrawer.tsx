@@ -95,34 +95,34 @@ const CartDrawer = () => {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.2 }}
-                    className="flex gap-4 p-3 rounded-lg border border-border bg-card"
+                    className="flex gap-4 p-3 rounded-lg border border-white/10 bg-primary shadow-lg"
                   >
-                    <div className="w-20 h-20 rounded-md bg-muted/30 flex items-center justify-center flex-shrink-0">
+                    <div className="w-20 h-20 rounded-md bg-white flex items-center justify-center flex-shrink-0">
                       <img src={item.image} alt={item.name} className="max-w-full max-h-full object-contain" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-heading">{item.brand}</p>
-                      <h4 className="font-heading font-bold text-foreground text-sm truncate">{item.name}</h4>
-                      <p className="text-xs text-muted-foreground mt-0.5">{item.color} · {item.size}</p>
+                      <p className="text-[10px] uppercase tracking-widest text-white font-heading">{item.brand}</p>
+                      <h4 className="font-heading font-bold text-black text-sm truncate">{item.name}</h4>
+                      <p className="text-xs text-white mt-0.5">{item.color} · {item.size}</p>
                       <div className="flex items-center gap-2 mt-2">
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="w-7 h-7 rounded border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors"
+                          className="w-7 h-7 rounded border border-white/30 flex items-center justify-center text-white hover:text-white/80 hover:border-white/60 transition-colors"
                           aria-label="Decrease quantity"
                         >
                           <Minus className="w-3 h-3" />
                         </button>
-                        <span className="text-sm font-heading font-semibold text-foreground w-6 text-center">{item.quantity}</span>
+                        <span className="text-sm font-heading font-semibold text-white w-6 text-center">{item.quantity}</span>
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="w-7 h-7 rounded border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors"
+                          className="w-7 h-7 rounded border border-white/30 flex items-center justify-center text-white hover:text-white/80 hover:border-white/60 transition-colors"
                           aria-label="Increase quantity"
                         >
                           <Plus className="w-3 h-3" />
                         </button>
                         <button
                           onClick={() => removeItem(item.id)}
-                          className="ml-auto w-7 h-7 rounded flex items-center justify-center text-muted-foreground hover:text-destructive transition-colors"
+                          className="ml-auto w-7 h-7 rounded flex items-center justify-center text-black hover:text-red-600 transition-colors"
                           aria-label="Remove item"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -143,7 +143,7 @@ const CartDrawer = () => {
               >
                 {isSubmitting ? "Sending..." : "Enquire About Cart"}
               </Button>
-              <Button variant="ghost" size="sm" className="w-full text-muted-foreground" onClick={clearCart}>
+              <Button variant="ghost" size="sm" className="w-full text-black" onClick={clearCart}>
                 Clear Cart
               </Button>
             </div>

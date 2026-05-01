@@ -349,13 +349,13 @@ const RentalBikes = () => {
           onValueChange={(value) => setActiveCategory(value as RentalCategory)}
           className="w-full"
         >
-          <div className="flex justify-center mb-8">
-            <TabsList className="grid grid-cols-3 w-full max-w-md bg-muted p-1">
+          <div className="flex justify-center mb-8 px-4 md:px-0">
+            <TabsList className="grid grid-cols-3 w-full max-w-md bg-muted p-1 h-auto items-stretch rounded-lg">
               {rentalCategories.map((category) => (
                 <TabsTrigger 
                   key={category.key} 
                   value={category.key}
-                  className="font-heading font-semibold text-sm py-2.5 px-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md transition-all"
+                  className="font-heading font-semibold text-xs sm:text-sm py-2.5 px-2 sm:px-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md transition-all h-full whitespace-normal sm:whitespace-nowrap flex items-center justify-center"
                 >
                   {category.label}
                 </TabsTrigger>
@@ -366,7 +366,7 @@ const RentalBikes = () => {
           {rentalCategories.map((category) => (
             <TabsContent key={category.key} value={category.key} className="mt-0">
               <div className="text-center mb-6">
-                <p className={category.description === "Performance bikes for speed on paved roads." ? "text-[#111111]" : "text-muted-foreground"}>
+                <p className="text-gray-700">
                   {category.description}
                 </p>
               </div>

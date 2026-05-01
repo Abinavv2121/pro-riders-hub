@@ -19,14 +19,17 @@ const StatCard = ({ icon: Icon, value, suffix, label, delay }: {
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
       transition={{ delay, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-      className="glass-card p-6 sm:p-8 rounded-lg text-center hover:border-primary/20 transition-colors duration-200 relative overflow-hidden"
-      style={{ backgroundColor: "#FFFFFF" }}
+      className="glass-card p-6 sm:p-8 rounded-lg text-center transition-colors duration-200 relative overflow-hidden !bg-primary !border-none group"
     >
-      <Icon className="relative w-6 h-6 sm:w-7 sm:h-7 text-primary mx-auto mb-3" />
-      <p className="relative font-heading font-black text-[#000000] text-2xl sm:text-3xl mb-1">
+      {/* Radial glow on hover */}
+      <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-[240ms] pointer-events-none"
+        style={{ background: "radial-gradient(circle at 30% 20%, hsl(193 100% 42% / 0.06) 0%, transparent 60%)" }}
+      />
+      <Icon className="relative w-6 h-6 sm:w-7 sm:h-7 text-black mx-auto mb-3 group-hover:scale-110 transition-transform duration-200" />
+      <p className="relative font-heading font-black text-white text-2xl sm:text-3xl mb-1">
         {count.toLocaleString()}{suffix}
       </p>
-      <p className="relative text-[#000000] text-[10px] sm:text-xs uppercase tracking-wider font-heading">{label}</p>
+      <p className="relative text-black text-[10px] sm:text-xs uppercase tracking-wider font-heading">{label}</p>
     </motion.div>
   );
 };
@@ -67,12 +70,15 @@ const LegacySection = () => {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.08, duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-                  className="glass-card p-6 sm:p-8 rounded-lg text-center hover:border-primary/30 transition-colors duration-[240ms]"
-                  style={{ backgroundColor: "#FFFFFF" }}
+                  className="glass-card p-6 sm:p-8 rounded-lg text-center transition-colors duration-[240ms] !bg-primary !border-none group relative overflow-hidden"
                 >
-                  <stat.icon className="w-6 h-6 sm:w-7 sm:h-7 text-primary mx-auto mb-3" />
-                  <p className="font-heading font-black text-[#000000] text-2xl sm:text-3xl mb-1">GCN</p>
-                  <p className="text-[#000000] text-[10px] sm:text-xs uppercase tracking-wider font-heading">{stat.label}</p>
+                  {/* Radial glow on hover */}
+                  <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-[240ms] pointer-events-none"
+                    style={{ background: "radial-gradient(circle at 30% 20%, hsl(193 100% 42% / 0.06) 0%, transparent 60%)" }}
+                  />
+                  <stat.icon className="relative w-6 h-6 sm:w-7 sm:h-7 text-black mx-auto mb-3 group-hover:scale-110 transition-transform duration-200" />
+                  <p className="relative font-heading font-black text-white text-2xl sm:text-3xl mb-1">GCN</p>
+                  <p className="relative text-black text-[10px] sm:text-xs uppercase tracking-wider font-heading">{stat.label}</p>
                 </motion.div>
               ) : (
                 <StatCard

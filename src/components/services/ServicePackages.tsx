@@ -95,8 +95,7 @@ const ServicePackages = ({ packages, onSelectPackage, selectedPackageId }: Servi
 
                 <CardFooter>
                   <Button
-                    className={`w-full ${isSelected ? "bg-primary" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
-                    variant={isSelected ? "default" : "outline"}
+                    className={`w-full bg-primary text-white hover:bg-primary/80 hover:scale-[1.03] hover:shadow-lg transition-all duration-300 ease-out cursor-pointer ${isSelected ? "ring-2 ring-primary/40" : ""}`}
                   >
                     {isSelected ? "Selected" : "Select Package"}
                   </Button>

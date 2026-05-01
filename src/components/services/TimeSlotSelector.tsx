@@ -50,14 +50,14 @@ const TimeSlotSelector = ({ selectedSlot, onSlotSelect }: TimeSlotSelectorProps)
                   !slot.available
                     ? "border-muted bg-muted/30 cursor-not-allowed opacity-50"
                     : isSelected
-                    ? "border-primary bg-primary/10 cursor-pointer"
+                    ? "border-primary bg-primary cursor-pointer"
                     : "border-border hover:border-primary/50 cursor-pointer"
                 }`}
                 onClick={() => slot.available && onSlotSelect(slot.id)}
                 disabled={!slot.available}
               >
                 <div className="text-center">
-                  <span className={`font-heading font-semibold ${isSelected ? "text-primary" : ""}`}>
+                  <span className={`font-heading font-semibold ${isSelected ? "text-black" : ""}`}>
                     {slot.displayTime}
                   </span>
                   {!slot.available && (
@@ -73,10 +73,10 @@ const TimeSlotSelector = ({ selectedSlot, onSlotSelect }: TimeSlotSelectorProps)
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-4 bg-muted rounded-lg p-3 text-center"
+            className="mt-4 bg-primary rounded-lg p-3 text-center"
           >
-            <p className="text-sm text-[#000000]">Selected Time</p>
-            <p className="font-heading font-semibold text-primary">
+            <p className="text-sm text-white/80">Selected Time</p>
+            <p className="font-heading font-semibold text-black">
               {slots.find((s) => s.id === selectedSlot)?.displayTime}
             </p>
           </motion.div>

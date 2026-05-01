@@ -127,8 +127,8 @@ const Header = () => {
                 >
                   <Link
                     to={link.href}
-                    className={`relative px-4 py-2 text-xs font-heading font-medium uppercase tracking-[0.15em] transition-colors duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] flex items-center gap-1
-                      ${isActive ? "text-primary" : activeDropdown === link.label ? "text-[#111111]" : "text-muted-foreground hover:text-[#111111]"}
+                    className={`relative px-4 py-2 text-xs font-heading font-medium uppercase tracking-[0.15em] transition-colors duration-300 ease-out flex items-center gap-1
+                      ${isActive ? "text-primary" : "text-black hover:text-primary"}
                     `}
                   >
                     {link.label}
@@ -159,7 +159,7 @@ const Header = () => {
                             <div className="bg-background/95 backdrop-blur-xl border border-border/40 rounded-xl shadow-2xl p-1 inline-flex min-h-[200px]">
                             {/* Category list */}
                             <div className="w-56 border-r border-border/30 p-3">
-                              <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-muted-foreground/60 mb-2 px-3">Categories</p>
+                              <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-primary mb-2 px-3">Categories</p>
                               {bikeCategories.map((cat) => (
                                 <div
                                   key={cat.key}
@@ -172,12 +172,12 @@ const Header = () => {
                                     className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-heading font-medium uppercase tracking-wider transition-all duration-150
                                       ${hoveredCategory === cat.key
                                         ? "bg-primary/10 text-primary"
-                                        : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                                        : "text-foreground hover:text-foreground hover:bg-muted/40"
                                       }
                                     `}
                                   >
                                     {cat.label}
-                                    <ChevronRight className="w-3.5 h-3.5 opacity-40" />
+                                    <ChevronRight className="w-3.5 h-3.5 opacity-80" />
                                   </Link>
                                 </div>
                               ))}
@@ -196,7 +196,7 @@ const Header = () => {
                                     onMouseEnter={keepSubOpen}
                                     onMouseLeave={() => closeSub("category")}
                                   >
-                                    <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-muted-foreground/60 mb-3">
+                                    <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-primary mb-3">
                                       {bikeCategories.find((c) => c.key === hoveredCategory)?.label}
                                     </p>
                                     <div className="flex flex-col gap-2">
@@ -223,7 +223,7 @@ const Header = () => {
                                     animate={{ opacity: 1 }}
                                     className="h-full flex items-center justify-center"
                                   >
-                                    <p className="text-xs text-muted-foreground/50 font-heading uppercase tracking-widest">Hover a category to see bikes</p>
+                                    <p className="text-xs text-muted-foreground font-heading uppercase tracking-widest">Hover a category to see bikes</p>
                                   </motion.div>
                                 )}
                               </AnimatePresence>
@@ -246,7 +246,7 @@ const Header = () => {
                             <div className="bg-background/95 backdrop-blur-xl border border-border/40 rounded-xl shadow-2xl p-1 inline-flex min-h-[200px]">
                             {/* Brand list */}
                             <div className="w-56 border-r border-border/30 p-3">
-                              <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-muted-foreground/60 mb-2 px-3">Brands</p>
+                              <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-primary mb-2 px-3">Brands</p>
                               {bikeBrands.map((brand) => (
                                 <div
                                   key={brand.name}
@@ -257,12 +257,12 @@ const Header = () => {
                                     className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-heading font-medium uppercase tracking-wider transition-all duration-150 cursor-default
                                       ${hoveredBrand === brand.name
                                         ? "bg-primary/10 text-primary"
-                                        : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                                        : "text-foreground hover:text-foreground hover:bg-muted/40"
                                       }
                                     `}
                                   >
                                     {brand.name}
-                                    <ChevronRight className="w-3.5 h-3.5 opacity-40" />
+                                    <ChevronRight className="w-3.5 h-3.5 opacity-80" />
                                   </div>
                                 </div>
                               ))}
@@ -281,7 +281,7 @@ const Header = () => {
                                     onMouseEnter={keepSubOpen}
                                     onMouseLeave={() => closeSub("brand")}
                                   >
-                                    <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-muted-foreground/60 mb-3">{hoveredBrand}</p>
+                                    <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-primary mb-3">{hoveredBrand}</p>
                                     <div className="space-y-1">
                                       {bikeBrands
                                         .find((b) => b.name === hoveredBrand)
@@ -290,7 +290,7 @@ const Header = () => {
                                           const brandBikes = bikes.filter((b) => b.brand === hoveredBrand && b.category === catKey);
                                           return brandBikes.length > 0 ? (
                                             <div key={catKey} className="mb-4">
-                                              <p className="text-[10px] font-heading font-semibold text-muted-foreground/60 mb-2">{cat?.label}</p>
+                                              <p className="text-[10px] font-heading font-semibold text-primary mb-2">{cat?.label}</p>
                                               <div className="flex flex-col gap-2">
                                                 {brandBikes.map((bike) => (
                                                   <Link
@@ -317,7 +317,7 @@ const Header = () => {
                                     animate={{ opacity: 1 }}
                                     className="h-full flex items-center justify-center"
                                   >
-                                    <p className="text-xs text-muted-foreground/50 font-heading uppercase tracking-widest">Hover a brand to see bikes</p>
+                                    <p className="text-xs text-muted-foreground font-heading uppercase tracking-widest">Hover a brand to see bikes</p>
                                   </motion.div>
                                 )}
                               </AnimatePresence>
@@ -341,7 +341,7 @@ const Header = () => {
               onClick={() => setSearchOpen(true)}
               aria-label="Open search"
               title="Search"
-              className="p-2 text-muted-foreground hover:text-foreground transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hidden sm:flex items-center justify-center hover:-translate-y-px hover:rotate-[-3deg] motion-reduce:hover:transform-none"
+              className="p-2 text-black hover:text-primary transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hidden sm:flex items-center justify-center hover:-translate-y-px hover:rotate-[-3deg] motion-reduce:hover:transform-none"
             >
               <Search className="w-[18px] h-[18px]" />
             </button>
@@ -349,7 +349,7 @@ const Header = () => {
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button aria-label="Account menu" title="Account" className="p-2 text-muted-foreground hover:text-foreground transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] relative flex items-center justify-center hover:-translate-y-px hover:rotate-[-3deg] motion-reduce:hover:transform-none">
+                  <button aria-label="Account menu" title="Account" className="p-2 text-black hover:text-primary transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] relative flex items-center justify-center hover:-translate-y-px hover:rotate-[-3deg] motion-reduce:hover:transform-none">
                     <UserIcon className="w-[18px] h-[18px]" />
                   </button>
                 </DropdownMenuTrigger>
@@ -367,7 +367,7 @@ const Header = () => {
                 onClick={() => navigate("/auth")}
                 aria-label="Sign in"
                 title="Sign in"
-                className="p-2 text-muted-foreground hover:text-foreground transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] relative flex items-center justify-center hover:-translate-y-px hover:rotate-[-3deg] motion-reduce:hover:transform-none"
+                className="p-2 text-black hover:text-primary transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] relative flex items-center justify-center hover:-translate-y-px hover:rotate-[-3deg] motion-reduce:hover:transform-none"
               >
                 <UserIcon className="w-[18px] h-[18px]" />
               </button>
@@ -377,7 +377,7 @@ const Header = () => {
               onClick={() => setIsOpen(true)}
               aria-label="Open cart"
               title="Cart"
-              className="p-2 text-muted-foreground hover:text-foreground transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] relative flex items-center justify-center hover:-translate-y-px hover:rotate-[3deg] motion-reduce:hover:transform-none"
+              className="p-2 text-black hover:text-primary transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] relative flex items-center justify-center hover:-translate-y-px hover:rotate-[3deg] motion-reduce:hover:transform-none"
             >
               <ShoppingBag className="w-[18px] h-[18px]" />
               {totalItems > 0 && (

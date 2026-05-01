@@ -1,10 +1,29 @@
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useTransform, animate, useInView } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Star, Shield } from "lucide-react";
 import ScrollReveal from "@/components/ScrollReveal";
 import { useParallax } from "@/hooks/use-parallax";
-import heroImage from "@/assets/hero-road.jpg";
+import heroVideo from "@/assets/hero img pedeling.mp4";
+import { useEffect, useRef } from "react";
+
+const Counter = ({ to, duration = 2.5 }: { to: number; duration?: number }) => {
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => Math.round(latest).toLocaleString());
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+
+  useEffect(() => {
+    if (isInView) {
+      animate(count, to, {
+        duration: duration,
+        ease: [0.4, 0, 0.2, 1],
+      });
+    }
+  }, [isInView, count, to, duration]);
+
+  return <motion.span ref={ref} style={{ display: "inline-block", minWidth: `${to.toLocaleString().length}ch`, textAlign: "right" }}>{rounded}</motion.span>;
+};
 
 const HeroSection = () => {
   const { ref, offset } = useParallax(0.85);
@@ -13,9 +32,12 @@ const HeroSection = () => {
     <section ref={ref as React.RefObject<HTMLElement>} className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background with parallax */}
       <div className="absolute inset-0" style={{ transform: `translateY(${offset}px)`, willChange: "transform" }}>
-        <img
-          src={heroImage}
-          alt="Premium road cycling"
+        <video
+          src={heroVideo}
+          autoPlay
+          loop
+          muted
+          playsInline
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-hero-gradient" />
@@ -48,7 +70,7 @@ const HeroSection = () => {
                 className="flex items-center gap-2 text-small text-muted-foreground font-micro"
               >
                 <Shield className="w-4 h-4 text-primary" />
-                Trusted by 50,000+ Riders
+                Trusted by <Counter to={50000} />+ Riders
               </motion.div>
               <span className="w-px h-4 bg-border" />
               <motion.div

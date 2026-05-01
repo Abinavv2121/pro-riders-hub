@@ -59,28 +59,17 @@ const BrandTile = ({ brand, i }: { brand: typeof brands[number]; i: number }) =>
           <img
             src={brand.logo}
             alt={brand.name}
-            className={`object-contain transition-[filter,opacity] duration-[240ms] ease-out
-              group-hover:blur-[2px] group-hover:opacity-[0.8]
-              group-focus-visible:blur-[2px] group-focus-visible:opacity-[0.8]
+            className={`object-contain transition-transform duration-300 ease-out
+              group-hover:scale-105
               ${bucketStyles[brand.bucket]} w-full h-full`}
             draggable={false}
           />
         </div>
       </div>
 
-      {/* Hover overlay with brand name */}
-      <div
-        className="absolute inset-0 flex items-center justify-center bg-[hsl(216,16%,7%)]/[0.3]
-          opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100
-          transition-opacity duration-[240ms] ease-out pointer-events-none"
-      >
-        <span className="font-heading font-bold text-foreground text-base md:text-lg tracking-wide uppercase">
-          {brand.name}
-        </span>
-      </div>
-
-      {/* Mobile: small label below logo (always visible) */}
-      <span className="absolute bottom-2 left-0 right-0 text-center text-[10px] uppercase tracking-widest text-muted-foreground font-heading font-semibold md:hidden">
+      {/* Brand name label – always visible on mobile, shown on hover for desktop */}
+      <span className="absolute bottom-2 left-0 right-0 text-center text-[10px] uppercase tracking-widest text-muted-foreground font-heading font-semibold
+        md:opacity-0 md:group-hover:opacity-100 md:transition-opacity md:duration-300 md:ease-out">
         {brand.name}
       </span>
     </Link>
@@ -93,8 +82,8 @@ const BrandsSection = () => {
     <section className="section-card space-section" style={{ backgroundColor: "#FFFFFF" }}>
       <div className="container mx-auto px-5 md:px-8">
         <div className="text-center mb-12">
-          <ScrollReveal as="p" scanline drift={8} className="text-primary text-xs uppercase tracking-[0.3em] font-heading font-semibold mb-3">Authorized Dealer</ScrollReveal>
-          <ScrollReveal as="h2" delay={0.08} drift={12} className="font-heading text-section-sm md:text-section text-[#FFFFFF]">
+          <ScrollReveal as="div" scanline drift={8} className="text-primary font-heading text-xl md:text-3xl font-bold mb-6">Authorized Dealer</ScrollReveal>
+          <ScrollReveal as="h2" delay={0.08} drift={12} className="font-heading text-section-sm md:text-section text-black">
             World-Class Brands
           </ScrollReveal>
         </div>

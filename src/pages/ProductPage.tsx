@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { bikes } from "@/data/bikes";
 import { ShoppingBag, ArrowLeft, Tag, CheckCircle2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 const specRows = [
     { label: "Category",       key: "bikeType" },
@@ -23,6 +24,33 @@ const ProductPage = () => {
     const bike = bikes.find(b => b.id === parseInt(id || "0"));
     const images: string[] = bike?.images?.length ? bike.images : bike ? [bike.image] : [];
     const [currentIndex, setCurrentIndex] = useState(0);
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+
+    const mouseXSpring = useSpring(x, { stiffness: 150, damping: 40 });
+    const mouseYSpring = useSpring(y, { stiffness: 150, damping: 40 });
+
+    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["15deg", "-15deg"]);
+    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-180deg", "180deg"]);
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const width = rect.width;
+        const height = rect.height;
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        const xPct = mouseX / width - 0.5;
+        const yPct = mouseY / height - 0.5;
+
+        x.set(xPct);
+        y.set(yPct);
+    };
+
+    const handleMouseLeave = () => {
+        x.set(0);
+        y.set(0);
+    };
 
     if (!bike) return <Navigate to="/shop" />;
 
@@ -57,18 +85,38 @@ const ProductPage = () => {
                     {/* ── LEFT: Image column ── */}
                     <div className="flex flex-col gap-4">
                         {/* Main image */}
-                        <div className="relative bg-[#F7F7F7] rounded-xl overflow-hidden flex items-center justify-center aspect-[4/3] border border-gray-100">
+                        <div 
+                            onMouseMove={handleMouseMove}
+                            onMouseLeave={handleMouseLeave}
+                            style={{
+                                perspective: "1500px",
+                            }}
+                            className="relative rounded-xl overflow-hidden flex items-center justify-center aspect-[4/3] group cursor-grab active:cursor-grabbing"
+                        >
                             {bike.tag && (
                                 <span className="absolute top-4 left-4 z-10 bg-primary text-primary-foreground text-[10px] font-heading font-bold uppercase tracking-widest px-3 py-1 rounded-md flex items-center gap-1">
                                     <Tag className="w-3 h-3" />
                                     {bike.tag}
                                 </span>
                             )}
-                            <img
+                            <motion.img
+                                style={{
+                                    rotateY,
+                                    rotateX,
+                                    transformStyle: "preserve-3d",
+                                    transform: "translateZ(100px)",
+                                    filter: "drop-shadow(0 30px 40px rgba(0,0,0,0.12))",
+                                }}
                                 src={images[currentIndex]}
                                 alt={bike.name}
-                                className="w-full h-full object-contain p-8 transition-opacity duration-300"
+                                className="w-full h-full object-contain p-8 transition-opacity duration-300 pointer-events-none select-none"
                             />
+                            
+                            {/* 360 Degree Indicator */}
+                            <div className="absolute bottom-4 right-4 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-full px-3 py-1 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                                <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                                <span className="text-[10px] font-heading font-bold uppercase tracking-widest text-foreground">360° View</span>
+                            </div>
                         </div>
 
                         {/* Thumbnail strip — only render if there's more than one unique image */}

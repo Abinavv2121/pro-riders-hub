@@ -135,12 +135,12 @@ const ServiceStatusTracker = ({ currentStage, showLabels = true }: ServiceStatus
 
         {/* Current Status Summary */}
         {currentStage && (
-          <div className="mt-6 p-4 bg-muted rounded-lg">
-            <p className="text-sm text-[#000000]">Current Status</p>
-            <p className="font-heading font-semibold text-primary">
+          <div className="mt-6 p-4 bg-primary rounded-lg">
+            <p className="text-sm text-white/80">Current Status</p>
+            <p className="font-heading font-semibold text-black">
               {stages[currentStageIndex]?.label}
             </p>
-            <p className="text-xs text-[#000000] mt-1">
+            <p className="text-xs text-white/70 mt-1">
               {stages[currentStageIndex]?.description}
             </p>
           </div>

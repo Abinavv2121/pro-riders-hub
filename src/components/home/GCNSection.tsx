@@ -8,22 +8,22 @@ const GCNSection = () => {
       <div className="container mx-auto px-5 md:px-8">
         <div className="text-center mb-12">
           <ScrollReveal delay={0} drift={8}>
-            <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-4 py-1.5 mb-6">
-              <Award className="w-4 h-4 text-primary" />
-              <span className="text-primary text-xs uppercase tracking-widest font-heading font-bold">
+            <div className="inline-flex items-center gap-3 mb-6">
+              <Award className="w-8 h-8 text-primary" />
+              <span className="text-primary font-heading text-lg md:text-2xl font-bold">
                 Global Recognition
               </span>
             </div>
           </ScrollReveal>
-          <ScrollReveal as="h2" delay={0.08} drift={12} className="font-heading text-section-sm md:text-section text-[#FFFFFF] mb-4">
+          <ScrollReveal as="h2" delay={0.08} drift={12} className="font-heading text-xl md:text-4xl text-black mb-4">
             Global Recognition for Excellence!
           </ScrollReveal>
-          <ScrollReveal as="p" delay={0.16} drift={10} className="text-[#000000] font-body text-body max-w-2xl mx-auto">
+          <ScrollReveal as="p" delay={0.16} drift={10} className="text-[#000000] font-body text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
             Pro-Bikers proudly holds the title of{" "}
             <span className="text-primary font-semibold">
               The Best Bike Shop in the World
             </span>
-            , awarded by GCN! 🌍🚴‍♀️
+            , awarded by GCN!
           </ScrollReveal>
         </div>
 

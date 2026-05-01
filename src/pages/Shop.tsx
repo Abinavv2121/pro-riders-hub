@@ -319,7 +319,7 @@ const Shop = () => {
                 onClick={() => setActiveCategory(cat.key)}
                 className={`pb-3 text-small font-heading font-semibold uppercase tracking-wider whitespace-nowrap transition-colors duration-200 border-b-2 ${activeCategory === cat.key
                   ? "text-primary border-primary"
-                  : "text-muted-foreground border-transparent hover:text-foreground"
+                  : "text-black border-transparent hover:text-primary"
                   }`}
               >
                 {cat.label}
