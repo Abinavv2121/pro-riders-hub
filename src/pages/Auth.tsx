@@ -58,7 +58,7 @@ const Auth = () => {
     return (
         <PageShell>
             <div className="container mx-auto px-5 flex items-center justify-center min-h-[70vh]">
-                <div className="w-full max-w-md bg-card border border-border rounded-xl p-8 shadow-sm">
+                <div className="w-full max-w-md bg-[#FFFFFF] border border-[#000000] rounded-xl p-8" style={{ boxShadow: "0 10px 25px rgba(0,0,0,0.08)" }}>
                     <Tabs defaultValue="login" className="w-full">
                         <TabsList className="grid w-full grid-cols-2 mb-8">
                             <TabsTrigger value="login">Login</TabsTrigger>
@@ -67,8 +67,8 @@ const Auth = () => {
 
                         <TabsContent value="login">
                             <div className="text-center mb-6">
-                                <h2 className="text-2xl font-heading font-bold">Welcome Back</h2>
-                                <p className="text-sm text-muted-foreground font-body mt-2">Enter your email to sign in</p>
+                                <h2 className="text-2xl font-heading font-bold text-[#111827]">Welcome Back</h2>
+                                <p className="text-sm text-[#6B7280] font-body mt-2">Enter your email to sign in</p>
                             </div>
                             <form onSubmit={(e) => handleAuth("login", e)} className="space-y-4">
                                 <input
@@ -76,7 +76,7 @@ const Auth = () => {
                                     placeholder="Email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full px-4 py-3 border border-border rounded-lg bg-background text-sm font-body focus:border-primary focus:outline-none transition-colors"
+                                    className="w-full px-4 py-3 border border-[#D1D5DB] rounded-lg bg-[#F9FAFB] text-[#000000] placeholder:text-[#9CA3AF] text-sm font-body focus:border-primary focus:outline-none transition-colors"
                                     required
                                 />
                                 <input
@@ -84,7 +84,7 @@ const Auth = () => {
                                     placeholder="Password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full px-4 py-3 border border-border rounded-lg bg-background text-sm font-body focus:border-primary focus:outline-none transition-colors"
+                                    className="w-full px-4 py-3 border border-[#D1D5DB] rounded-lg bg-[#F9FAFB] text-[#000000] placeholder:text-[#9CA3AF] text-sm font-body focus:border-primary focus:outline-none transition-colors"
                                     required
                                 />
                                 <Button className="w-full" size="lg" disabled={loading}>
@@ -95,8 +95,8 @@ const Auth = () => {
 
                         <TabsContent value="signup">
                             <div className="text-center mb-6">
-                                <h2 className="text-2xl font-heading font-bold">Create an Account</h2>
-                                <p className="text-sm text-muted-foreground font-body mt-2">Join us to manage your enquiries</p>
+                                <h2 className="text-2xl font-heading font-bold text-[#111827]">Create an Account</h2>
+                                <p className="text-sm text-[#6B7280] font-body mt-2">Join us to manage your enquiries</p>
                             </div>
                             <form onSubmit={(e) => handleAuth("signup", e)} className="space-y-4">
                                 <input
@@ -104,7 +104,7 @@ const Auth = () => {
                                     placeholder="Email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full px-4 py-3 border border-border rounded-lg bg-background text-sm font-body focus:border-primary focus:outline-none transition-colors"
+                                    className="w-full px-4 py-3 border border-[#D1D5DB] rounded-lg bg-[#F9FAFB] text-[#000000] placeholder:text-[#9CA3AF] text-sm font-body focus:border-primary focus:outline-none transition-colors"
                                     required
                                 />
                                 <input
@@ -112,7 +112,7 @@ const Auth = () => {
                                     placeholder="Password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full px-4 py-3 border border-border rounded-lg bg-background text-sm font-body focus:border-primary focus:outline-none transition-colors"
+                                    className="w-full px-4 py-3 border border-[#D1D5DB] rounded-lg bg-[#F9FAFB] text-[#000000] placeholder:text-[#9CA3AF] text-sm font-body focus:border-primary focus:outline-none transition-colors"
                                     required
                                     minLength={6}
                                 />

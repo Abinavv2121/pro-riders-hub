@@ -25,10 +25,10 @@ const AdminLogin = () => {
     return (
         <PageShell>
             <div className="flex min-h-[60vh] items-center justify-center p-4">
-                <div className="w-full max-w-md space-y-8 rounded-xl bg-card p-8 shadow-sm border border-border">
+                <div className="w-full max-w-md space-y-8 rounded-xl bg-[#FFFFFF] p-8 border border-[#000000]" style={{ boxShadow: "0 10px 25px rgba(0,0,0,0.08)" }}>
                     <div className="text-center">
-                        <h2 className="text-2xl font-bold font-heading">Admin Login</h2>
-                        <p className="mt-2 text-sm text-muted-foreground font-body">
+                        <h2 className="text-2xl font-bold font-heading text-[#111827]">Admin Login</h2>
+                        <p className="mt-2 text-sm text-[#6B7280] font-body">
                             Sign in to view customer enquiries
                         </p>
                     </div>
@@ -40,7 +40,7 @@ const AdminLogin = () => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="Email address"
-                                    className="w-full px-4 py-3 border border-border rounded-lg bg-background text-foreground font-body text-sm focus:outline-none focus:border-primary transition-colors duration-200"
+                                    className="w-full px-4 py-3 border border-[#D1D5DB] rounded-lg bg-[#F9FAFB] text-[#000000] placeholder:text-[#9CA3AF] font-body text-sm focus:outline-none focus:border-primary transition-colors duration-200"
                                     required
                                 />
                             </div>
@@ -50,7 +50,7 @@ const AdminLogin = () => {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="Password"
-                                    className="w-full px-4 py-3 border border-border rounded-lg bg-background text-foreground font-body text-sm focus:outline-none focus:border-primary transition-colors duration-200"
+                                    className="w-full px-4 py-3 border border-[#D1D5DB] rounded-lg bg-[#F9FAFB] text-[#000000] placeholder:text-[#9CA3AF] font-body text-sm focus:outline-none focus:border-primary transition-colors duration-200"
                                     required
                                 />
                             </div>

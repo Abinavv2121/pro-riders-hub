@@ -5,6 +5,7 @@ import { Star, Shield } from "lucide-react";
 import ScrollReveal from "@/components/ScrollReveal";
 import { useParallax } from "@/hooks/use-parallax";
 import heroVideo from "@/assets/hero img pedeling.mp4";
+import heroPoster from "@/assets/hero-road.jpg";
 import { useEffect, useRef } from "react";
 
 const Counter = ({ to, duration = 2.5 }: { to: number; duration?: number }) => {
@@ -31,14 +32,17 @@ const HeroSection = () => {
   return (
     <section ref={ref as React.RefObject<HTMLElement>} className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background with parallax */}
-      <div className="absolute inset-0" style={{ transform: `translateY(${offset}px)`, willChange: "transform" }}>
+      <div className="absolute inset-0" style={{ transform: `translateY(${offset}px)`, willChange: "transform", backgroundColor: "#000000" }}>
         <video
           src={heroVideo}
+          poster={heroPoster}
           autoPlay
           loop
           muted
           playsInline
+          preload="auto"
           className="w-full h-full object-cover"
+          style={{ filter: "brightness(0.8)" }}
         />
         <div className="absolute inset-0 bg-hero-gradient" />
       </div>

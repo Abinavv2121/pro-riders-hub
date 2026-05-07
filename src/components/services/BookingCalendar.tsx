@@ -168,10 +168,10 @@ const BookingCalendar = ({ selectedDate, onDateSelect, priorityBooking = false, 
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-muted rounded-lg p-4 text-center"
+            className="bg-primary rounded-lg p-4 text-center"
           >
-            <p className="text-sm text-[#000000]">Selected Date</p>
-            <p className="font-heading font-semibold text-primary">{formatDate(selectedDate)}</p>
+            <p className="text-sm text-white">Selected Date</p>
+            <p className="font-heading font-semibold text-black">{formatDate(selectedDate)}</p>
           </motion.div>
         )}
 
