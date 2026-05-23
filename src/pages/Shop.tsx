@@ -1,391 +1,474 @@
 import { BikeCard } from "@/components/BikeCard";
-import PageShell from "@/components/PageShell";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Input } from "@/components/ui/input";
+import { 
+  bikeBrands, 
+  bikeCategories, 
+  bikes, 
+  priceRanges 
+} from "@/data/bikes";
 import { useCart } from "@/contexts/CartContext";
-import { motion } from "framer-motion";
-import { SlidersHorizontal, X } from "lucide-react";
-import { useState, useMemo } from "react";
-import { useParams } from "react-router-dom";
-import { bikes, bikeBrands, bikeTypes, bikeSizes, bikeGears, frameMaterials, groupsets, brakeTypes, wheelSizes, priceRanges, Bike } from "@/data/bikes";
-
-import { Navigate } from "react-router-dom";
-
-const categories = [
-  { key: "all", label: "All Bikes" },
-  { key: "race-road", label: "Race Road" },
-  { key: "endurance-road", label: "Endurance Road" },
-  { key: "gravel", label: "Gravel & Adventure" },
-  { key: "mtb", label: "MTB (XC & Trail)" },
-  { key: "city-fitness", label: "City & Fitness" },
-];
-
-interface Filters {
-  bikeTypes: string[];
-  sizes: string[];
-  brands: string[];
-  gears: string[];
-  frameMaterials: string[];
-  groupsets: string[];
-  brakeTypes: string[];
-  wheelSizes: string[];
-  priceRange: { min: number; max: number } | null;
-}
-
-const initialFilters: Filters = {
-  bikeTypes: [],
-  sizes: [],
-  brands: [],
-  gears: [],
-  frameMaterials: [],
-  groupsets: [],
-  brakeTypes: [],
-  wheelSizes: [],
-  priceRange: null,
-};
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+  Filter, 
+  Search, 
+  ArrowRight, 
+  Check, 
+  ShieldCheck, 
+  Truck, 
+  CreditCard, 
+  Clock, 
+  HelpCircle,
+  X,
+  ChevronDown,
+  LayoutGrid,
+  List
+} from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const Shop = () => {
-  const { category: routeCategory } = useParams();
-  const [activeCategory, setActiveCategory] = useState(routeCategory || "all");
   const { addItem } = useCart();
-  const [filters, setFilters] = useState<Filters>(initialFilters);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedBrand, setSelectedBrand] = useState<string[]>([]);
+  const [selectedPriceRange, setSelectedPriceRange] = useState<number | null>(null);
+  const [sortBy, setSortBy] = useState("featured");
+  const [showFilters, setShowFilters] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Get unique values for filters from bikes data
-  const uniqueBrands = useMemo(() => Array.from(new Set(bikes.map(b => b.brand))), []);
+  useEffect(() => {
+    // Simulate loading for skeletons
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
 
-  const handleFilterChange = (filterKey: keyof Filters, value: string) => {
-    setFilters(prev => {
-      const current = prev[filterKey] as string[];
-      const updated = current.includes(value)
-        ? current.filter(v => v !== value)
-        : [...current, value];
-      return { ...prev, [filterKey]: updated };
+  const filteredBikes = useMemo(() => {
+    let result = bikes.filter((bike) => {
+      const matchesSearch = 
+        bike.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        bike.brand.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      const matchesCategory = selectedCategory === "all" || bike.category === selectedCategory;
+      
+      const matchesBrand = selectedBrand.length === 0 || selectedBrand.includes(bike.brand);
+      
+      const matchesPrice = selectedPriceRange === null || (() => {
+        const range = priceRanges[selectedPriceRange];
+        return bike.price >= range.min && bike.price <= range.max;
+      })();
+
+      return matchesSearch && matchesCategory && matchesBrand && matchesPrice;
     });
-  };
 
-  const handlePriceRangeChange = (range: { min: number; max: number } | null) => {
-    setFilters(prev => ({ ...prev, priceRange: range }));
-  };
-
-  const clearFilters = () => {
-    setFilters(initialFilters);
-  };
-
-  const applyFilters = () => {
-    setIsFilterOpen(false);
-  };
-
-  // Filter bikes based on category and filters
-  const filtered = useMemo(() => {
-    let result = activeCategory === "all" ? bikes : bikes.filter((b) => b.category === activeCategory);
-
-    // Apply additional filters
-    if (filters.bikeTypes.length > 0) {
-      result = result.filter(b => filters.bikeTypes.includes(b.bikeType));
-    }
-    if (filters.sizes.length > 0) {
-      result = result.filter(b => filters.sizes.some(s => b.size.includes(s)));
-    }
-    if (filters.brands.length > 0) {
-      result = result.filter(b => filters.brands.includes(b.brand));
-    }
-    if (filters.gears.length > 0) {
-      result = result.filter(b => filters.gears.includes(b.gears));
-    }
-    if (filters.frameMaterials.length > 0) {
-      result = result.filter(b => filters.frameMaterials.includes(b.frameMaterial));
-    }
-    if (filters.groupsets.length > 0) {
-      result = result.filter(b => filters.groupsets.includes(b.groupset));
-    }
-    if (filters.brakeTypes.length > 0) {
-      result = result.filter(b => filters.brakeTypes.includes(b.brakeType));
-    }
-    if (filters.wheelSizes.length > 0) {
-      result = result.filter(b => filters.wheelSizes.includes(b.wheelSize));
-    }
-    if (filters.priceRange) {
-      result = result.filter(b => b.price >= filters.priceRange!.min && b.price <= filters.priceRange!.max);
+    // Sorting
+    switch (sortBy) {
+      case "price-low": result.sort((a, b) => a.price - b.price); break;
+      case "price-high": result.sort((a, b) => b.price - a.price); break;
+      case "best-selling": result.sort((a, b) => (b.reviews || 0) - (a.reviews || 0)); break;
+      case "newest": result.sort((a, b) => b.id - a.id); break;
+      default: break;
     }
 
     return result;
-  }, [activeCategory, filters]);
+  }, [searchQuery, selectedCategory, selectedBrand, selectedPriceRange, sortBy]);
 
-  const activeFilterCount = 
-    filters.bikeTypes.length +
-    filters.sizes.length +
-    filters.brands.length +
-    filters.gears.length +
-    filters.frameMaterials.length +
-    filters.groupsets.length +
-    filters.brakeTypes.length +
-    filters.wheelSizes.length +
-    (filters.priceRange ? 1 : 0);
+  const toggleBrand = (brand: string) => {
+    setSelectedBrand(prev => 
+      prev.includes(brand) ? prev.filter(b => b !== brand) : [...prev, brand]
+    );
+  };
 
-  const FilterPanel = () => (
-    <div className="space-y-6">
-      {/* Bike Type */}
-      <div>
-        <h4 className="font-heading font-semibold text-sm mb-3">Bike Type</h4>
-        <div className="space-y-2">
-          {bikeTypes.map((type) => (
-            <div key={type} className="flex items-center space-x-2">
-              <Checkbox
-                id={`type-${type}`}
-                checked={filters.bikeTypes.includes(type)}
-                onCheckedChange={() => handleFilterChange('bikeTypes', type)}
-              />
-              <Label htmlFor={`type-${type}`} className="text-sm cursor-pointer">{type}</Label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Size */}
-      <div>
-        <h4 className="font-heading font-semibold text-sm mb-3">Size</h4>
-        <div className="space-y-2">
-          {bikeSizes.map((size) => (
-            <div key={size} className="flex items-center space-x-2">
-              <Checkbox
-                id={`size-${size}`}
-                checked={filters.sizes.includes(size)}
-                onCheckedChange={() => handleFilterChange('sizes', size)}
-              />
-              <Label htmlFor={`size-${size}`} className="text-sm cursor-pointer">{size}</Label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Brand */}
-      <div>
-        <h4 className="font-heading font-semibold text-sm mb-3">Brand</h4>
-        <div className="space-y-2">
-          {uniqueBrands.map((brand) => (
-            <div key={brand} className="flex items-center space-x-2">
-              <Checkbox
-                id={`brand-${brand}`}
-                checked={filters.brands.includes(brand)}
-                onCheckedChange={() => handleFilterChange('brands', brand)}
-              />
-              <Label htmlFor={`brand-${brand}`} className="text-sm cursor-pointer">{brand}</Label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Price Range */}
-      <div>
-        <h4 className="font-heading font-semibold text-sm mb-3">Price Range</h4>
-        <div className="space-y-2">
-          {priceRanges.map((range, idx) => (
-            <div key={idx} className="flex items-center space-x-2">
-              <Checkbox
-                id={`price-${idx}`}
-                checked={filters.priceRange?.min === range.min && filters.priceRange?.max === range.max}
-                onCheckedChange={() => {
-                  if (filters.priceRange?.min === range.min && filters.priceRange?.max === range.max) {
-                    handlePriceRangeChange(null);
-                  } else {
-                    handlePriceRangeChange({ min: range.min, max: range.max });
-                  }
-                }}
-              />
-              <Label htmlFor={`price-${idx}`} className="text-sm cursor-pointer">{range.label}</Label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Gears */}
-      <div>
-        <h4 className="font-heading font-semibold text-sm mb-3">Gears</h4>
-        <div className="space-y-2">
-          {bikeGears.map((gear) => (
-            <div key={gear} className="flex items-center space-x-2">
-              <Checkbox
-                id={`gear-${gear}`}
-                checked={filters.gears.includes(gear)}
-                onCheckedChange={() => handleFilterChange('gears', gear)}
-              />
-              <Label htmlFor={`gear-${gear}`} className="text-sm cursor-pointer">{gear}</Label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Frame Material */}
-      <div>
-        <h4 className="font-heading font-semibold text-sm mb-3">Frame Material</h4>
-        <div className="space-y-2">
-          {frameMaterials.map((material) => (
-            <div key={material} className="flex items-center space-x-2">
-              <Checkbox
-                id={`frame-${material}`}
-                checked={filters.frameMaterials.includes(material)}
-                onCheckedChange={() => handleFilterChange('frameMaterials', material)}
-              />
-              <Label htmlFor={`frame-${material}`} className="text-sm cursor-pointer">{material}</Label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Groupset */}
-      <div>
-        <h4 className="font-heading font-semibold text-sm mb-3">Groupset</h4>
-        <div className="space-y-2">
-          {groupsets.map((groupset) => (
-            <div key={groupset} className="flex items-center space-x-2">
-              <Checkbox
-                id={`groupset-${groupset}`}
-                checked={filters.groupsets.includes(groupset)}
-                onCheckedChange={() => handleFilterChange('groupsets', groupset)}
-              />
-              <Label htmlFor={`groupset-${groupset}`} className="text-sm cursor-pointer">{groupset}</Label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Brake Type */}
-      <div>
-        <h4 className="font-heading font-semibold text-sm mb-3">Brake Type</h4>
-        <div className="space-y-2">
-          {brakeTypes.map((brake) => (
-            <div key={brake} className="flex items-center space-x-2">
-              <Checkbox
-                id={`brake-${brake}`}
-                checked={filters.brakeTypes.includes(brake)}
-                onCheckedChange={() => handleFilterChange('brakeTypes', brake)}
-              />
-              <Label htmlFor={`brake-${brake}`} className="text-sm cursor-pointer">{brake}</Label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Wheel Size */}
-      <div>
-        <h4 className="font-heading font-semibold text-sm mb-3">Wheel Size</h4>
-        <div className="space-y-2">
-          {wheelSizes.map((wheel) => (
-            <div key={wheel} className="flex items-center space-x-2">
-              <Checkbox
-                id={`wheel-${wheel}`}
-                checked={filters.wheelSizes.includes(wheel)}
-                onCheckedChange={() => handleFilterChange('wheelSizes', wheel)}
-              />
-              <Label htmlFor={`wheel-${wheel}`} className="text-sm cursor-pointer">{wheel}</Label>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+  const clearFilters = () => {
+    setSelectedCategory("all");
+    setSelectedBrand([]);
+    setSelectedPriceRange(null);
+    setSearchQuery("");
+  };
 
   return (
-    <PageShell>
-      <section className="py-8">
-        <div className="container mx-auto px-5 md:px-8">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="font-heading text-hero-sm md:text-section text-foreground mb-3"
-          >
-            Shop
-          </motion.h1>
-          <p className="text-muted-foreground font-body text-body max-w-xl">
-            Browse our curated collection of premium bicycles from the world's finest brands.
-          </p>
-          <p className="mt-4 text-[#111111] text-left leading-relaxed font-body w-full max-w-none">
-            Browse a wide range of high-performance bicycles designed for every type of rider, from beginners to professionals. Explore road bikes built for speed, mountain bikes made for adventure, and city bikes perfect for everyday commuting. Each bike is carefully selected from trusted global brands to ensure quality, durability, and top performance. Use our category filters to quickly find the perfect bike based on your riding style and needs. Whether you ride for fitness, competition, or leisure, we have options tailored for every journey. Start your cycling experience today with bikes that combine innovation, comfort, and reliability.
-          </p>
+    <div className="min-h-screen bg-[#FBFDFF]">
+      <Header />
+      
+      {/* 1. Product Page Intro (Compact Hero) */}
+      <section className="pt-32 pb-12 bg-white border-b border-[#CCE0F5]">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="max-w-4xl">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-2 mb-4"
+            >
+              <div className="h-px w-8 bg-primary" />
+              <span className="text-[11px] font-heading font-black text-primary uppercase tracking-[0.2em]">The Product Hub</span>
+            </motion.div>
+            
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="text-4xl md:text-5xl font-heading font-black text-[#111111] uppercase tracking-tight mb-6"
+            >
+              Find Your Perfect Ride & <br/> <span className="text-primary">Cycling Essentials</span>
+            </motion.h1>
+            
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-lg text-[#555555] font-body max-w-2xl mb-8 leading-relaxed"
+            >
+              Explore premium bikes, components, accessories, and service-ready gear curated by Chennai's leading cycling experts.
+            </motion.p>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="flex flex-wrap gap-4"
+            >
+              <Button onClick={() => setSelectedCategory("race-road")} className="bg-primary hover:bg-primary/90 text-white rounded-full font-heading font-bold uppercase tracking-wider text-[12px] h-12 px-8">
+                Shop Bikes
+              </Button>
+              <Button variant="outline" className="border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white rounded-full font-heading font-bold uppercase tracking-wider text-[12px] h-12 px-8 transition-colors">
+                Browse Components
+              </Button>
+            </motion.div>
+          </div>
         </div>
       </section>
 
-      <section className="pb-24">
-        <div className="container mx-auto px-5 md:px-8">
-          {/* Category tabs */}
-          <div className="flex items-center gap-6 border-b border-border mb-10 overflow-x-auto">
-            {categories.map((cat) => (
+      {/* 2. Trust Strip */}
+      <section className="bg-primary py-4">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="flex flex-wrap justify-between items-center gap-6">
+            {[
+              { icon: <CreditCard className="w-4 h-4" />, text: "EMI Available" },
+              { icon: <Truck className="w-4 h-4" />, text: "Free Shipping Above ₹1,999" },
+              { icon: <Clock className="w-4 h-4" />, text: "Easy Returns" },
+              { icon: <ShieldCheck className="w-4 h-4" />, text: "Expert Support" },
+              { icon: <Check className="w-4 h-4" />, text: "Since 1975" }
+            ].map((item, i) => (
+              <div key={i} className="flex items-center gap-2 text-white/90">
+                {item.icon}
+                <span className="text-[10px] md:text-[11px] font-heading font-bold uppercase tracking-wider">{item.text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Category Quick Links */}
+      <div className="bg-white border-b border-[#CCE0F5] sticky top-[var(--header-total-height-lg)] z-30">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="flex items-center gap-4 overflow-x-auto py-4 no-scrollbar">
+            {bikeCategories.map((cat) => (
               <button
                 key={cat.key}
-                onClick={() => setActiveCategory(cat.key)}
-                className={`pb-3 text-small font-heading font-semibold uppercase tracking-wider whitespace-nowrap transition-colors duration-200 border-b-2 ${activeCategory === cat.key
-                  ? "text-primary border-primary"
-                  : "text-black border-transparent hover:text-primary"
-                  }`}
+                onClick={() => setSelectedCategory(cat.key)}
+                className={`whitespace-nowrap px-6 py-2.5 rounded-full font-heading font-bold text-[11px] uppercase tracking-widest transition-all duration-300 border ${
+                  selectedCategory === cat.key
+                    ? "bg-primary border-primary text-white shadow-lg"
+                    : "bg-white border-[#CCE0F5] text-[#111111] hover:border-primary hover:text-primary"
+                }`}
               >
                 {cat.label}
               </button>
             ))}
-            <div className="ml-auto pb-3">
-              <Sheet open={isFilterOpen} onOpenChange={setIsFilterOpen}>
-                <SheetTrigger asChild>
-                  <button className={`flex items-center gap-2 text-small font-body transition-colors duration-200 ${activeFilterCount > 0 ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}`}>
-                    <SlidersHorizontal className="w-4 h-4" />
-                    Filters
-                    {activeFilterCount > 0 && (
-                      <span className="bg-primary text-primary-foreground text-[10px] font-bold px-1.5 py-0.5 rounded-full">
-                        {activeFilterCount}
-                      </span>
-                    )}
-                  </button>
-                </SheetTrigger>
-                <SheetContent side="right" className="w-[320px] sm:w-[400px] overflow-y-auto">
-                  <div className="flex items-center justify-between mb-6">
-                    <h2 className="font-heading text-xl font-bold">Filters</h2>
-                    {activeFilterCount > 0 && (
-                      <Button variant="ghost" size="sm" onClick={clearFilters} className="text-muted-foreground hover:text-foreground">
-                        <X className="w-4 h-4 mr-1" />
-                        Clear All
-                      </Button>
+          </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 md:px-6 py-12">
+        <div className="flex flex-col lg:flex-row gap-10">
+          
+          {/* Desktop Filter Sidebar */}
+          <aside className="hidden lg:block w-72 flex-shrink-0">
+            <div className="sticky top-40 space-y-8">
+              <div>
+                <h3 className="font-heading font-black text-[#111111] text-[14px] uppercase tracking-[0.15em] mb-6 flex items-center gap-2">
+                  <Filter className="w-4 h-4 text-primary" /> Filter Options
+                </h3>
+                
+                {/* Brand Filter */}
+                <div className="mb-8">
+                  <h4 className="font-heading font-bold text-[#111111] text-[12px] uppercase tracking-widest mb-4">Brands</h4>
+                  <div className="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+                    {bikeBrands.map((brand) => (
+                      <label key={brand.name} className="flex items-center gap-3 cursor-pointer group">
+                        <div className="relative flex items-center justify-center">
+                          <input 
+                            type="checkbox" 
+                            className="peer appearance-none w-5 h-5 border border-[#CCE0F5] rounded bg-white checked:bg-primary checked:border-primary transition-all"
+                            checked={selectedBrand.includes(brand.name)}
+                            onChange={() => toggleBrand(brand.name)}
+                          />
+                          <Check className="absolute w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 transition-opacity" />
+                        </div>
+                        <span className="text-[13px] text-[#555555] group-hover:text-primary transition-colors">{brand.name}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Price Filter */}
+                <div className="mb-8">
+                  <h4 className="font-heading font-bold text-[#111111] text-[12px] uppercase tracking-widest mb-4">Price Range</h4>
+                  <div className="space-y-2">
+                    {priceRanges.map((range, i) => (
+                      <label key={i} className="flex items-center gap-3 cursor-pointer group">
+                        <input 
+                          type="radio" 
+                          name="price-range"
+                          className="w-4 h-4 accent-primary"
+                          checked={selectedPriceRange === i}
+                          onChange={() => setSelectedPriceRange(i)}
+                        />
+                        <span className="text-[13px] text-[#555555] group-hover:text-primary transition-colors">{range.label}</span>
+                      </label>
+                    ))}
+                    {selectedPriceRange !== null && (
+                      <button 
+                        onClick={() => setSelectedPriceRange(null)}
+                        className="text-[11px] text-primary font-bold uppercase tracking-wider mt-2 hover:underline"
+                      >
+                        Reset Price
+                      </button>
                     )}
                   </div>
-                  <ScrollArea className="h-[calc(100vh-180px)] pr-4">
-                    <FilterPanel />
-                  </ScrollArea>
-                  <div className="mt-6 pt-4 border-t">
-                    <Button onClick={applyFilters} className="w-full">
-                      Apply Filters
-                    </Button>
+                </div>
+
+                <div className="p-6 bg-primary/5 rounded-2xl border border-primary/10">
+                  <HelpCircle className="w-8 h-8 text-primary mb-3" />
+                  <h4 className="font-heading font-bold text-[#111111] text-[13px] mb-2">Need advice?</h4>
+                  <p className="text-[12px] text-[#666666] leading-relaxed mb-4">
+                    Our experts can help you choose the right bike for your riding style.
+                  </p>
+                  <Button variant="link" className="p-0 text-primary font-bold uppercase tracking-widest text-[11px] h-auto">
+                    Contact Us <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          {/* Main Product Hub */}
+          <main className="flex-1">
+            {/* Search & Sort Bar */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 bg-white p-4 rounded-2xl border border-[#CCE0F5] shadow-sm">
+              <div className="relative flex-1 max-w-md">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#888888]" />
+                <Input 
+                  placeholder="Search by name or brand..." 
+                  className="pl-11 h-12 bg-[#F9FBFF] border-[#CCE0F5] rounded-xl focus:ring-primary/20 text-sm font-medium"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 text-[#888888] text-[12px] font-bold uppercase tracking-widest">
+                  Sort By:
+                  <select 
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="bg-transparent text-[#111111] outline-none cursor-pointer hover:text-primary transition-colors"
+                  >
+                    <option value="featured">Featured</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="best-selling">Best Selling</option>
+                    <option value="newest">New Arrivals</option>
+                  </select>
+                </div>
+                
+                <div className="h-6 w-px bg-[#CCE0F5] mx-2" />
+                
+                <button 
+                  className="lg:hidden p-2.5 bg-primary text-white rounded-xl shadow-lg"
+                  onClick={() => setShowFilters(true)}
+                >
+                  <Filter className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Results Info */}
+            <div className="flex items-center justify-between mb-8">
+              <p className="text-[13px] text-[#666666]">
+                Showing <span className="font-bold text-[#111111]">{filteredBikes.length}</span> bikes 
+                {selectedCategory !== 'all' && <span> in <span className="text-primary font-bold uppercase tracking-wider">{selectedCategory}</span></span>}
+              </p>
+              
+              {(selectedCategory !== "all" || selectedBrand.length > 0 || selectedPriceRange !== null || searchQuery !== "") && (
+                <button 
+                  onClick={clearFilters}
+                  className="text-[11px] font-heading font-black text-[#111111] uppercase tracking-[0.15em] flex items-center gap-1 hover:text-primary transition-colors"
+                >
+                  Clear All <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+
+            {/* Grid */}
+            <AnimatePresence mode="wait">
+              {isLoading ? (
+                <motion.div 
+                  key="skeleton"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8"
+                >
+                  {[...Array(6)].map((_, i) => (
+                    <div key={i} className="bg-white rounded-2xl border border-[#CCE0F5] p-5 h-[450px] flex flex-col">
+                      <div className="flex-1 bg-[#F9FBFF] rounded-xl animate-pulse mb-4" />
+                      <div className="h-4 w-1/4 bg-[#F9FBFF] animate-pulse mb-3" />
+                      <div className="h-6 w-3/4 bg-[#F9FBFF] animate-pulse mb-6" />
+                      <div className="h-10 w-full bg-[#F9FBFF] animate-pulse rounded-xl" />
+                    </div>
+                  ))}
+                </motion.div>
+              ) : filteredBikes.length > 0 ? (
+                <motion.div 
+                  key="grid"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8"
+                >
+                  {filteredBikes.map((bike, index) => (
+                    <BikeCard key={bike.id} bike={bike} index={index} onAddItem={addItem} />
+                  ))}
+                </motion.div>
+              ) : (
+                <motion.div 
+                  key="empty"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex flex-col items-center justify-center py-24 text-center"
+                >
+                  <div className="w-20 h-20 bg-[#F0F6FF] rounded-full flex items-center justify-center mb-6">
+                    <Search className="w-8 h-8 text-primary" />
                   </div>
-                </SheetContent>
-              </Sheet>
+                  <h3 className="text-2xl font-heading font-black text-[#111111] uppercase tracking-tight mb-2">No Matches Found</h3>
+                  <p className="text-[#666666] mb-8 max-w-sm">
+                    We couldn't find any bikes matching your current filters. Try adjusting your search or resetting all filters.
+                  </p>
+                  <Button onClick={clearFilters} className="bg-primary hover:bg-primary/90 text-white rounded-full font-heading font-bold uppercase tracking-wider px-8">
+                    Reset All Filters
+                  </Button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </main>
+        </div>
+      </div>
+
+      {/* 9. Expert Help CTA Section */}
+      <section className="py-24 bg-white border-y border-[#CCE0F5]">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="bg-[#111111] rounded-[3rem] overflow-hidden relative p-12 md:p-20 text-center">
+            {/* Background pattern */}
+            <div className="absolute inset-0 opacity-10 pointer-events-none" 
+              style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #00BDEB 1px, transparent 0)', backgroundSize: '32px 32px' }} 
+            />
+            
+            <div className="relative z-10 max-w-3xl mx-auto">
+              <h2 className="text-3xl md:text-5xl font-heading font-black text-white uppercase tracking-tight mb-6">
+                Not sure what fits <span className="text-primary">your ride?</span>
+              </h2>
+              <p className="text-lg text-white/70 mb-10 leading-relaxed font-body">
+                Our expert mechanics and pro-cyclists are ready to help. From frame sizing to groupset compatibility, get professional advice before you buy.
+              </p>
+              <div className="flex flex-wrap justify-center gap-4">
+                <Button className="bg-primary hover:bg-primary/90 text-white rounded-full font-heading font-bold uppercase tracking-widest h-14 px-10 shadow-xl">
+                  Talk to an Expert
+                </Button>
+                <Button variant="outline" className="border-white/30 text-white hover:bg-white hover:text-[#111111] rounded-full font-heading font-bold uppercase tracking-widest h-14 px-10">
+                  Book a Consultation
+                </Button>
+              </div>
             </div>
           </div>
-
-          {/* Product grid */}
-          {filtered.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filtered.map((bike, i) => (
-                <BikeCard
-                  key={bike.id}
-                  bike={bike}
-                  index={i}
-                  onAddItem={addItem}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-16">
-              <p className="text-muted-foreground text-lg mb-4">No bikes match your filters</p>
-              <Button variant="outline" onClick={clearFilters}>
-                Clear Filters
-              </Button>
-            </div>
-          )}
         </div>
       </section>
-    </PageShell>
+
+      {/* Mobile Filter Drawer */}
+      <AnimatePresence>
+        {showFilters && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowFilters(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
+            />
+            <motion.div 
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed top-0 right-0 bottom-0 w-full max-w-[320px] bg-white z-[101] shadow-2xl flex flex-col"
+            >
+              <div className="p-6 border-b border-[#CCE0F5] flex items-center justify-between">
+                <h3 className="font-heading font-black text-[#111111] text-[16px] uppercase tracking-widest">Filters</h3>
+                <button onClick={() => setShowFilters(false)}>
+                  <X className="w-6 h-6 text-[#111111]" />
+                </button>
+              </div>
+              <div className="flex-1 overflow-y-auto p-6 space-y-10 custom-scrollbar">
+                {/* Mobile Filters Content (Clone of desktop) */}
+                <div>
+                  <h4 className="font-heading font-bold text-[#111111] text-[12px] uppercase tracking-widest mb-6 border-b border-primary/20 pb-2">Brands</h4>
+                  <div className="space-y-4">
+                    {bikeBrands.map((brand) => (
+                      <label key={brand.name} className="flex items-center gap-3">
+                        <input 
+                          type="checkbox" 
+                          className="w-5 h-5 accent-primary border-[#CCE0F5] rounded"
+                          checked={selectedBrand.includes(brand.name)}
+                          onChange={() => toggleBrand(brand.name)}
+                        />
+                        <span className="text-[14px] text-[#555555]">{brand.name}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-heading font-bold text-[#111111] text-[12px] uppercase tracking-widest mb-6 border-b border-primary/20 pb-2">Price Range</h4>
+                  <div className="space-y-4">
+                    {priceRanges.map((range, i) => (
+                      <label key={i} className="flex items-center gap-3">
+                        <input 
+                          type="radio" 
+                          name="price-range-mobile"
+                          className="w-5 h-5 accent-primary"
+                          checked={selectedPriceRange === i}
+                          onChange={() => setSelectedPriceRange(i)}
+                        />
+                        <span className="text-[14px] text-[#555555]">{range.label}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="p-6 border-t border-[#CCE0F5] bg-[#F9FBFF]">
+                <Button onClick={() => setShowFilters(false)} className="w-full bg-[#111111] hover:bg-primary text-white rounded-xl h-14 font-heading font-bold uppercase tracking-widest shadow-xl">
+                  Show {filteredBikes.length} Results
+                </Button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      <Footer />
+    </div>
   );
 };
 
 export default Shop;
-

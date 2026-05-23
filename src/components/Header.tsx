@@ -17,9 +17,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
 import { bikeBrands, bikeCategories, bikes } from "@/data/bikes";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronRight, Menu, MessageCircle, Phone, Search, ShoppingBag, User as UserIcon, X } from "lucide-react";
+import { ChevronRight, Menu, MessageCircle, Phone, Search, ShoppingCart, User as UserIcon, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import AnnouncementBar from "./AnnouncementBar";
 
 const navLinks = [
   { label: "Bikes", href: "/shop" },
@@ -83,7 +84,7 @@ const Header = () => {
 
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.7);
+    const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
@@ -100,310 +101,276 @@ const Header = () => {
   }, [mobileOpen]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 px-4 md:px-6 pt-4">
+    <header className="fixed top-0 left-0 right-0 z-50">
+      <AnnouncementBar />
       <div
-        className={`container mx-auto rounded-2xl border border-border/30 motion-reduce:transition-none transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] ${scrolled
-          ? "scale-95 bg-background/80 backdrop-blur-md shadow-xl"
-          : "scale-100 bg-background/40 backdrop-blur-lg shadow-lg"
-          }`}
+        className={`w-full border-b border-black/5 transition-all duration-300 h-[var(--navbar-height)] lg:h-[var(--navbar-height-lg)] ${
+          scrolled ? "bg-white/95 backdrop-blur-md shadow-sm" : "bg-white"
+        }`}
       >
-        <div className="flex items-center justify-between h-14 lg:h-16 px-5 lg:px-6">
-          {/* Logo */}
-          <Link to="/" className="flex-shrink-0 z-50">
-            <img src={logo} alt="Pro-Bikers" className="h-7 lg:h-8" />
-          </Link>
+        <div className="container mx-auto px-4 md:px-6 h-full flex items-center">
+          <div className="flex items-center justify-between w-full h-full">
+            {/* Logo */}
+            <Link to="/" className="flex-shrink-0 z-50">
+              <img src={logo} alt="Pro-Bikers" className="h-8 lg:h-10" />
+            </Link>
 
-          {/* Center nav */}
-          <nav className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => {
-              const isActive = location.pathname === link.href;
-              const hasDropdown = link.label === "Bikes" || link.label === "Brands";
-              return (
-                <div
-                  key={link.label}
-                  className="relative"
-                  onMouseEnter={hasDropdown ? () => openDropdown(link.label) : undefined}
-                  onMouseLeave={hasDropdown ? closeDropdown : undefined}
-                >
-                  <Link
-                    to={link.href}
-                    className={`relative px-4 py-2 text-xs font-heading font-medium uppercase tracking-[0.15em] transition-colors duration-300 ease-out flex items-center gap-1
-                      ${isActive ? "text-primary" : "text-black hover:text-primary"}
-                    `}
+            {/* Center nav */}
+            <nav className="hidden lg:flex items-center gap-1">
+              {navLinks.map((link) => {
+                const isActive = location.pathname === link.href;
+                const hasDropdown = link.label === "Bikes" || link.label === "Brands";
+                return (
+                  <div
+                    key={link.label}
+                    className="relative"
+                    onMouseEnter={hasDropdown ? () => openDropdown(link.label) : undefined}
+                    onMouseLeave={hasDropdown ? closeDropdown : undefined}
                   >
-                    {link.label}
-                    <span
-                      className={`absolute bottom-0.5 left-1/2 -translate-x-1/2 h-px bg-primary transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]
-                        ${isActive ? "w-4 opacity-100" : "w-0 opacity-0"}
+                    <Link
+                      to={link.href}
+                      className={`relative px-4 py-2 text-[13px] font-heading font-bold uppercase tracking-[0.1em] transition-colors duration-300 ease-out flex items-center gap-1
+                        ${isActive ? "text-primary" : "text-[#111111] hover:text-primary"}
                       `}
-                    />
-                    {!isActive && (
-                      <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 h-px bg-foreground/40 w-0 opacity-0 group-hover:w-3 group-hover:opacity-60 transition-all duration-200" />
-                    )}
-                  </Link>
+                    >
+                      {link.label}
+                      <span
+                        className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-primary transition-all duration-300
+                          ${isActive ? "w-6 opacity-100" : "w-0 opacity-0 group-hover:w-4 group-hover:opacity-100"}
+                        `}
+                      />
+                    </Link>
 
-                  {/* Bikes Mega Dropdown */}
-                  {hasDropdown && activeDropdown === link.label && (
-                    <AnimatePresence>
-                      {link.label === "Bikes" && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -8 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -8 }}
-                          transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
-                          className="absolute top-full left-0 mt-2 z-50 min-w-max"
-                          onMouseEnter={keepDropdownOpen}
-                          onMouseLeave={closeDropdown}
-                        >
-                          <div className="container mx-auto px-6">
-                            <div className="bg-background/95 backdrop-blur-xl border border-border/40 rounded-xl shadow-2xl p-1 inline-flex min-h-[200px]">
-                            {/* Category list */}
-                            <div className="w-56 border-r border-border/30 p-3">
-                              <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-primary mb-2 px-3">Categories</p>
-                              {bikeCategories.map((cat) => (
-                                <div
-                                  key={cat.key}
-                                  onMouseEnter={() => openSub(cat.key, "category")}
-                                  onMouseLeave={() => closeSub("category")}
-                                >
-                                  <Link
-                                    to={`/shop/${cat.key}`}
-                                    onClick={() => setActiveDropdown(null)}
-                                    className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-heading font-medium uppercase tracking-wider transition-all duration-150
-                                      ${hoveredCategory === cat.key
-                                        ? "bg-primary/10 text-primary"
-                                        : "text-foreground hover:text-foreground hover:bg-muted/40"
-                                      }
-                                    `}
-                                  >
-                                    {cat.label}
-                                    <ChevronRight className="w-3.5 h-3.5 opacity-80" />
-                                  </Link>
-                                </div>
-                              ))}
-                            </div>
-
-                            {/* Bikes sub-panel */}
-                            <div className="flex-1 p-4">
-                              <AnimatePresence mode="wait">
-                                {hoveredCategory ? (
-                                  <motion.div
-                                    key={hoveredCategory}
-                                    initial={{ opacity: 0, x: 8 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: 8 }}
-                                    transition={{ duration: 0.12 }}
-                                    onMouseEnter={keepSubOpen}
+                    {/* Bikes Mega Dropdown */}
+                    {hasDropdown && activeDropdown === link.label && (
+                      <AnimatePresence>
+                        {link.label === "Bikes" && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 10 }}
+                            transition={{ duration: 0.2 }}
+                            className="absolute top-full left-0 mt-0 z-50 min-w-max pt-2"
+                            onMouseEnter={keepDropdownOpen}
+                            onMouseLeave={closeDropdown}
+                          >
+                            <div className="bg-white border border-[#CCE0F5] rounded-xl shadow-2xl p-1 inline-flex min-h-[200px]">
+                              {/* Category list */}
+                              <div className="w-56 border-r border-[#CCE0F5] p-3">
+                                <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-primary mb-2 px-3">Categories</p>
+                                {bikeCategories.map((cat) => (
+                                  <div
+                                    key={cat.key}
+                                    onMouseEnter={() => openSub(cat.key, "category")}
                                     onMouseLeave={() => closeSub("category")}
                                   >
-                                    <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-primary mb-3">
-                                      {bikeCategories.find((c) => c.key === hoveredCategory)?.label}
-                                    </p>
-                                    <div className="flex flex-col gap-2">
-                                      {bikes
-                                        .filter((b) => b.category === hoveredCategory)
-                                        .map((bike) => (
-                                          <Link
-                                            key={bike.id}
-                                            to={`/product/${bike.id}`}
-                                            onClick={() => setActiveDropdown(null)}
-                                            className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-muted/40 transition-all duration-150 group/bike"
-                                          >
-                                            <div className="flex flex-col min-w-0">
-                                              <span className="text-xs font-heading font-semibold text-foreground truncate">{bike.name}</span>
-                                              <span className="text-[10px] text-muted-foreground font-heading uppercase tracking-wider">{bike.brand}</span>
-                                            </div>
-                                          </Link>
-                                        ))}
-                                    </div>
-                                  </motion.div>
-                                ) : (
-                                  <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    className="h-full flex items-center justify-center"
-                                  >
-                                    <p className="text-xs text-muted-foreground font-heading uppercase tracking-widest">Hover a category to see bikes</p>
-                                  </motion.div>
-                                )}
-                              </AnimatePresence>
-                            </div>
-                          </div>
-                          </div>
-                        </motion.div>
-                      )}
-                      {link.label === "Brands" && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -8 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -8 }}
-                          transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
-                          className="absolute top-full left-0 mt-2 z-50 min-w-max"
-                          onMouseEnter={keepDropdownOpen}
-                          onMouseLeave={closeDropdown}
-                        >
-                          <div className="container mx-auto px-6">
-                            <div className="bg-background/95 backdrop-blur-xl border border-border/40 rounded-xl shadow-2xl p-1 inline-flex min-h-[200px]">
-                            {/* Brand list */}
-                            <div className="w-56 border-r border-border/30 p-3">
-                              <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-primary mb-2 px-3">Brands</p>
-                              {bikeBrands.map((brand) => (
-                                <div
-                                  key={brand.name}
-                                  onMouseEnter={() => openSub(brand.name, "brand")}
-                                  onMouseLeave={() => closeSub("brand")}
-                                >
-                                  <div
-                                    className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-heading font-medium uppercase tracking-wider transition-all duration-150 cursor-default
-                                      ${hoveredBrand === brand.name
-                                        ? "bg-primary/10 text-primary"
-                                        : "text-foreground hover:text-foreground hover:bg-muted/40"
-                                      }
-                                    `}
-                                  >
-                                    {brand.name}
-                                    <ChevronRight className="w-3.5 h-3.5 opacity-80" />
+                                    <Link
+                                      to={`/shop/${cat.key}`}
+                                      onClick={() => setActiveDropdown(null)}
+                                      className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-heading font-medium uppercase tracking-wider transition-all duration-150
+                                        ${hoveredCategory === cat.key
+                                          ? "bg-[#EBF4FF] text-primary"
+                                          : "text-[#111111] hover:bg-[#F0F6FF]"
+                                        }
+                                      `}
+                                    >
+                                      {cat.label}
+                                      <ChevronRight className="w-3.5 h-3.5 opacity-80" />
+                                    </Link>
                                   </div>
-                                </div>
-                              ))}
-                            </div>
+                                ))}
+                              </div>
 
-                            {/* Brand categories sub-panel */}
-                            <div className="flex-1 p-4">
-                              <AnimatePresence mode="wait">
-                                {hoveredBrand ? (
-                                  <motion.div
-                                    key={hoveredBrand}
-                                    initial={{ opacity: 0, x: 8 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: 8 }}
-                                    transition={{ duration: 0.12 }}
-                                    onMouseEnter={keepSubOpen}
+                              {/* Bikes sub-panel */}
+                              <div className="w-64 p-4">
+                                <AnimatePresence mode="wait">
+                                  {hoveredCategory ? (
+                                    <motion.div
+                                      key={hoveredCategory}
+                                      initial={{ opacity: 0, x: 5 }}
+                                      animate={{ opacity: 1, x: 0 }}
+                                      exit={{ opacity: 0, x: 5 }}
+                                      transition={{ duration: 0.15 }}
+                                      onMouseEnter={keepSubOpen}
+                                      onMouseLeave={() => closeSub("category")}
+                                    >
+                                      <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-primary mb-3">
+                                        {bikeCategories.find((c) => c.key === hoveredCategory)?.label}
+                                      </p>
+                                      <div className="flex flex-col gap-1">
+                                        {bikes
+                                          .filter((b) => b.category === hoveredCategory)
+                                          .slice(0, 6)
+                                          .map((bike) => (
+                                            <Link
+                                              key={bike.id}
+                                              to={`/product/${bike.id}`}
+                                              onClick={() => setActiveDropdown(null)}
+                                              className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#F0F6FF] transition-all duration-150 group/bike"
+                                            >
+                                              <div className="flex flex-col min-w-0">
+                                                <span className="text-xs font-heading font-semibold text-[#111111] truncate">{bike.name}</span>
+                                                <span className="text-[10px] text-[#888888] font-heading uppercase tracking-wider">{bike.brand}</span>
+                                              </div>
+                                            </Link>
+                                          ))}
+                                      </div>
+                                    </motion.div>
+                                  ) : (
+                                    <div className="h-full flex items-center justify-center text-center">
+                                      <p className="text-[10px] text-[#888888] font-heading uppercase tracking-widest leading-relaxed">Hover a category<br/>to see bikes</p>
+                                    </div>
+                                  )}
+                                </AnimatePresence>
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                        {link.label === "Brands" && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 10 }}
+                            transition={{ duration: 0.2 }}
+                            className="absolute top-full left-0 mt-0 z-50 min-w-max pt-2"
+                            onMouseEnter={keepDropdownOpen}
+                            onMouseLeave={closeDropdown}
+                          >
+                            <div className="bg-white border border-[#CCE0F5] rounded-xl shadow-2xl p-1 inline-flex min-h-[200px]">
+                              {/* Brand list */}
+                              <div className="w-56 border-r border-[#CCE0F5] p-3">
+                                <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-primary mb-2 px-3">Brands</p>
+                                {bikeBrands.map((brand) => (
+                                  <div
+                                    key={brand.name}
+                                    onMouseEnter={() => openSub(brand.name, "brand")}
                                     onMouseLeave={() => closeSub("brand")}
                                   >
-                                    <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-primary mb-3">{hoveredBrand}</p>
-                                    <div className="space-y-1">
-                                      {bikeBrands
-                                        .find((b) => b.name === hoveredBrand)
-                                        ?.categories.map((catKey) => {
-                                          const cat = bikeCategories.find((c) => c.key === catKey);
-                                          const brandBikes = bikes.filter((b) => b.brand === hoveredBrand && b.category === catKey);
-                                          return brandBikes.length > 0 ? (
-                                            <div key={catKey} className="mb-4">
-                                              <p className="text-[10px] font-heading font-semibold text-primary mb-2">{cat?.label}</p>
-                                              <div className="flex flex-col gap-2">
-                                                {brandBikes.map((bike) => (
-                                                  <Link
-                                                    key={bike.id}
-                                                    to={`/product/${bike.id}`}
-                                                    onClick={() => setActiveDropdown(null)}
-                                                    className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-muted/40 transition-all duration-150 group/bike"
-                                                  >
-                                                    <div className="flex flex-col min-w-0">
-                                                      <span className="text-xs font-heading font-semibold text-foreground truncate">{bike.name}</span>
-                                                      <span className="text-[10px] text-muted-foreground font-heading uppercase tracking-wider">{bike.brand}</span>
-                                                    </div>
-                                                  </Link>
-                                                ))}
-                                              </div>
-                                            </div>
-                                          ) : null;
-                                        })}
+                                    <div
+                                      className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-heading font-medium uppercase tracking-wider transition-all duration-150 cursor-default
+                                        ${hoveredBrand === brand.name
+                                          ? "bg-[#EBF4FF] text-primary"
+                                          : "text-[#111111] hover:bg-[#F0F6FF]"
+                                        }
+                                      `}
+                                    >
+                                      {brand.name}
+                                      <ChevronRight className="w-3.5 h-3.5 opacity-80" />
                                     </div>
-                                  </motion.div>
-                                ) : (
-                                  <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    className="h-full flex items-center justify-center"
-                                  >
-                                    <p className="text-xs text-muted-foreground font-heading uppercase tracking-widest">Hover a brand to see bikes</p>
-                                  </motion.div>
-                                )}
-                              </AnimatePresence>
+                                  </div>
+                                ))}
+                              </div>
+
+                              {/* Brand categories sub-panel */}
+                              <div className="w-64 p-4">
+                                <AnimatePresence mode="wait">
+                                  {hoveredBrand ? (
+                                    <motion.div
+                                      key={hoveredBrand}
+                                      initial={{ opacity: 0, x: 5 }}
+                                      animate={{ opacity: 1, x: 0 }}
+                                      exit={{ opacity: 0, x: 5 }}
+                                      transition={{ duration: 0.15 }}
+                                      onMouseEnter={keepSubOpen}
+                                      onMouseLeave={() => closeSub("brand")}
+                                    >
+                                      <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-primary mb-3">{hoveredBrand}</p>
+                                      <div className="space-y-4">
+                                        {bikeBrands
+                                          .find((b) => b.name === hoveredBrand)
+                                          ?.categories.map((catKey) => {
+                                            const cat = bikeCategories.find((c) => c.key === catKey);
+                                            const brandBikes = bikes.filter((b) => b.brand === hoveredBrand && b.category === catKey);
+                                            return brandBikes.length > 0 ? (
+                                              <div key={catKey}>
+                                                <p className="text-[9px] font-heading font-bold text-primary/60 uppercase tracking-widest mb-1.5">{cat?.label}</p>
+                                                <div className="flex flex-col gap-1">
+                                                  {brandBikes.slice(0, 3).map((bike) => (
+                                                    <Link
+                                                      key={bike.id}
+                                                      to={`/product/${bike.id}`}
+                                                      onClick={() => setActiveDropdown(null)}
+                                                      className="flex items-center gap-3 p-1.5 rounded-lg hover:bg-[#F0F6FF] transition-all duration-150"
+                                                    >
+                                                      <span className="text-[11px] font-heading font-semibold text-[#111111] truncate">{bike.name}</span>
+                                                    </Link>
+                                                  ))}
+                                                </div>
+                                              </div>
+                                            ) : null;
+                                          })}
+                                      </div>
+                                    </motion.div>
+                                  ) : (
+                                    <div className="h-full flex items-center justify-center text-center">
+                                      <p className="text-[10px] text-[#888888] font-heading uppercase tracking-widest leading-relaxed">Hover a brand<br/>to see bikes</p>
+                                    </div>
+                                  )}
+                                </AnimatePresence>
+                              </div>
                             </div>
-                          </div>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  )}
-                </div>
-              );
-            })}
-          </nav>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    )}
+                  </div>
+                );
+              })}
+            </nav>
 
-
-
-          {/* Right icons */}
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => setSearchOpen(true)}
-              aria-label="Open search"
-              title="Search"
-              className="p-2 text-black hover:text-primary transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hidden sm:flex items-center justify-center hover:-translate-y-px hover:rotate-[-3deg] motion-reduce:hover:transform-none"
-            >
-              <Search className="w-[18px] h-[18px]" />
-            </button>
-            {/* User Account */}
-            {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button aria-label="Account menu" title="Account" className="p-2 text-black hover:text-primary transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] relative flex items-center justify-center hover:-translate-y-px hover:rotate-[-3deg] motion-reduce:hover:transform-none">
-                    <UserIcon className="w-[18px] h-[18px]" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48 bg-background border-border">
-                  <DropdownMenuItem onClick={() => navigate("/dashboard")} className="cursor-pointer font-body">
-                    Dashboard
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={async () => { await signOut(); navigate("/"); }} className="cursor-pointer font-body text-destructive focus:text-destructive">
-                    Sign Out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
+            {/* Right icons */}
+            <div className="flex items-center gap-2">
               <button
-                onClick={() => navigate("/auth")}
-                aria-label="Sign in"
-                title="Sign in"
-                className="p-2 text-black hover:text-primary transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] relative flex items-center justify-center hover:-translate-y-px hover:rotate-[-3deg] motion-reduce:hover:transform-none"
+                onClick={() => setSearchOpen(true)}
+                className="p-2 text-[#111111] hover:text-primary transition-colors duration-200"
               >
-                <UserIcon className="w-[18px] h-[18px]" />
+                <Search className="w-5 h-5" />
               </button>
-            )}
-
-            <button
-              onClick={() => setIsOpen(true)}
-              aria-label="Open cart"
-              title="Cart"
-              className="p-2 text-black hover:text-primary transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] relative flex items-center justify-center hover:-translate-y-px hover:rotate-[3deg] motion-reduce:hover:transform-none"
-            >
-              <ShoppingBag className="w-[18px] h-[18px]" />
-              {totalItems > 0 && (
-                <span className="absolute top-0.5 right-0.5 w-3.5 h-3.5 bg-primary text-primary-foreground text-[9px] font-bold rounded-full flex items-center justify-center">
-                  {totalItems > 9 ? "9+" : totalItems}
-                </span>
+              
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="p-2 text-[#111111] hover:text-primary transition-colors duration-200">
+                      <UserIcon className="w-5 h-5" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48 bg-white border border-[#CCE0F5] shadow-xl">
+                    <DropdownMenuItem onClick={() => navigate("/dashboard")} className="cursor-pointer font-heading font-semibold text-xs uppercase tracking-wider p-3 focus:bg-[#F0F6FF]">
+                      Dashboard
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={async () => { await signOut(); navigate("/"); }} className="cursor-pointer font-heading font-semibold text-xs uppercase tracking-wider p-3 text-destructive focus:text-destructive focus:bg-destructive/5">
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <button
+                  onClick={() => navigate("/auth")}
+                  className="p-2 text-[#111111] hover:text-primary transition-colors duration-200"
+                >
+                  <UserIcon className="w-5 h-5" />
+                </button>
               )}
-            </button>
-            <button
-              className="lg:hidden p-2 text-foreground z-50 relative flex items-center justify-center"
-              onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label="Toggle navigation menu"
-              title={mobileOpen ? "Close menu" : "Open menu"}
-            >
-              <AnimatePresence mode="wait">
-                {mobileOpen ? (
-                  <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
-                    <X className="w-5 h-5" />
-                  </motion.div>
-                ) : (
-                  <motion.div key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
-                    <Menu className="w-5 h-5" />
-                  </motion.div>
+
+              <button
+                onClick={() => setIsOpen(true)}
+                className="p-2 text-[#111111] hover:text-primary transition-colors duration-200 relative"
+              >
+                <ShoppingCart className="w-5 h-5" />
+                {totalItems > 0 && (
+                  <span className="absolute top-1 right-1 w-4 h-4 bg-primary text-white text-[9px] font-bold rounded-full flex items-center justify-center shadow-sm">
+                    {totalItems}
+                  </span>
                 )}
-              </AnimatePresence>
-            </button>
+              </button>
+              
+              <button
+                className="lg:hidden p-2 text-[#111111]"
+                onClick={() => setMobileOpen(!mobileOpen)}
+              >
+                {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -412,58 +379,48 @@ const Header = () => {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-40 lg:hidden bg-background/95 backdrop-blur-2xl flex flex-col"
+            initial={{ opacity: 0, x: "100%" }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed inset-0 z-[60] bg-white flex flex-col"
           >
-            <nav className="flex-1 flex flex-col items-center justify-center gap-1 px-8">
-              {navLinks.map((link, i) => {
-                const isActive = location.pathname === link.href;
-                return (
-                  <motion.div
-                    key={link.label}
-                    initial={{ opacity: 0, x: -30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -30 }}
-                    transition={{ duration: 0.25, delay: 0.04 + i * 0.05 }}
-                  >
-                    <Link
-                      to={link.href}
-                      className={`block py-3 text-2xl sm:text-3xl font-heading font-bold uppercase tracking-widest text-center transition-colors duration-200
-                        ${isActive ? "text-primary" : "text-foreground hover:text-primary"}
-                      `}
-                    >
-                      {link.label}
-                    </Link>
-                  </motion.div>
-                );
-              })}
+            <div className="flex items-center justify-between h-16 px-4 border-b border-border">
+              <img src={logo} alt="Pro-Bikers" className="h-8" />
+              <button onClick={() => setMobileOpen(false)}>
+                <X className="w-6 h-6 text-[#111111]" />
+              </button>
+            </div>
+            
+            <nav className="flex-1 flex flex-col py-8 px-6 overflow-y-auto">
+              {navLinks.map((link, i) => (
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  className="py-4 text-xl font-heading font-bold uppercase tracking-widest text-[#111111] border-b border-[#F0F6FF]"
+                >
+                  {link.label}
+                </Link>
+              ))}
+              
+              <div className="mt-auto pt-10 grid grid-cols-2 gap-4">
+                <a href="tel:+919876543210" className="flex flex-col items-center justify-center p-4 bg-[#F0F6FF] rounded-xl text-center">
+                  <Phone className="w-5 h-5 mb-2 text-primary" />
+                  <span className="text-[10px] font-heading font-bold uppercase tracking-wider text-[#111111]">Call Us</span>
+                </a>
+                <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center justify-center p-4 bg-[#EBF4FF] rounded-xl text-center">
+                  <MessageCircle className="w-5 h-5 mb-2 text-primary" />
+                  <span className="text-[10px] font-heading font-bold uppercase tracking-wider text-[#111111]">WhatsApp</span>
+                </a>
+              </div>
             </nav>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35, duration: 0.25 }}
-              className="px-8 pb-10 flex items-center justify-center gap-6"
-            >
-              <a href="tel:+919876543210" className="flex items-center gap-2 text-muted-foreground hover:text-foreground text-small font-micro transition-colors duration-200">
-                <Phone className="w-4 h-4" /> Call Us
-              </a>
-              <span className="w-px h-4 bg-border" />
-              <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-muted-foreground hover:text-primary text-small font-micro transition-colors duration-200">
-                <MessageCircle className="w-4 h-4" /> WhatsApp
-              </a>
-            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Search Dialog */}
       <CommandDialog open={searchOpen} onOpenChange={setSearchOpen}>
         <CommandInput placeholder="Search bikes, brands, categories..." />
-        <CommandList>
+        <CommandList className="max-h-[70vh]">
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Bikes">
             {bikes.map((bike) => (
@@ -471,16 +428,16 @@ const Header = () => {
                 key={bike.id}
                 onSelect={() => {
                   setSearchOpen(false);
-                  navigate(`/shop`);
+                  navigate(`/product/${bike.id}`);
                 }}
                 className="flex items-center gap-4 cursor-pointer py-3"
               >
-                <div className="w-12 h-12 bg-muted/30 rounded-md flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 bg-[#F0F6FF] rounded-lg flex items-center justify-center flex-shrink-0">
                   <img src={bike.image} alt={bike.name} className="w-10 h-10 object-contain" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-heading font-semibold text-foreground text-sm">{bike.name}</span>
-                  <span className="text-xs text-muted-foreground uppercase tracking-wider font-heading mt-0.5">{bike.brand} · {bike.category}</span>
+                  <span className="font-heading font-bold text-[#111111] text-sm">{bike.name}</span>
+                  <span className="text-[10px] text-[#888888] uppercase tracking-wider font-heading mt-0.5">{bike.brand} · {bike.category}</span>
                 </div>
               </CommandItem>
             ))}

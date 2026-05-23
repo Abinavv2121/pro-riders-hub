@@ -76,6 +76,13 @@
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 215 10% 18%;
     --sidebar-ring: 193 100% 42%;
+
+    /* ── Header Heights ── */
+    --announcement-height: 32px;
+    --navbar-height: 56px;
+    --navbar-height-lg: 72px;
+    --header-total-height: calc(var(--announcement-height) + var(--navbar-height));
+    --header-total-height-lg: calc(var(--announcement-height) + var(--navbar-height-lg));
   }
 }
 
@@ -252,3 +259,323 @@ html {
     padding-bottom: 3rem;
   }
 }
+
+/* ── Global Container Padding Standardization ── */
+/* Ensures all page sections share the same left/right content edge */
+@media (min-width: 1536px) {
+  .container {
+    padding-left: clamp(32px, 4vw, 64px);
+    padding-right: clamp(32px, 4vw, 64px);
+  }
+}
+
+@media (max-width: 1024px) {
+  .container {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   Product Detail Page (PDP) - Bums On The Saddle Style
+   ══════════════════════════════════════════════════════ */
+
+.product-detail-page {
+  background: #ffffff;
+  color: #0b0f14;
+}
+
+.product-detail-container {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 32px clamp(20px, 5vw, 64px) 120px;
+}
+
+.product-breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: #667085;
+}
+
+.product-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(32px, 6vw, 80px);
+  align-items: start;
+}
+
+.product-media {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 20px;
+  align-items: start;
+  position: sticky;
+  top: 100px;
+}
+
+.product-thumbnails {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.product-thumbnail {
+  width: 80px;
+  height: 80px;
+  border: 1px solid #edf0f3;
+  border-radius: 12px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.product-thumbnail:hover {
+  border-color: #a0aec0;
+}
+
+.product-thumbnail.active {
+  border: 2px solid #111111;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.product-image-stage {
+  min-height: 480px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #edf0f3;
+  border-radius: 16px;
+  transition: border-color 0.2s ease;
+}
+
+.product-main-image {
+  width: 100%;
+  max-height: 460px;
+  object-fit: contain;
+}
+
+.product-info {
+  padding-top: 4px;
+}
+
+.product-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(26px, 3vw, 40px);
+  line-height: 1.1;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: #111111;
+  margin-bottom: 8px;
+}
+
+.product-price-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.product-price {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(24px, 2.5vw, 34px);
+  font-weight: 900;
+}
+
+.stock-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.product-description {
+  font-size: 15px;
+  line-height: 1.65;
+  color: #4b5563;
+  margin-bottom: 28px;
+}
+
+.product-section {
+  padding-top: 24px;
+  margin-top: 24px;
+  border-top: 1px solid #edf0f3;
+}
+
+.product-section-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #111111;
+  margin-bottom: 16px;
+}
+
+.product-bullet-list {
+  margin: 0;
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+.product-bullet-list li {
+  margin-bottom: 8px;
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+.product-spec-list {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.product-spec-list li {
+  margin-bottom: 8px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  border-bottom: 1px solid #f7fafc;
+  padding-bottom: 6px;
+}
+
+.product-spec-list strong {
+  font-weight: 800;
+  color: #111111;
+  display: inline-block;
+  min-width: 140px;
+}
+
+.product-options {
+  padding-top: 24px;
+  margin-top: 24px;
+  border-top: 1px solid #edf0f3;
+}
+
+.option-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #667085;
+}
+
+/* ── Sticky Cart Bar ── */
+.sticky-cart-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 80;
+  background: #ffffff;
+  border-top: 1px solid #edf0f3;
+  box-shadow: 0 -8px 30px rgba(15, 23, 42, 0.08);
+  padding: 12px clamp(20px, 5vw, 64px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.sticky-product-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sticky-product-info img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  background: #f7fafc;
+  border-radius: 8px;
+  border: 1px solid #edf0f3;
+}
+
+.sticky-product-name {
+  font-weight: 900;
+  color: #111111;
+  letter-spacing: -0.02em;
+}
+
+.sticky-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sticky-add-to-cart {
+  border-radius: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ── Responsive adjustments ── */
+@media (max-width: 1024px) {
+  .product-layout {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .product-media {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-media {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .product-thumbnails {
+    order: 2;
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .product-thumbnail {
+    width: 68px;
+    height: 68px;
+    flex-shrink: 0;
+  }
+
+  .product-image-stage {
+    min-height: 340px;
+  }
+
+  .product-main-image {
+    max-height: 320px;
+  }
+
+  .product-actions {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
