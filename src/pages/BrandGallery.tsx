@@ -28,11 +28,11 @@ const BrandGallery = () => {
       <section className="container mx-auto px-5 md:px-8 space-section">
         {/* Back button */}
         <Link
-          to="/brands"
+          to="/"
           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors duration-200 font-body mb-8 group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-200" />
-          Back to Brands
+          Back to Home
         </Link>
 
         {/* Heading */}

@@ -28,6 +28,10 @@ import {
 } from "lucide-react";
 import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
+import onRoadImg from "@/assets/categories/on-road.png";
+import xRoadImg from "@/assets/categories/x-road.png";
+import offRoadImg from "@/assets/categories/off-road.png";
+import livImg from "@/assets/categories/liv.png";
 
 const Shop = () => {
   const { addItem } = useCart();
@@ -44,6 +48,23 @@ const Shop = () => {
     const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
+
+  const handleSubcategoryClick = (categoryKey: string) => {
+    setSelectedCategory(categoryKey);
+    const element = document.getElementById("shop-listings");
+    if (element) {
+      const offset = 140; // offset for sticky headers
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+  };
 
   const filteredBikes = useMemo(() => {
     let result = bikes.filter((bike) => {
@@ -92,209 +113,182 @@ const Shop = () => {
     <div className="min-h-screen bg-[#FBFDFF]">
       <Header />
       
-      {/* 1. Product Page Intro (Compact Hero) */}
-      <section className="pt-32 pb-12 bg-white border-b border-[#CCE0F5]">
+      {/* 1. Category & Specification Showcase */}
+      <section className="pt-28 pb-10 bg-white">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex items-center gap-2 mb-4"
-            >
-              <div className="h-px w-8 bg-primary" />
-              <span className="text-[11px] font-heading font-black text-primary uppercase tracking-[0.2em]">The Product Hub</span>
-            </motion.div>
-            
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-4xl md:text-5xl font-heading font-black text-[#111111] uppercase tracking-tight mb-6"
-            >
-              Find Your Perfect Ride & <br/> <span className="text-primary">Cycling Essentials</span>
-            </motion.h1>
-            
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-lg text-[#555555] font-body max-w-2xl mb-8 leading-relaxed"
-            >
-              Explore premium bikes, components, accessories, and service-ready gear curated by Chennai's leading cycling experts.
-            </motion.p>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="flex flex-wrap gap-4"
-            >
-              <Button onClick={() => setSelectedCategory("race-road")} className="bg-primary hover:bg-primary/90 text-white rounded-full font-heading font-bold uppercase tracking-wider text-[12px] h-12 px-8">
-                Shop Bikes
-              </Button>
-              <Button variant="outline" className="border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white rounded-full font-heading font-bold uppercase tracking-wider text-[12px] h-12 px-8 transition-colors">
-                Browse Components
-              </Button>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* 2. Trust Strip */}
-      <section className="bg-primary py-4">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="flex flex-wrap justify-between items-center gap-6">
-            {[
-              { icon: <CreditCard className="w-4 h-4" />, text: "EMI Available" },
-              { icon: <Truck className="w-4 h-4" />, text: "Free Shipping Above ₹1,999" },
-              { icon: <Clock className="w-4 h-4" />, text: "Easy Returns" },
-              { icon: <ShieldCheck className="w-4 h-4" />, text: "Expert Support" },
-              { icon: <Check className="w-4 h-4" />, text: "Since 1975" }
-            ].map((item, i) => (
-              <div key={i} className="flex items-center gap-2 text-white/90">
-                {item.icon}
-                <span className="text-[10px] md:text-[11px] font-heading font-bold uppercase tracking-wider">{item.text}</span>
+          <motion.div 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+          >
+            {/* Column 1: ON ROAD */}
+            <div className="group">
+              <div className="overflow-hidden rounded-xl aspect-[16/10] bg-[#F9FBFF] border border-[#CCE0F5] shadow-sm">
+                <img 
+                  src={onRoadImg} 
+                  alt="On Road Category" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
               </div>
-            ))}
-          </div>
+              <h3 className="font-heading font-black text-[#111111] text-[14px] uppercase tracking-wider mt-4 mb-3 border-b border-[#CCE0F5] pb-2">
+                On Road
+              </h3>
+              <ul className="space-y-1.5">
+                {[
+                  { name: "Aero Race", cat: "race-road" },
+                  { name: "Race", cat: "race-road" },
+                  { name: "All Rounder", cat: "race-road" },
+                  { name: "Fitness", cat: "city-fitness" },
+                  { name: "City", cat: "city-fitness" },
+                  { name: "Endurance", cat: "endurance-road" }
+                ].map((sub, idx) => (
+                  <li key={idx}>
+                    <button 
+                      onClick={() => handleSubcategoryClick(sub.cat)}
+                      className="text-[13px] text-[#111111] hover:text-primary transition-colors font-body font-medium block w-full text-left"
+                    >
+                      {sub.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Column 2: X ROAD */}
+            <div className="group">
+              <div className="overflow-hidden rounded-xl aspect-[16/10] bg-[#F9FBFF] border border-[#CCE0F5] shadow-sm">
+                <img 
+                  src={xRoadImg} 
+                  alt="X Road Category" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <h3 className="font-heading font-black text-[#111111] text-[14px] uppercase tracking-wider mt-4 mb-3 border-b border-[#CCE0F5] pb-2">
+                X Road
+              </h3>
+              <ul className="space-y-1.5">
+                {[
+                  { name: "Gravel", cat: "gravel" },
+                  { name: "Sport", cat: "gravel" }
+                ].map((sub, idx) => (
+                  <li key={idx}>
+                    <button 
+                      onClick={() => handleSubcategoryClick(sub.cat)}
+                      className="text-[13px] text-[#111111] hover:text-primary transition-colors font-body font-medium block w-full text-left"
+                    >
+                      {sub.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Column 3: OFF ROAD */}
+            <div className="group">
+              <div className="overflow-hidden rounded-xl aspect-[16/10] bg-[#F9FBFF] border border-[#CCE0F5] shadow-sm">
+                <img 
+                  src={offRoadImg} 
+                  alt="Off Road Category" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <h3 className="font-heading font-black text-[#111111] text-[14px] uppercase tracking-wider mt-4 mb-3 border-b border-[#CCE0F5] pb-2">
+                Off Road
+              </h3>
+              <ul className="space-y-1.5">
+                {[
+                  { name: "XC", cat: "mtb" },
+                  { name: "Trail", cat: "mtb" },
+                  { name: "Recreation", cat: "mtb" },
+                  { name: "Sport", cat: "mtb" }
+                ].map((sub, idx) => (
+                  <li key={idx}>
+                    <button 
+                      onClick={() => handleSubcategoryClick(sub.cat)}
+                      className="text-[13px] text-[#111111] hover:text-primary transition-colors font-body font-medium block w-full text-left"
+                    >
+                      {sub.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Column 4: LIV */}
+            <div className="group">
+              <div className="overflow-hidden rounded-xl aspect-[16/10] bg-[#F9FBFF] border border-[#CCE0F5] shadow-sm">
+                <img 
+                  src={livImg} 
+                  alt="Liv Category" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <h3 className="font-heading font-black text-[#111111] text-[14px] uppercase tracking-wider mt-4 mb-3 border-b border-[#CCE0F5] pb-2">
+                Liv
+              </h3>
+              <ul className="space-y-1.5">
+                {[
+                  { name: "Liv On Road", cat: "city-fitness" }
+                ].map((sub, idx) => (
+                  <li key={idx}>
+                    <button 
+                      onClick={() => handleSubcategoryClick(sub.cat)}
+                      className="text-[13px] text-[#111111] hover:text-primary transition-colors font-body font-medium block w-full text-left"
+                    >
+                      {sub.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+          </motion.div>
         </div>
       </section>
 
       {/* 3. Category Quick Links */}
-      <div className="bg-white border-b border-[#CCE0F5] sticky top-[var(--header-total-height-lg)] z-30">
+      <div className="bg-white">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="flex items-center gap-4 overflow-x-auto py-4 no-scrollbar">
-            {bikeCategories.map((cat) => (
-              <button
-                key={cat.key}
-                onClick={() => setSelectedCategory(cat.key)}
-                className={`whitespace-nowrap px-6 py-2.5 rounded-full font-heading font-bold text-[11px] uppercase tracking-widest transition-all duration-300 border ${
-                  selectedCategory === cat.key
-                    ? "bg-primary border-primary text-white shadow-lg"
-                    : "bg-white border-[#CCE0F5] text-[#111111] hover:border-primary hover:text-primary"
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
+          <div className="flex items-center gap-4 py-4 overflow-x-auto no-scrollbar">
+            
+            {/* Filter Toggle Button on the Left */}
+            <button 
+              onClick={() => setShowFilters(true)}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-primary text-primary hover:bg-primary hover:text-white font-heading font-black text-[11px] uppercase tracking-widest transition-all duration-300 shadow-sm flex-shrink-0"
+            >
+              <Filter className="w-3.5 h-3.5" />
+              Filter Options
+            </button>
+
+            <div className="h-6 w-px bg-[#CCE0F5] flex-shrink-0" />
+
+            {/* The 6 Buttons */}
+            <div className="flex items-center justify-start md:justify-center gap-4 overflow-x-auto no-scrollbar flex-1">
+              {bikeCategories.map((cat) => (
+                <button
+                  key={cat.key}
+                  onClick={() => setSelectedCategory(cat.key)}
+                  className={`whitespace-nowrap px-6 py-2.5 rounded-full font-heading font-bold text-[11px] uppercase tracking-widest transition-all duration-300 border ${
+                    selectedCategory === cat.key
+                      ? "bg-primary border-primary text-white shadow-lg"
+                      : "bg-white border-[#CCE0F5] text-[#111111] hover:border-primary hover:text-primary"
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
+
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 md:px-6 py-12">
-        <div className="flex flex-col lg:flex-row gap-10">
+      <div id="shop-listings" className="container mx-auto px-4 md:px-6 pt-8 pb-16">
+        <div className="w-full">
           
-          {/* Desktop Filter Sidebar */}
-          <aside className="hidden lg:block w-72 flex-shrink-0">
-            <div className="sticky top-40 space-y-8">
-              <div>
-                <h3 className="font-heading font-black text-[#111111] text-[14px] uppercase tracking-[0.15em] mb-6 flex items-center gap-2">
-                  <Filter className="w-4 h-4 text-primary" /> Filter Options
-                </h3>
-                
-                {/* Brand Filter */}
-                <div className="mb-8">
-                  <h4 className="font-heading font-bold text-[#111111] text-[12px] uppercase tracking-widest mb-4">Brands</h4>
-                  <div className="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
-                    {bikeBrands.map((brand) => (
-                      <label key={brand.name} className="flex items-center gap-3 cursor-pointer group">
-                        <div className="relative flex items-center justify-center">
-                          <input 
-                            type="checkbox" 
-                            className="peer appearance-none w-5 h-5 border border-[#CCE0F5] rounded bg-white checked:bg-primary checked:border-primary transition-all"
-                            checked={selectedBrand.includes(brand.name)}
-                            onChange={() => toggleBrand(brand.name)}
-                          />
-                          <Check className="absolute w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 transition-opacity" />
-                        </div>
-                        <span className="text-[13px] text-[#555555] group-hover:text-primary transition-colors">{brand.name}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Price Filter */}
-                <div className="mb-8">
-                  <h4 className="font-heading font-bold text-[#111111] text-[12px] uppercase tracking-widest mb-4">Price Range</h4>
-                  <div className="space-y-2">
-                    {priceRanges.map((range, i) => (
-                      <label key={i} className="flex items-center gap-3 cursor-pointer group">
-                        <input 
-                          type="radio" 
-                          name="price-range"
-                          className="w-4 h-4 accent-primary"
-                          checked={selectedPriceRange === i}
-                          onChange={() => setSelectedPriceRange(i)}
-                        />
-                        <span className="text-[13px] text-[#555555] group-hover:text-primary transition-colors">{range.label}</span>
-                      </label>
-                    ))}
-                    {selectedPriceRange !== null && (
-                      <button 
-                        onClick={() => setSelectedPriceRange(null)}
-                        className="text-[11px] text-primary font-bold uppercase tracking-wider mt-2 hover:underline"
-                      >
-                        Reset Price
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                <div className="p-6 bg-primary/5 rounded-2xl border border-primary/10">
-                  <HelpCircle className="w-8 h-8 text-primary mb-3" />
-                  <h4 className="font-heading font-bold text-[#111111] text-[13px] mb-2">Need advice?</h4>
-                  <p className="text-[12px] text-[#666666] leading-relaxed mb-4">
-                    Our experts can help you choose the right bike for your riding style.
-                  </p>
-                  <Button variant="link" className="p-0 text-primary font-bold uppercase tracking-widest text-[11px] h-auto">
-                    Contact Us <ArrowRight className="w-3.5 h-3.5 ml-1" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </aside>
-
           {/* Main Product Hub */}
-          <main className="flex-1">
-            {/* Search & Sort Bar */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 bg-white p-4 rounded-2xl border border-[#CCE0F5] shadow-sm">
-              <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#888888]" />
-                <Input 
-                  placeholder="Search by name or brand..." 
-                  className="pl-11 h-12 bg-[#F9FBFF] border-[#CCE0F5] rounded-xl focus:ring-primary/20 text-sm font-medium"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2 text-[#888888] text-[12px] font-bold uppercase tracking-widest">
-                  Sort By:
-                  <select 
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="bg-transparent text-[#111111] outline-none cursor-pointer hover:text-primary transition-colors"
-                  >
-                    <option value="featured">Featured</option>
-                    <option value="price-low">Price: Low to High</option>
-                    <option value="price-high">Price: High to Low</option>
-                    <option value="best-selling">Best Selling</option>
-                    <option value="newest">New Arrivals</option>
-                  </select>
-                </div>
-                
-                <div className="h-6 w-px bg-[#CCE0F5] mx-2" />
-                
-                <button 
-                  className="lg:hidden p-2.5 bg-primary text-white rounded-xl shadow-lg"
-                  onClick={() => setShowFilters(true)}
-                >
-                  <Filter className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-
+          <main className="w-full">
             {/* Results Info */}
             <div className="flex items-center justify-between mb-8">
               <p className="text-[13px] text-[#666666]">
@@ -323,11 +317,12 @@ const Shop = () => {
                   className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8"
                 >
                   {[...Array(6)].map((_, i) => (
-                    <div key={i} className="bg-white rounded-2xl border border-[#CCE0F5] p-5 h-[450px] flex flex-col">
-                      <div className="flex-1 bg-[#F9FBFF] rounded-xl animate-pulse mb-4" />
-                      <div className="h-4 w-1/4 bg-[#F9FBFF] animate-pulse mb-3" />
-                      <div className="h-6 w-3/4 bg-[#F9FBFF] animate-pulse mb-6" />
-                      <div className="h-10 w-full bg-[#F9FBFF] animate-pulse rounded-xl" />
+                    <div key={i} className="bg-white p-4 h-auto flex flex-col items-center select-none py-2">
+                      <div className="w-full aspect-square bg-[#f5f5f5] rounded-xl animate-pulse mb-4" />
+                      <div className="h-5 w-3/4 bg-[#F9FBFF] rounded animate-pulse mb-2.5" />
+                      <div className="h-4 w-1/2 bg-[#F9FBFF] rounded animate-pulse mb-3" />
+                      <div className="h-4 w-1/3 bg-[#F9FBFF] rounded animate-pulse mb-2.5" />
+                      <div className="h-3.5 w-1/2 bg-[#F9FBFF] rounded animate-pulse" />
                     </div>
                   ))}
                 </motion.div>
@@ -366,34 +361,6 @@ const Shop = () => {
         </div>
       </div>
 
-      {/* 9. Expert Help CTA Section */}
-      <section className="py-24 bg-white border-y border-[#CCE0F5]">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="bg-[#111111] rounded-[3rem] overflow-hidden relative p-12 md:p-20 text-center">
-            {/* Background pattern */}
-            <div className="absolute inset-0 opacity-10 pointer-events-none" 
-              style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #00BDEB 1px, transparent 0)', backgroundSize: '32px 32px' }} 
-            />
-            
-            <div className="relative z-10 max-w-3xl mx-auto">
-              <h2 className="text-3xl md:text-5xl font-heading font-black text-white uppercase tracking-tight mb-6">
-                Not sure what fits <span className="text-primary">your ride?</span>
-              </h2>
-              <p className="text-lg text-white/70 mb-10 leading-relaxed font-body">
-                Our expert mechanics and pro-cyclists are ready to help. From frame sizing to groupset compatibility, get professional advice before you buy.
-              </p>
-              <div className="flex flex-wrap justify-center gap-4">
-                <Button className="bg-primary hover:bg-primary/90 text-white rounded-full font-heading font-bold uppercase tracking-widest h-14 px-10 shadow-xl">
-                  Talk to an Expert
-                </Button>
-                <Button variant="outline" className="border-white/30 text-white hover:bg-white hover:text-[#111111] rounded-full font-heading font-bold uppercase tracking-widest h-14 px-10">
-                  Book a Consultation
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Mobile Filter Drawer */}
       <AnimatePresence>
@@ -454,6 +421,18 @@ const Shop = () => {
                       </label>
                     ))}
                   </div>
+                </div>
+
+                {/* Need Advice section */}
+                <div className="p-6 bg-primary/5 rounded-2xl border border-primary/10">
+                  <HelpCircle className="w-8 h-8 text-primary mb-3" />
+                  <h4 className="font-heading font-bold text-[#111111] text-[13px] mb-2">Need advice?</h4>
+                  <p className="text-[12px] text-[#666666] leading-relaxed mb-4">
+                    Our experts can help you choose the right bike for your riding style.
+                  </p>
+                  <a href="/contact" className="text-primary font-bold uppercase tracking-widest text-[11px] flex items-center gap-1 hover:underline">
+                    Contact Us <ArrowRight className="w-3.5 h-3.5" />
+                  </a>
                 </div>
               </div>
               <div className="p-6 border-t border-[#CCE0F5] bg-[#F9FBFF]">

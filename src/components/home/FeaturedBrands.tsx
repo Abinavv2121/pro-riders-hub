@@ -73,12 +73,6 @@ const FeaturedBrands = () => {
             </motion.div>
           ))}
         </div>
-
-        <div className="text-center">
-          <Link to="/brands" className="group inline-flex items-center gap-2 text-primary font-heading font-bold text-sm uppercase tracking-wider">
-            View All 50+ Brands <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </div>
       </div>
     </section>
   );

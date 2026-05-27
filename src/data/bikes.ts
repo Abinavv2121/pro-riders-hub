@@ -53,35 +53,356 @@ export interface Bike {
     rating?: number;
     reviews?: number;
     stockStatus?: "In Stock" | "Limited Stock" | "Out of Stock" | "Preorder";
+    features?: string[];
+    specifications?: Record<string, string>;
+    components?: Record<string, string>;
 }
 
 export const bikes: Bike[] = [
     // Race Road
-    { id: 1, name: "Argon 18 Nitrogen", brand: "Argon 18", category: "race-road", image: argon18, images: [argon18, argon18, argon18], color: "Silver Blue", size: "L", tag: "New Arrival", price: 190000, bikeType: "Race Road", gears: "22 Speed", frameMaterial: "Carbon", groupset: "Shimano Ultegra", brakeType: "Disc Brakes (Mechanical)", wheelSize: "700c", rating: 5, reviews: 12, stockStatus: "In Stock" },
-    { id: 2, name: "Lapierre Aircode DRS 5.0", brand: "Lapierre", category: "race-road", image: lapierre, images: [lapierre, lapierre], color: "Gold / Black", size: "M / L", tag: "Disc", price: 215000, originalPrice: 245000, bikeType: "Race Road", gears: "22 Speed", frameMaterial: "Carbon", groupset: "Shimano 105", brakeType: "Disc Brakes (Hydraulic)", wheelSize: "700c", rating: 4, reviews: 8, stockStatus: "Limited Stock" },
-    { id: 3, name: "Scott Plasma 10", brand: "Scott", category: "race-road", image: scottPlasma, images: [scottPlasma, scottPlasma], color: "Yellow / Black", size: "M", tag: "Triathlon", price: 220000, bikeType: "Race Road", gears: "24 Speed", frameMaterial: "Carbon", groupset: "Shimano Ultegra", brakeType: "Disc Brakes (Hydraulic)", wheelSize: "700c", rating: 5, reviews: 15, stockStatus: "In Stock" },
-    { id: 7, name: "Scott Addict RC", brand: "Scott", category: "race-road", image: scottPlasma, images: [scottPlasma, scottPlasma], color: "Black / Red", size: "M / L", tag: "Pro", price: 245000, originalPrice: 285000, bikeType: "Race Road", gears: "24 Speed", frameMaterial: "Carbon", groupset: "Shimano Dura-Ace", brakeType: "Disc Brakes (Hydraulic)", wheelSize: "700c", rating: 5, reviews: 20, stockStatus: "Preorder" },
+    {
+        id: 1, name: "Argon 18 Nitrogen", brand: "Argon 18", category: "race-road", image: argon18, images: [argon18, argon18, argon18], color: "Silver Blue", size: "L", tag: "New Arrival", price: 190000, bikeType: "Race Road", gears: "22 Speed", frameMaterial: "Carbon", groupset: "Shimano Ultegra", brakeType: "Disc Brakes (Mechanical)", wheelSize: "700c", rating: 5, reviews: 12, stockStatus: "In Stock",
+        features: [
+            "Full carbon monocoque frame with Argon 18 3D Head Tube system for precise handling",
+            "Shimano Ultegra R8000 22-speed drivetrain for smooth and reliable shifting",
+            "Mechanical disc brakes for dependable stopping power in all conditions",
+            "700c wheels optimized for aerodynamic road performance",
+            "Professional assembly and fine-tuning by Pro-Bikers Chennai experts"
+        ],
+        specifications: {
+            "Intended Use": "Race Road",
+            "Wheel Size": "700c",
+            "Braking System": "Disc Brakes (Mechanical)",
+            "Frame Material": "Carbon",
+            "Groupset": "Shimano Ultegra",
+            "Gears": "22 Speed",
+            "Color": "Silver Blue",
+            "Warranty": "Lifetime warranty on frame"
+        },
+        components: {
+            "Frame": "Argon 18 Nitrogen carbon monocoque with 3D Head Tube",
+            "Drivetrain": "Shimano Ultegra R8000 components",
+            "Shifters": "Shimano Ultegra 22-speed integrated",
+            "Brakes": "Disc Brakes (Mechanical)",
+            "Wheels": "700c double-wall alloy rims"
+        }
+    },
+    {
+        id: 2, name: "Lapierre Aircode DRS 5.0", brand: "Lapierre", category: "race-road", image: lapierre, images: [lapierre, lapierre], color: "Gold / Black", size: "M / L", tag: "Disc", price: 215000, originalPrice: 245000, bikeType: "Race Road", gears: "22 Speed", frameMaterial: "Carbon", groupset: "Shimano 105", brakeType: "Disc Brakes (Hydraulic)", wheelSize: "700c", rating: 4, reviews: 8, stockStatus: "Limited Stock",
+        features: [
+            "Lapierre Supreme Carbon frame with aerodynamic tube shaping",
+            "Shimano 105 R7000 22-speed drivetrain for precise gear changes",
+            "Hydraulic disc brakes for superior modulation and stopping power",
+            "Internal cable routing for clean aesthetics and reduced drag",
+            "Professional assembly and fine-tuning by Pro-Bikers Chennai experts"
+        ],
+        specifications: {
+            "Intended Use": "Race Road",
+            "Wheel Size": "700c",
+            "Braking System": "Disc Brakes (Hydraulic)",
+            "Frame Material": "Carbon",
+            "Groupset": "Shimano 105",
+            "Gears": "22 Speed",
+            "Color": "Gold / Black",
+            "Warranty": "Lifetime warranty on frame"
+        }
+    },
+    {
+        id: 3, name: "Scott Plasma 10", brand: "Scott", category: "race-road", image: scottPlasma, images: [scottPlasma, scottPlasma], color: "Yellow / Black", size: "M", tag: "Triathlon", price: 220000, bikeType: "Race Road", gears: "24 Speed", frameMaterial: "Carbon", groupset: "Shimano Ultegra", brakeType: "Disc Brakes (Hydraulic)", wheelSize: "700c", rating: 5, reviews: 15, stockStatus: "In Stock",
+        features: [
+            "Scott HMF carbon frame designed for triathlon and time-trial performance",
+            "Shimano Ultegra 24-speed drivetrain with aero-optimized shifting",
+            "Hydraulic disc brakes for consistent stopping at high speed",
+            "Integrated aero cockpit for maximum wind-cheating efficiency",
+            "Professional assembly and fine-tuning by Pro-Bikers Chennai experts"
+        ],
+        specifications: {
+            "Intended Use": "Race Road / Triathlon",
+            "Wheel Size": "700c",
+            "Braking System": "Disc Brakes (Hydraulic)",
+            "Frame Material": "Carbon",
+            "Groupset": "Shimano Ultegra",
+            "Gears": "24 Speed",
+            "Color": "Yellow / Black",
+            "Warranty": "Lifetime warranty on frame"
+        }
+    },
+    {
+        id: 7, name: "Scott Addict RC", brand: "Scott", category: "race-road", image: scottPlasma, images: [scottPlasma, scottPlasma], color: "Black / Red", size: "M / L", tag: "Pro", price: 245000, originalPrice: 285000, bikeType: "Race Road", gears: "24 Speed", frameMaterial: "Carbon", groupset: "Shimano Dura-Ace", brakeType: "Disc Brakes (Hydraulic)", wheelSize: "700c", rating: 5, reviews: 20, stockStatus: "Preorder",
+        features: [
+            "Scott HMX carbon frame – one of the lightest in its class",
+            "Shimano Dura-Ace R9100 24-speed for top-tier shifting performance",
+            "Hydraulic disc brakes for race-ready stopping confidence",
+            "Syncros integrated cockpit for clean aerodynamic lines",
+            "Professional assembly and fine-tuning by Pro-Bikers Chennai experts"
+        ],
+        specifications: {
+            "Intended Use": "Race Road",
+            "Wheel Size": "700c",
+            "Braking System": "Disc Brakes (Hydraulic)",
+            "Frame Material": "Carbon",
+            "Groupset": "Shimano Dura-Ace",
+            "Gears": "24 Speed",
+            "Color": "Black / Red",
+            "Warranty": "Lifetime warranty on frame"
+        }
+    },
 
     // Endurance Road
-    { id: 8, name: "Trek Domane AL 5", brand: "Trek", category: "endurance-road", image: marlin5, images: [marlin5, marlin5], color: "Crimson Red", size: "M / L", tag: "Sale", price: 115000, originalPrice: 135000, bikeType: "Endurance Road", gears: "16 Speed", frameMaterial: "Aluminum", groupset: "Shimano 105", brakeType: "Disc Brakes (Mechanical)", wheelSize: "700c", rating: 5, reviews: 24, stockStatus: "In Stock" },
-    { id: 9, name: "Lapierre Xelius SL 5.0", brand: "Lapierre", category: "endurance-road", image: lapierre, images: [lapierre, lapierre], color: "Blue / White", size: "M / L", tag: null, price: 195000, bikeType: "Endurance Road", gears: "22 Speed", frameMaterial: "Carbon", groupset: "Shimano Ultegra", brakeType: "Disc Brakes (Hydraulic)", wheelSize: "700c", rating: 4, reviews: 6, stockStatus: "In Stock" },
-    { id: 10, name: "Argon 18 Gallium Pro", brand: "Argon 18", category: "endurance-road", image: argon18, images: [argon18, argon18], color: "Matte Black", size: "M / L", tag: "Premium", price: 210000, bikeType: "Endurance Road", gears: "22 Speed", frameMaterial: "Carbon", groupset: "Shimano Dura-Ace", brakeType: "Disc Brakes (Hydraulic)", wheelSize: "700c", rating: 5, reviews: 18, stockStatus: "Limited Stock" },
+    {
+        id: 8, name: "Trek Domane AL 5", brand: "Trek", category: "endurance-road", image: marlin5, images: [marlin5, marlin5], color: "Crimson Red", size: "M / L", tag: "Sale", price: 115000, originalPrice: 135000, bikeType: "Endurance Road", gears: "16 Speed", frameMaterial: "Aluminum", groupset: "Shimano 105", brakeType: "Disc Brakes (Mechanical)", wheelSize: "700c", rating: 5, reviews: 24, stockStatus: "In Stock",
+        features: [
+            "Trek 100 Series Alpha Aluminum frame with IsoSpeed decoupler for comfort",
+            "Shimano 105 16-speed drivetrain for reliable endurance shifting",
+            "Mechanical disc brakes for dependable all-weather stopping",
+            "Internal cable routing for a clean, modern look",
+            "Professional assembly and fine-tuning by Pro-Bikers Chennai experts"
+        ],
+        specifications: {
+            "Intended Use": "Endurance Road",
+            "Wheel Size": "700c",
+            "Braking System": "Disc Brakes (Mechanical)",
+            "Frame Material": "Aluminum",
+            "Groupset": "Shimano 105",
+            "Gears": "16 Speed",
+            "Color": "Crimson Red",
+            "Warranty": "Lifetime warranty on frame"
+        }
+    },
+    {
+        id: 9, name: "Lapierre Xelius SL 5.0", brand: "Lapierre", category: "endurance-road", image: lapierre, images: [lapierre, lapierre], color: "Blue / White", size: "M / L", tag: null, price: 195000, bikeType: "Endurance Road", gears: "22 Speed", frameMaterial: "Carbon", groupset: "Shimano Ultegra", brakeType: "Disc Brakes (Hydraulic)", wheelSize: "700c", rating: 4, reviews: 6, stockStatus: "In Stock",
+        features: [
+            "Lapierre SL carbon frame balancing lightweight performance with endurance comfort",
+            "Shimano Ultegra 22-speed drivetrain for smooth long-distance shifting",
+            "Hydraulic disc brakes for confident descending and all-weather control",
+            "Vibration-damping carbon layup for reduced rider fatigue",
+            "Professional assembly and fine-tuning by Pro-Bikers Chennai experts"
+        ],
+        specifications: {
+            "Intended Use": "Endurance Road",
+            "Wheel Size": "700c",
+            "Braking System": "Disc Brakes (Hydraulic)",
+            "Frame Material": "Carbon",
+            "Groupset": "Shimano Ultegra",
+            "Gears": "22 Speed",
+            "Color": "Blue / White",
+            "Warranty": "Lifetime warranty on frame"
+        }
+    },
+    {
+        id: 10, name: "Argon 18 Gallium Pro", brand: "Argon 18", category: "endurance-road", image: argon18, images: [argon18, argon18], color: "Matte Black", size: "M / L", tag: "Premium", price: 210000, bikeType: "Endurance Road", gears: "22 Speed", frameMaterial: "Carbon", groupset: "Shimano Dura-Ace", brakeType: "Disc Brakes (Hydraulic)", wheelSize: "700c", rating: 5, reviews: 18, stockStatus: "Limited Stock",
+        features: [
+            "Argon 18 Gallium Pro carbon frame with 3D Head Tube for endurance geometry",
+            "Shimano Dura-Ace 22-speed for the highest level of shifting precision",
+            "Hydraulic disc brakes for responsive stopping on long descents",
+            "Optimized compliance zones in the frame for all-day riding comfort",
+            "Professional assembly and fine-tuning by Pro-Bikers Chennai experts"
+        ],
+        specifications: {
+            "Intended Use": "Endurance Road",
+            "Wheel Size": "700c",
+            "Braking System": "Disc Brakes (Hydraulic)",
+            "Frame Material": "Carbon",
+            "Groupset": "Shimano Dura-Ace",
+            "Gears": "22 Speed",
+            "Color": "Matte Black",
+            "Warranty": "Lifetime warranty on frame"
+        }
+    },
 
     // Gravel & Adventure
-    { id: 11, name: "Scott Speedster CX 20 Disc", brand: "Scott", category: "gravel", image: scottPlasma, images: [scottPlasma, scottPlasma], color: "Dark Grey", size: "M / L", tag: "Adventure", price: 165000, bikeType: "Gravel", gears: "20 Speed", frameMaterial: "Carbon", groupset: "Shimano 105", brakeType: "Disc Brakes (Hydraulic)", wheelSize: "700c", rating: 4, reviews: 9, stockStatus: "In Stock" },
-    { id: 12, name: "Marin Nicasio 2", brand: "Marin", category: "gravel", image: marlin5, images: [marlin5, marlin5], color: "Satin Black", size: "M / L", tag: "Gravel", price: 85000, originalPrice: 95000, bikeType: "Gravel", gears: "18 Speed", frameMaterial: "Steel", groupset: "Shimano Deore", brakeType: "Disc Brakes (Mechanical)", wheelSize: "700c", rating: 5, reviews: 14, stockStatus: "In Stock" },
+    {
+        id: 11, name: "Scott Speedster CX 20 Disc", brand: "Scott", category: "gravel", image: scottPlasma, images: [scottPlasma, scottPlasma], color: "Dark Grey", size: "M / L", tag: "Adventure", price: 165000, bikeType: "Gravel", gears: "20 Speed", frameMaterial: "Carbon", groupset: "Shimano 105", brakeType: "Disc Brakes (Hydraulic)", wheelSize: "700c", rating: 4, reviews: 9, stockStatus: "In Stock",
+        features: [
+            "Scott carbon frame with gravel-specific geometry and tire clearance",
+            "Shimano 105 20-speed drivetrain tuned for mixed-terrain versatility",
+            "Hydraulic disc brakes for reliable stopping on loose and wet surfaces",
+            "Rack and fender mounts for adventure and bikepacking setups",
+            "Professional assembly and fine-tuning by Pro-Bikers Chennai experts"
+        ],
+        specifications: {
+            "Intended Use": "Gravel / CX",
+            "Wheel Size": "700c",
+            "Braking System": "Disc Brakes (Hydraulic)",
+            "Frame Material": "Carbon",
+            "Groupset": "Shimano 105",
+            "Gears": "20 Speed",
+            "Color": "Dark Grey",
+            "Warranty": "Lifetime warranty on frame"
+        }
+    },
+    {
+        id: 12, name: "Marin Nicasio 2", brand: "Marin", category: "gravel", image: marlin5, images: [marlin5, marlin5], color: "Satin Black", size: "M / L", tag: "Gravel", price: 85000, originalPrice: 95000, bikeType: "Gravel", gears: "18 Speed", frameMaterial: "Steel", groupset: "Shimano Deore", brakeType: "Disc Brakes (Mechanical)", wheelSize: "700c", rating: 5, reviews: 14, stockStatus: "In Stock",
+        features: [
+            "Marin CrMo steel frame for a smooth, compliant ride on rough roads",
+            "Shimano Deore 18-speed drivetrain for dependable off-road shifting",
+            "Mechanical disc brakes for straightforward maintenance and stopping",
+            "Wide tire clearance for gravel, adventure, and light touring",
+            "Professional assembly and fine-tuning by Pro-Bikers Chennai experts"
+        ],
+        specifications: {
+            "Intended Use": "Gravel / Adventure",
+            "Wheel Size": "700c",
+            "Braking System": "Disc Brakes (Mechanical)",
+            "Frame Material": "Steel",
+            "Groupset": "Shimano Deore",
+            "Gears": "18 Speed",
+            "Color": "Satin Black",
+            "Warranty": "Lifetime warranty on frame"
+        }
+    },
 
     // MTB (XC & Trail)
-    { id: 6, name: "Trek Marlin 5 Gen 3", brand: "Trek", category: "mtb", image: marlin5, images: [marlin5, marlin5], color: "Matte Dark", size: "M / L / XL", tag: "Popular", price: 65000, originalPrice: 75000, bikeType: "MTB", gears: "18 Speed", frameMaterial: "Aluminum", groupset: "Shimano Deore", brakeType: "Disc Brakes (Hydraulic)", wheelSize: "29\"", rating: 5, reviews: 42, stockStatus: "In Stock" },
-    { id: 13, name: "Scott Spark 960", brand: "Scott", category: "mtb", image: scottPlasma, images: [scottPlasma, scottPlasma], color: "Stellar Blue", size: "M / L", tag: "Trail", price: 185000, bikeType: "MTB", gears: "24 Speed", frameMaterial: "Carbon", groupset: "Shimano XT", brakeType: "Disc Brakes (Hydraulic)", wheelSize: "29\"", rating: 4, reviews: 11, stockStatus: "In Stock" },
-    { id: 14, name: "Scott Scale 970", brand: "Scott", category: "mtb", image: scottPlasma, images: [scottPlasma, scottPlasma], color: "Prism Green", size: "M / L", tag: "XC", price: 155000, bikeType: "MTB", gears: "24 Speed", frameMaterial: "Carbon", groupset: "Shimano XT", brakeType: "Disc Brakes (Hydraulic)", wheelSize: "29\"", rating: 5, reviews: 7, stockStatus: "Limited Stock" },
-    { id: 15, name: "Marin Rift Zone 29", brand: "Marin", category: "mtb", image: marlin5, images: [marlin5, marlin5], color: "Gloss Black", size: "M / L", tag: "Trail", price: 175000, bikeType: "MTB", gears: "27 Speed", frameMaterial: "Aluminum", groupset: "Shimano XT", brakeType: "Disc Brakes (Hydraulic)", wheelSize: "29\"", rating: 4, reviews: 16, stockStatus: "In Stock" },
+    {
+        id: 6, name: "Trek Marlin 5 Gen 3", brand: "Trek", category: "mtb", image: marlin5, images: [marlin5, marlin5], color: "Matte Dark", size: "M / L / XL", tag: "Popular", price: 65000, originalPrice: 75000, bikeType: "MTB", gears: "18 Speed", frameMaterial: "Aluminum", groupset: "Shimano Deore", brakeType: "Disc Brakes (Hydraulic)", wheelSize: "29\"", rating: 5, reviews: 42, stockStatus: "In Stock",
+        features: [
+            "Alpha Silver Aluminum frame with internal routing for derailleur & dropper post",
+            "Shimano Deore 18-speed drivetrain with wide-range cassette",
+            "Hydraulic disc brakes for powerful and consistent stopping",
+            "29\" wheels for superior rollover and trail confidence",
+            "Professional assembly and fine-tuning by Pro-Bikers Chennai experts"
+        ],
+        specifications: {
+            "Intended Use": "Cross Country / Trail",
+            "Wheel Size": "29\"",
+            "Braking System": "Disc Brakes (Hydraulic)",
+            "Frame Material": "Aluminum",
+            "Groupset": "Shimano Deore",
+            "Gears": "18 Speed",
+            "Color": "Matte Dark",
+            "Warranty": "Lifetime warranty on frame"
+        },
+        components: {
+            "Frame": "Trek Alpha Silver Aluminum, internal routing",
+            "Fork": "SR Suntour XCE, coil spring, 100mm travel",
+            "Drivetrain": "Shimano Deore components",
+            "Brakes": "Hydraulic disc, 160mm rotors",
+            "Wheels": "29\" Bontrager Connection double-wall"
+        }
+    },
+    {
+        id: 13, name: "Scott Spark 960", brand: "Scott", category: "mtb", image: scottPlasma, images: [scottPlasma, scottPlasma], color: "Stellar Blue", size: "M / L", tag: "Trail", price: 185000, bikeType: "MTB", gears: "24 Speed", frameMaterial: "Carbon", groupset: "Shimano XT", brakeType: "Disc Brakes (Hydraulic)", wheelSize: "29\"", rating: 4, reviews: 11, stockStatus: "In Stock",
+        features: [
+            "Scott carbon frame with TwinLoc full-suspension platform",
+            "Shimano XT 24-speed drivetrain for aggressive trail riding",
+            "Hydraulic disc brakes for maximum control on technical descents",
+            "29\" wheels with trail-optimized geometry",
+            "Professional assembly and fine-tuning by Pro-Bikers Chennai experts"
+        ],
+        specifications: {
+            "Intended Use": "MTB / Trail",
+            "Wheel Size": "29\"",
+            "Braking System": "Disc Brakes (Hydraulic)",
+            "Frame Material": "Carbon",
+            "Groupset": "Shimano XT",
+            "Gears": "24 Speed",
+            "Color": "Stellar Blue",
+            "Warranty": "Lifetime warranty on frame"
+        }
+    },
+    {
+        id: 14, name: "Scott Scale 970", brand: "Scott", category: "mtb", image: scottPlasma, images: [scottPlasma, scottPlasma], color: "Prism Green", size: "M / L", tag: "XC", price: 155000, bikeType: "MTB", gears: "24 Speed", frameMaterial: "Carbon", groupset: "Shimano XT", brakeType: "Disc Brakes (Hydraulic)", wheelSize: "29\"", rating: 5, reviews: 7, stockStatus: "Limited Stock",
+        features: [
+            "Scott Scale carbon hardtail frame optimized for XC racing",
+            "Shimano XT 24-speed drivetrain for fast, reliable shifting under load",
+            "Hydraulic disc brakes for lightweight, powerful stopping",
+            "29\" wheels for fast rollover on cross-country courses",
+            "Professional assembly and fine-tuning by Pro-Bikers Chennai experts"
+        ],
+        specifications: {
+            "Intended Use": "MTB / XC",
+            "Wheel Size": "29\"",
+            "Braking System": "Disc Brakes (Hydraulic)",
+            "Frame Material": "Carbon",
+            "Groupset": "Shimano XT",
+            "Gears": "24 Speed",
+            "Color": "Prism Green",
+            "Warranty": "Lifetime warranty on frame"
+        }
+    },
+    {
+        id: 15, name: "Marin Rift Zone 29", brand: "Marin", category: "mtb", image: marlin5, images: [marlin5, marlin5], color: "Gloss Black", size: "M / L", tag: "Trail", price: 175000, bikeType: "MTB", gears: "27 Speed", frameMaterial: "Aluminum", groupset: "Shimano XT", brakeType: "Disc Brakes (Hydraulic)", wheelSize: "29\"", rating: 4, reviews: 16, stockStatus: "In Stock",
+        features: [
+            "Marin Series 3 aluminum full-suspension frame with MultiTrac geometry",
+            "Shimano XT 27-speed drivetrain for wide-range trail gearing",
+            "Hydraulic disc brakes for aggressive trail riding confidence",
+            "29\" wheels with progressive suspension kinematics",
+            "Professional assembly and fine-tuning by Pro-Bikers Chennai experts"
+        ],
+        specifications: {
+            "Intended Use": "MTB / Trail",
+            "Wheel Size": "29\"",
+            "Braking System": "Disc Brakes (Hydraulic)",
+            "Frame Material": "Aluminum",
+            "Groupset": "Shimano XT",
+            "Gears": "27 Speed",
+            "Color": "Gloss Black",
+            "Warranty": "Lifetime warranty on frame"
+        }
+    },
 
     // City & Fitness
-    { id: 4, name: "Avanti Giro F1W", brand: "Avanti", category: "city-fitness", image: avantiF1W, images: [avantiF1W, avantiF1W], color: "Metallic Blue", size: "M", tag: "Sale", price: 36000, originalPrice: 42000, bikeType: "City & Fitness", gears: "24 Speed", frameMaterial: "Aluminum", groupset: "Shimano Deore", brakeType: "Rim Brakes", wheelSize: "700c", rating: 4, reviews: 5, stockStatus: "In Stock" },
-    { id: 5, name: "Avanti Giro FM 1W", brand: "Avanti", category: "city-fitness", image: avantiFM1W, images: [avantiFM1W, avantiFM1W], color: "White", size: "M", tag: null, price: 39000, bikeType: "City & Fitness", gears: "21 Speed", frameMaterial: "Aluminum", groupset: "Shimano 105", brakeType: "Rim Brakes", wheelSize: "700c", rating: 4, reviews: 3, stockStatus: "In Stock" },
-    { id: 16, name: "Trek FX 3 Disc", brand: "Trek", category: "city-fitness", image: marlin5, images: [marlin5, marlin5], color: "Lithium Grey", size: "M / L", tag: "Fitness", price: 68000, bikeType: "City & Fitness", gears: "18 Speed", frameMaterial: "Aluminum", groupset: "Shimano Deore", brakeType: "Disc Brakes (Hydraulic)", wheelSize: "700c", rating: 5, reviews: 19, stockStatus: "In Stock" },
-];;
+    {
+        id: 4, name: "Avanti Giro F1W", brand: "Avanti", category: "city-fitness", image: avantiF1W, images: [avantiF1W, avantiF1W], color: "Metallic Blue", size: "M", tag: "Sale", price: 36000, originalPrice: 42000, bikeType: "City & Fitness", gears: "24 Speed", frameMaterial: "Aluminum", groupset: "Shimano Deore", brakeType: "Rim Brakes", wheelSize: "700c", rating: 4, reviews: 5, stockStatus: "In Stock",
+        features: [
+            "Avanti lightweight aluminum frame designed for city commuting",
+            "Shimano Deore 24-speed drivetrain for versatile urban shifting",
+            "Rim brakes for lightweight simplicity and easy maintenance",
+            "700c wheels for efficient road rolling and fitness riding",
+            "Professional assembly and fine-tuning by Pro-Bikers Chennai experts"
+        ],
+        specifications: {
+            "Intended Use": "City & Fitness",
+            "Wheel Size": "700c",
+            "Braking System": "Rim Brakes",
+            "Frame Material": "Aluminum",
+            "Groupset": "Shimano Deore",
+            "Gears": "24 Speed",
+            "Color": "Metallic Blue",
+            "Warranty": "Lifetime warranty on frame"
+        }
+    },
+    {
+        id: 5, name: "Avanti Giro FM 1W", brand: "Avanti", category: "city-fitness", image: avantiFM1W, images: [avantiFM1W, avantiFM1W], color: "White", size: "M", tag: null, price: 39000, bikeType: "City & Fitness", gears: "21 Speed", frameMaterial: "Aluminum", groupset: "Shimano 105", brakeType: "Rim Brakes", wheelSize: "700c", rating: 4, reviews: 3, stockStatus: "In Stock",
+        features: [
+            "Avanti aluminum step-through frame for easy mounting and comfort",
+            "Shimano 105 21-speed drivetrain for smooth city riding",
+            "Rim brakes for lightweight, low-maintenance stopping",
+            "700c wheels with puncture-resistant tires for daily commuting",
+            "Professional assembly and fine-tuning by Pro-Bikers Chennai experts"
+        ],
+        specifications: {
+            "Intended Use": "City & Fitness",
+            "Wheel Size": "700c",
+            "Braking System": "Rim Brakes",
+            "Frame Material": "Aluminum",
+            "Groupset": "Shimano 105",
+            "Gears": "21 Speed",
+            "Color": "White",
+            "Warranty": "Lifetime warranty on frame"
+        }
+    },
+    {
+        id: 16, name: "Trek FX 3 Disc", brand: "Trek", category: "city-fitness", image: marlin5, images: [marlin5, marlin5], color: "Lithium Grey", size: "M / L", tag: "Fitness", price: 68000, bikeType: "City & Fitness", gears: "18 Speed", frameMaterial: "Aluminum", groupset: "Shimano Deore", brakeType: "Disc Brakes (Hydraulic)", wheelSize: "700c", rating: 5, reviews: 19, stockStatus: "In Stock",
+        features: [
+            "Trek Alpha Gold Aluminum frame with carbon fork for vibration damping",
+            "Shimano Deore 18-speed drivetrain for fitness and commuter versatility",
+            "Hydraulic disc brakes for confident stopping in all weather",
+            "700c wheels with lightweight alloy rims for fast rolling",
+            "Professional assembly and fine-tuning by Pro-Bikers Chennai experts"
+        ],
+        specifications: {
+            "Intended Use": "City & Fitness",
+            "Wheel Size": "700c",
+            "Braking System": "Disc Brakes (Hydraulic)",
+            "Frame Material": "Aluminum",
+            "Groupset": "Shimano Deore",
+            "Gears": "18 Speed",
+            "Color": "Lithium Grey",
+            "Warranty": "Lifetime warranty on frame"
+        }
+    },
+];
 
 // Derive unique brands and their categories from the data
 export const bikeBrands = (() => {
@@ -95,4 +416,3 @@ export const bikeBrands = (() => {
         categories: Array.from(cats),
     }));
 })();
-

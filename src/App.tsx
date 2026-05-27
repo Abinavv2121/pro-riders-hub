@@ -13,7 +13,6 @@ import AdminLogin from "./pages/AdminLogin";
 import Auth from "./pages/Auth";
 import BikeServicing from "./pages/BikeServicing";
 import BrandGallery from "./pages/BrandGallery";
-import Brands from "./pages/Brands";
 import Community from "./pages/Community";
 import Contact from "./pages/Contact";
 import Index from "./pages/Index";
@@ -46,7 +45,6 @@ const App = () => {
                 <Route path="/" element={<Index />} />
                 <Route path="/shop" element={<Shop />} />
                 <Route path="/shop/:category" element={<Shop />} />
-                <Route path="/brands" element={<Brands />} />
                 <Route path="/services" element={<Services />} />
                 <Route path="/servicing" element={<BikeServicing />} />
                 <Route path="/rental" element={<Rental />} />

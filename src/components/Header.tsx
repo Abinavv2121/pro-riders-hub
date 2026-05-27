@@ -24,7 +24,6 @@ import AnnouncementBar from "./AnnouncementBar";
 
 const navLinks = [
   { label: "Bikes", href: "/shop" },
-  { label: "Brands", href: "/brands" },
   { label: "Services", href: "/services" },
   { label: "Community", href: "/community" },
   { label: "About", href: "/about" },
@@ -114,7 +113,6 @@ const Header = () => {
             <Link to="/" className="flex-shrink-0 z-50">
               <img src={logo} alt="Pro-Bikers" className="h-8 lg:h-10" />
             </Link>
-
             {/* Center nav */}
             <nav className="hidden lg:flex items-center gap-1">
               {navLinks.map((link) => {
