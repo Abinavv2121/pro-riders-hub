@@ -19,50 +19,50 @@ import { useState } from "react";
 // Service packages data
 const servicePackages: ServicePackage[] = [
   {
-    id: "basic",
-    name: "Basic Service",
-    description: "Essential maintenance for regular riders",
-    price: 999,
+    id: "general-check-up",
+    name: "General Check Up",
+    description: "Essential safety checks and adjustments",
+    price: 500,
     features: [
-      "Brake adjustment",
-      "Gear tuning",
-      "Chain lubrication",
-      "Tire pressure check",
-      "Basic safety inspection",
+      "Safety checks",
+      "Brake inspection",
+      "Gear inspection",
+      "Bolt tightening",
+      "Air pressure check",
+      "Lubrication touch up"
     ],
-    icon: "basic",
+    icon: "safety"
   },
   {
-    id: "standard",
-    name: "Standard Service",
-    description: "Complete maintenance for optimal performance",
-    price: 2499,
+    id: "general-service",
+    name: "General Service",
+    description: "Deep clean and complete tuning",
+    price: 1200,
     features: [
-      "Everything in Basic",
-      "Full bearing check",
-      "Wheel trueing",
-      "Cable replacement",
-      "Fork/suspension check",
-      "Detailed cleaning",
+      "Bike wash and cleaning",
+      "Full degreasing of drivetrain",
+      "Deep cleaning of cassette, chain and crank",
+      "Gear tuning",
+      "Brake adjustment",
+      "Frame polishing",
+      "Bottom bracket & headset inspection",
+      "Detailed safety inspection"
     ],
     icon: "standard",
-    popular: true,
+    popular: true
   },
   {
-    id: "premium",
-    name: "Premium Service",
-    description: "Full overhaul for peak performance",
-    price: 4999,
+    id: "full-service",
+    name: "Full Service",
+    description: "Complete tear down and rebuild for peak performance",
+    price: 2500,
     features: [
-      "Everything in Standard",
-      "Complete bearing overhaul",
-      "Hydraulic brake service",
-      "Suspension tuning",
-      "Frame inspection",
-      "Priority scheduling",
+      "Complete bike teardown",
+      "Complete tuning and rebuild",
+      "Complete deep cleaning"
     ],
-    icon: "premium",
-  },
+    icon: "overhaul-alloy"
+  }
 ];
 
 const BikeServicing = () => {
@@ -142,12 +142,15 @@ _Requested from Pro Riders Hub Website_
       <section className="container mx-auto px-5 md:px-8 py-16 space-y-16">
         {/* Step 1: Select Package */}
         <div>
-          <div className="flex items-center gap-4 mb-8">
-            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold">
-              1
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold">
+                1
+              </div>
+              <h2 className="font-heading text-h3">Choose Your Service Package</h2>
             </div>
-            <h2 className="font-heading text-h3">Choose Your Service Package</h2>
           </div>
+          
           <ServicePackages
             packages={servicePackages}
             onSelectPackage={handlePackageSelect}

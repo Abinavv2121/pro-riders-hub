@@ -27,7 +27,7 @@ import {
   List
 } from "lucide-react";
 import { useState, useMemo, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import onRoadImg from "@/assets/categories/on-road.png";
 import xRoadImg from "@/assets/categories/x-road.png";
 import offRoadImg from "@/assets/categories/off-road.png";
@@ -35,6 +35,11 @@ import livImg from "@/assets/categories/liv.png";
 
 const Shop = () => {
   const { addItem } = useCart();
+  const { category } = useParams<{ category?: string }>();
+  const [searchParams] = useSearchParams();
+  const isSale = searchParams.get("sale") === "true";
+  const brandParam = searchParams.get("brand");
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedBrand, setSelectedBrand] = useState<string[]>([]);
@@ -42,6 +47,26 @@ const Shop = () => {
   const [sortBy, setSortBy] = useState("featured");
   const [showFilters, setShowFilters] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Sync parameters from URL
+  useEffect(() => {
+    if (category) {
+      setSelectedCategory(category);
+    } else {
+      const catParam = searchParams.get("category");
+      if (catParam) {
+        setSelectedCategory(catParam);
+      } else {
+        setSelectedCategory("all");
+      }
+    }
+
+    if (brandParam) {
+      setSelectedBrand([brandParam]);
+    } else {
+      setSelectedBrand([]);
+    }
+  }, [category, searchParams, brandParam]);
 
   useEffect(() => {
     // Simulate loading for skeletons
@@ -72,7 +97,11 @@ const Shop = () => {
         bike.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         bike.brand.toLowerCase().includes(searchQuery.toLowerCase());
       
-      const matchesCategory = selectedCategory === "all" || bike.category === selectedCategory;
+      const matchesCategory = selectedCategory === "all" || 
+        (selectedCategory === "kids" && (bike.size === "20" || bike.size === "24" || bike.name.toLowerCase().includes("kids") || bike.name.toLowerCase().includes("junior"))) ||
+        (selectedCategory === "pre-owned" && (bike.condition === "used" || bike.tag === "Pre-Owned")) ||
+        (selectedCategory === "restoration" && (bike.tag === "Restoration" || bike.condition === "restored")) ||
+        bike.category === selectedCategory;
       
       const matchesBrand = selectedBrand.length === 0 || selectedBrand.includes(bike.brand);
       
@@ -81,7 +110,9 @@ const Shop = () => {
         return bike.price >= range.min && bike.price <= range.max;
       })();
 
-      return matchesSearch && matchesCategory && matchesBrand && matchesPrice;
+      const matchesSale = !isSale || bike.tag === "Sale" || bike.tag === "Stock Clearance/Sale" || (bike.originalPrice !== undefined && bike.originalPrice > bike.price);
+
+      return matchesSearch && matchesCategory && matchesBrand && matchesPrice && matchesSale;
     });
 
     // Sorting
@@ -94,7 +125,7 @@ const Shop = () => {
     }
 
     return result;
-  }, [searchQuery, selectedCategory, selectedBrand, selectedPriceRange, sortBy]);
+  }, [searchQuery, selectedCategory, selectedBrand, selectedPriceRange, sortBy, isSale]);
 
   const toggleBrand = (brand: string) => {
     setSelectedBrand(prev => 

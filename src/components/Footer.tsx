@@ -46,10 +46,17 @@ const Footer = () => {
           <div>
             <h4 className="font-heading font-bold text-foreground uppercase tracking-wider text-sm mb-4">Shop</h4>
             <ul className="space-y-2">
-              {["Road Bikes", "Mountain Bikes", "Hybrid Bikes", "Pre-Owned", "Accessories", "Components"].map((item) => (
-                <li key={item}>
-                  <Link to="/shop" className="text-small text-[#000000] hover:text-primary transition-colors duration-200 font-body inline-block relative group">
-                    {item}
+              {[
+                { name: "Road Bikes", href: "/shop/race-road" },
+                { name: "Mountain Bikes", href: "/shop/mtb" },
+                { name: "Hybrid Bikes", href: "/shop/city-fitness" },
+                { name: "Pre-Owned", href: "/pre-owned" },
+                { name: "Accessories", href: "/shop?category=accessories" },
+                { name: "Apparels", href: "/shop?category=apparels" }
+              ].map((item) => (
+                <li key={item.name}>
+                  <Link to={item.href} className="text-small text-[#000000] hover:text-primary transition-colors duration-200 font-body inline-block relative group">
+                    {item.name}
                     <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-px bg-primary w-0 group-hover:w-full transition-all duration-200" />
                   </Link>
                 </li>

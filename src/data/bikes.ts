@@ -12,24 +12,39 @@ export const bikeCategories = [
     { key: "gravel", label: "Gravel & Adventure" },
     { key: "mtb", label: "MTB (XC & Trail)" },
     { key: "city-fitness", label: "City & Fitness" },
+    { key: "hybrid", label: "Hybrid" },
+    { key: "kids", label: "Kids Bikes" },
+    { key: "pre-owned", label: "Pre-Owned Bikes" },
+    { key: "restoration", label: "Restoration Bikes" },
 ] as const;
 
 export type BikeCategory = (typeof bikeCategories)[number]["key"];
 
 // Filter options
-export const bikeTypes = ["Race Road", "Endurance Road", "Gravel", "MTB", "City & Fitness"];
-export const bikeSizes = ["XS", "S", "M", "L", "XL", "M / L", "S / M", "M / L / XL"];
-export const bikeGears = ["8 Speed", "9 Speed", "10 Speed", "11 Speed", "12 Speed", "18 Speed", "20 Speed", "24 Speed", "27 Speed"];
+export const bikeTypes = ["Race Road", "Endurance Road", "Gravel", "MTB", "City & Fitness", "Hybrid"];
+export const bikeSizes = ["XXS", "XXXS", "XS", "S", "M", "L", "XL", "XXL", "48", "50", "51", "52", "54", "M / L", "S / M", "M / L / XL", "20", "24"];
+export const bikeGears = ["8 Speed", "9 Speed", "10 Speed", "11 Speed", "12 Speed", "16 Speed", "18 Speed", "20 Speed", "21 Speed", "22 Speed", "24 Speed", "27 Speed"];
 export const frameMaterials = ["Carbon", "Aluminum", "Steel", "Titanium", "Carbon Fiber"];
-export const groupsets = ["Shimano 105", "Shimano Ultegra", "Shimano Dura-Ace", "Shimano Deore", "Shimano XT", "Shimano XTR", "SRAM Rival", "SRAM Force", "SRAM Red", "Campagnolo Chorus", "Campagnolo Record"];
+export const groupsets = [
+    "Shimano Claris", "Shimano Sora", "Shimano Tiagra",
+    "Shimano 105", "Shimano 105 Di2", "Shimano 105 (11-speed)",
+    "Shimano Ultegra", "Shimano Ultegra Di2",
+    "Shimano Dura-Ace",
+    "Shimano Deore", "Shimano XT", "Shimano XTR",
+    "Shimano Tourney", "Shimano Altus", "Shimano Cues", "Shimano Essa",
+    "Shimano GRX",
+    "SRAM Rival", "SRAM Force", "SRAM Red", "SRAM Eagle NX",
+    "Campagnolo", "Campagnolo Chorus", "Campagnolo Record"
+];
 export const brakeTypes = ["Rim Brakes", "Disc Brakes (Mechanical)", "Disc Brakes (Hydraulic)", "Hydraulic Disc"];
-export const wheelSizes = ["26\"", "27.5\"", "29\"", "700c", "650b"];
+export const wheelSizes = ["20\"", "24\"", "26\"", "27.5\"", "29\"", "700c", "650b"];
 export const priceRanges = [
     { label: "Under ₹50,000", min: 0, max: 50000 },
     { label: "₹50,000 - ₹1,00,000", min: 50000, max: 100000 },
     { label: "₹1,00,000 - ₹1,50,000", min: 100000, max: 150000 },
     { label: "₹1,50,000 - ₹2,00,000", min: 150000, max: 200000 },
-    { label: "Above ₹2,00,000", min: 200000, max: Infinity },
+    { label: "₹2,00,000 - ₹3,00,000", min: 200000, max: 300000 },
+    { label: "Above ₹3,00,000", min: 300000, max: Infinity },
 ];
 
 export interface Bike {
@@ -56,9 +71,145 @@ export interface Bike {
     features?: string[];
     specifications?: Record<string, string>;
     components?: Record<string, string>;
+    condition?: "new" | "used";
+    year?: number;
 }
 
-export const bikes: Bike[] = [
+// ─────────────────────────────────────────────────────
+// Helper: pick a placeholder image based on brand
+// ─────────────────────────────────────────────────────
+function brandImage(brand: string): string {
+    const map: Record<string, string> = {
+        "Argon 18": argon18,
+        "Lapierre": lapierre,
+        "Avanti": avantiF1W,
+        "Scott": scottPlasma,
+        "Trek": marlin5,
+    };
+    return map[brand] || marlin5;
+}
+
+// ─────────────────────────────────────────────────────
+// Helper: infer frame material from groupset / brand / category
+// ─────────────────────────────────────────────────────
+function inferFrameMaterial(brand: string, groupset: string, product: string): string {
+    const carbonBrands = ["Colnago", "Cipollini", "Pinarello"];
+    const carbonGroupsets = ["Shimano Ultegra", "Shimano Ultegra Di2", "Shimano Dura-Ace", "SRAM Force", "SRAM Red"];
+    const carbonProducts = ["SuperSix", "Synapse Carbon", "Synapse Hi-Mod", "Madone", "Emonda SL", "Tarmac", "Addict", "Foil", "Reacto", "Scultura", "Xelius", "Aircode", "V4RS", "Eureka", "Bond"];
+
+    if (carbonBrands.includes(brand)) return "Carbon";
+    if (carbonGroupsets.some(g => groupset.includes(g))) return "Carbon";
+    if (carbonProducts.some(p => product.includes(p))) return "Carbon";
+    if (product.includes("AL") || product.includes("Optimo") || product.includes("Stratos") || product.includes("FX") || product.includes("Dual Sport") || product.includes("Marlin") || product.includes("Aspect") || product.includes("Cascade") || product.includes("Sub Cross")) return "Aluminum";
+    if (product.includes("Grandurance")) return "Aluminum";
+
+    return "Carbon";
+}
+
+// ─────────────────────────────────────────────────────
+// Helper: infer brake type from groupset / product tier
+// ─────────────────────────────────────────────────────
+function inferBrakeType(product: string, groupset: string): string {
+    if (product.toLowerCase().includes("rim")) return "Rim Brakes";
+    const hydraulicGroupsets = ["Shimano 105", "Shimano 105 Di2", "Shimano Ultegra", "Shimano Ultegra Di2", "Shimano Dura-Ace", "Shimano GRX", "Shimano Deore", "SRAM"];
+    if (hydraulicGroupsets.some(g => groupset.includes(g))) return "Disc Brakes (Hydraulic)";
+    if (groupset.includes("Claris") || groupset.includes("Sora") || groupset.includes("Tourney") || groupset.includes("Altus")) return "Disc Brakes (Mechanical)";
+    return "Disc Brakes (Hydraulic)";
+}
+
+// ─────────────────────────────────────────────────────
+// Helper: infer number of gears from groupset
+// ─────────────────────────────────────────────────────
+function inferGears(groupset: string): string {
+    if (groupset.includes("Di2") && groupset.includes("Ultegra")) return "24 Speed";
+    if (groupset.includes("Di2") && groupset.includes("105")) return "24 Speed";
+    if (groupset.includes("Dura-Ace")) return "24 Speed";
+    if (groupset.includes("Ultegra")) return "22 Speed";
+    if (groupset.includes("105") && groupset.includes("11-speed")) return "22 Speed";
+    if (groupset.includes("105")) return "22 Speed";
+    if (groupset.includes("GRX")) return "22 Speed";
+    if (groupset.includes("Tiagra")) return "20 Speed";
+    if (groupset.includes("Sora")) return "18 Speed";
+    if (groupset.includes("Claris")) return "16 Speed";
+    if (groupset.includes("Deore")) return "20 Speed";
+    if (groupset.includes("Tourney")) return "21 Speed";
+    if (groupset.includes("Altus")) return "18 Speed";
+    if (groupset.includes("Cues")) return "20 Speed";
+    if (groupset.includes("Essa")) return "18 Speed";
+    if (groupset.includes("Eagle")) return "12 Speed";
+    if (groupset.includes("XT")) return "24 Speed";
+    if (groupset.includes("Campagnolo")) return "22 Speed";
+    return "22 Speed";
+}
+
+// ─────────────────────────────────────────────────────
+// Helper: infer wheel size from category
+// ─────────────────────────────────────────────────────
+function inferWheelSize(category: string): string {
+    if (category === "mtb") return "29\"";
+    return "700c";
+}
+
+// ─────────────────────────────────────────────────────
+// Helper: infer price based on groupset tier and frame
+// ─────────────────────────────────────────────────────
+function inferPrice(groupset: string, frameMaterial: string, category: string): number {
+    const isCarbon = frameMaterial === "Carbon";
+
+    if (groupset.includes("Dura-Ace")) return isCarbon ? 350000 : 280000;
+    if (groupset.includes("Ultegra Di2")) return isCarbon ? 300000 : 240000;
+    if (groupset.includes("Ultegra")) return isCarbon ? 250000 : 200000;
+    if (groupset.includes("105 Di2")) return isCarbon ? 220000 : 180000;
+    if (groupset.includes("105") && groupset.includes("11-speed")) return isCarbon ? 160000 : 125000;
+    if (groupset.includes("105")) return isCarbon ? 185000 : 145000;
+    if (groupset.includes("GRX")) return isCarbon ? 180000 : 140000;
+    if (groupset.includes("Tiagra")) return isCarbon ? 130000 : 95000;
+    if (groupset.includes("Sora")) return isCarbon ? 100000 : 75000;
+    if (groupset.includes("Claris")) return isCarbon ? 85000 : 60000;
+    if (groupset.includes("Eagle")) return isCarbon ? 185000 : 140000;
+    if (groupset.includes("XT")) return isCarbon ? 190000 : 150000;
+    if (groupset.includes("Deore")) return isCarbon ? 120000 : 70000;
+    if (groupset.includes("Tourney")) return 45000;
+    if (groupset.includes("Altus")) return 55000;
+    if (groupset.includes("Cues")) return 60000;
+    if (groupset.includes("Essa")) return 48000;
+    if (groupset.includes("Campagnolo")) return isCarbon ? 180000 : 140000;
+    if (category === "mtb") return 65000;
+    if (category === "hybrid") return 55000;
+    return 120000;
+}
+
+// ─────────────────────────────────────────────────────
+// Helper: determine road sub-category
+// ─────────────────────────────────────────────────────
+function inferRoadCategory(product: string, brand: string): BikeCategory {
+    // Gravel bikes
+    const gravelKeywords = ["Gravel", "Grandurance", "Speedster Gravel", "Granger", "Nicasio"];
+    if (gravelKeywords.some(k => product.includes(k))) return "gravel";
+
+    // Aero / Race Road
+    const raceKeywords = ["Madone", "SuperSix", "Reacto", "Addict", "Foil", "Speed Concept", "Tarmac", "V4RS", "Bond", "Plasma", "Aircode"];
+    if (raceKeywords.some(k => product.includes(k))) return "race-road";
+
+    // Endurance Road
+    const enduranceKeywords = ["Domane", "Synapse", "Scultura Endurance", "Emonda", "Xelius", "Eureka", "GTR", "Gallium"];
+    if (enduranceKeywords.some(k => product.includes(k))) return "endurance-road";
+
+    // Lightweight / climbing → race-road
+    const climbKeywords = ["Scultura", "Emonda SL"];
+    if (climbKeywords.some(k => product.includes(k))) return "race-road";
+
+    // Entry-level road → endurance-road
+    const entryKeywords = ["Speedster", "Optimo", "Stratos", "Duello", "Fuoco"];
+    if (entryKeywords.some(k => product.includes(k))) return "endurance-road";
+
+    return "race-road";
+}
+
+// ═════════════════════════════════════════════════════
+// EXISTING BIKES (preserved exactly as before)
+// ═════════════════════════════════════════════════════
+const existingBikes: Bike[] = [
     // Race Road
     {
         id: 1, name: "Argon 18 Nitrogen", brand: "Argon 18", category: "race-road", image: argon18, images: [argon18, argon18, argon18], color: "Silver Blue", size: "L", tag: "New Arrival", price: 190000, bikeType: "Race Road", gears: "22 Speed", frameMaterial: "Carbon", groupset: "Shimano Ultegra", brakeType: "Disc Brakes (Mechanical)", wheelSize: "700c", rating: 5, reviews: 12, stockStatus: "In Stock",
@@ -402,6 +553,219 @@ export const bikes: Bike[] = [
             "Warranty": "Lifetime warranty on frame"
         }
     },
+];
+
+// ═════════════════════════════════════════════════════
+// NEW STOCK from bikes.json – road, hybrid, mtb
+// (only bikes NOT already present as existing entries)
+// ═════════════════════════════════════════════════════
+
+let nextId = 100;
+
+interface JsonVariant {
+    size: string;
+    color: string;
+    groupset: string | null;
+    condition?: string;
+    year?: number;
+}
+
+interface JsonBike {
+    brand: string;
+    category: string;
+    product: string;
+    variants: JsonVariant[];
+}
+
+const jsonStock: JsonBike[] = [
+    // ── TREK ROAD ──
+    { brand: "Trek", category: "road", product: "Speed Concept", variants: [{ size: "M", color: "Black", groupset: "Shimano Ultegra Di2", condition: "new" }] },
+    { brand: "Trek", category: "road", product: "Madone SL6 Gen8", variants: [{ size: "M/L", color: "Crimson", groupset: "Shimano 105 Di2", condition: "new" }] },
+    { brand: "Trek", category: "road", product: "Madone SL7 Gen8", variants: [{ size: "M/L", color: "Purple", groupset: "Shimano Ultegra Di2", condition: "new" }] },
+    { brand: "Trek", category: "road", product: "Madone SL5 Gen8", variants: [{ size: "L", color: "Black", groupset: "Shimano 105", condition: "new" }] },
+    { brand: "Trek", category: "road", product: "Emonda ALR 5", variants: [{ size: "L", color: "Red", groupset: "Shimano 105", condition: "new" }, { size: "S", color: "Black/Grey", groupset: "Shimano 105", condition: "new" }] },
+    { brand: "Trek", category: "road", product: "Domane AL5 Gen4", variants: [{ size: "L", color: "Black", groupset: "Shimano 105", condition: "new" }, { size: "XXXS", color: "Black", groupset: "Shimano 105", condition: "new" }] },
+    { brand: "Trek", category: "road", product: "Emonda SL5", variants: [{ size: "XS", color: "White", groupset: "Shimano 105 (11-speed)", condition: "new" }] },
+    { brand: "Trek", category: "road", product: "Domane AL4 Gen4", variants: [{ size: "M", color: "Blue", groupset: "Shimano Tiagra", condition: "new" }] },
+    // ── SCOTT ROAD ──
+    { brand: "Scott", category: "road", product: "Addict 20", variants: [{ size: "L", color: "Green", groupset: "Shimano 105", year: 2023 }, { size: "S", color: "Green", groupset: "Shimano 105", year: 2023 }] },
+    { brand: "Scott", category: "road", product: "Addict 50", variants: [{ size: "M", color: "Grey", groupset: "Shimano 105", year: 2025 }] },
+    { brand: "Scott", category: "road", product: "Speedster Gravel 50", variants: [{ size: "S", color: "Olive Green", groupset: "Shimano Claris" }] },
+    { brand: "Scott", category: "road", product: "Speedster 40 Rim", variants: [{ size: "L", color: "Black/Green", groupset: "Shimano Sora" }] },
+    { brand: "Scott", category: "road", product: "Speedster 10", variants: [{ size: "XXS", color: "Black", groupset: "Shimano 105" }, { size: "S", color: "Green", groupset: "Shimano 105" }] },
+    { brand: "Scott", category: "road", product: "Foil RC 20", variants: [{ size: "M", color: "Light Blue/Black", groupset: "Shimano Ultegra Di2" }] },
+    // ── PINARELLO ──
+    { brand: "Pinarello", category: "road", product: "Granger Gravel", variants: [{ size: "S", color: "Olive Green", groupset: "Shimano GRX", condition: "used" }] },
+    // ── CANNONDALE ──
+    { brand: "Cannondale", category: "road", product: "SuperSix Evo", variants: [{ size: "48", color: "Black", groupset: "Shimano 105" }, { size: "54", color: "Black", groupset: "Shimano 105" }, { size: "51", color: "Black", groupset: "Shimano 105" }] },
+    { brand: "Cannondale", category: "road", product: "Synapse Carbon", variants: [{ size: "51", color: "Red", groupset: "Shimano 105 Di2" }] },
+    { brand: "Cannondale", category: "road", product: "Synapse Hi-Mod", variants: [{ size: "54", color: "Black", groupset: "Shimano Ultegra (11-speed)" }] },
+    { brand: "Cannondale", category: "road", product: "Synapse AL", variants: [{ size: "54", color: "Yellow", groupset: "Shimano Claris" }, { size: "54", color: "Grey", groupset: "Shimano Sora" }, { size: "51", color: "Black", groupset: "Shimano 105" }, { size: "51", color: "White", groupset: "Shimano 105" }] },
+    { brand: "Cannondale", category: "road", product: "Optimo", variants: [{ size: "51", color: "Blue", groupset: "Shimano Claris" }, { size: "54", color: "Blue", groupset: "Shimano Claris" }] },
+    // ── MERIDA ──
+    { brand: "Merida", category: "road", product: "Reacto 4000", variants: [{ size: "XS", color: "Dark Blue", groupset: "Shimano 105" }, { size: "XXS", color: "Dark Blue", groupset: "Shimano 105" }, { size: "S", color: "Dark Blue", groupset: "Shimano 105" }] },
+    { brand: "Merida", category: "road", product: "Scultura Endurance 4000", variants: [{ size: "XS", color: "Grey", groupset: "Shimano 105" }] },
+    { brand: "Merida", category: "road", product: "Scultura 4000", variants: [{ size: "S", color: "Silver", groupset: "Shimano 105" }] },
+    // ── COLNAGO ──
+    { brand: "Colnago", category: "road", product: "V4RS", variants: [{ size: "M", color: "Black", groupset: "Shimano Ultegra Di2" }] },
+    // ── GUERCIOTTI ──
+    { brand: "Guerciotti", category: "road", product: "Eureka Air", variants: [{ size: "L", color: "Black", groupset: "Shimano 105 (11-speed)" }] },
+    // ── WILIER ──
+    { brand: "Wilier", category: "road", product: "GTR Rim", variants: [{ size: "M", color: "Red", groupset: "Shimano 105 (11-speed)" }] },
+    // ── LAPIERRE ──
+    { brand: "Lapierre", category: "road", product: "Xelius SL7", variants: [{ size: "L", color: "Blue", groupset: "Shimano Ultegra Di2" }] },
+    { brand: "Lapierre", category: "road", product: "Aircode DRS", variants: [{ size: "XL", color: "Gold", groupset: "Shimano 105 (11-speed)" }, { size: "M", color: "Blue", groupset: "Shimano 105 (11-speed)", condition: "used" }] },
+    // ── ARGON 18 ──
+    { brand: "Argon 18", category: "road", product: "Nitrogen", variants: [{ size: "L", color: "Blue/Grey", groupset: "Shimano 105" }] },
+    // ── BERGAMONT ──
+    { brand: "Bergamont", category: "road", product: "Grandurance Elite", variants: [{ size: "L", color: "Black", groupset: "Shimano 105" }] },
+    { brand: "Bergamont", category: "road", product: "Grandurance RB3", variants: [{ size: "L", color: "Silver", groupset: "Shimano Claris" }] },
+    // ── CIPOLLINI ──
+    { brand: "Cipollini", category: "road", product: "Bond", variants: [{ size: "XS", color: "Blue", groupset: "Shimano 105" }] },
+    // ── POLYGON ──
+    { brand: "Polygon", category: "road", product: "Stratos S5D", variants: [{ size: "M", color: "White", groupset: "Shimano 105" }] },
+    { brand: "Polygon", category: "road", product: "Stratos S2", variants: [{ size: "S", color: "Light Blue", groupset: "Shimano Claris" }, { size: "M", color: "Light Blue", groupset: "Shimano Claris" }, { size: "L", color: "Light Blue", groupset: "Shimano Claris" }] },
+    { brand: "Polygon", category: "road", product: "Stratos 3", variants: [{ size: "S", color: "Dark Brown", groupset: "Shimano Sora" }] },
+    { brand: "Polygon", category: "road", product: "Stratos 4", variants: [{ size: "M", color: "Orangish Brown", groupset: null }] },
+    // ── BOTTACHIA ──
+    { brand: "Bottachia", category: "road", product: "Duello", variants: [{ size: "L", color: "Red", groupset: "Campagnolo" }] },
+
+    // ── TREK HYBRID ──
+    { brand: "Trek", category: "hybrid", product: "FX3", variants: [{ size: "S", color: "Grey", groupset: "Shimano Deore" }, { size: "M", color: "Red", groupset: "Shimano Deore" }, { size: "L", color: "Maroon", groupset: "Shimano Deore" }, { size: "XL", color: "Grey", groupset: "Shimano Deore" }] },
+    { brand: "Trek", category: "hybrid", product: "FX2", variants: [{ size: "L", color: "Blue", groupset: "Shimano Altus" }] },
+    { brand: "Trek", category: "hybrid", product: "Dual Sport", variants: [{ size: "M", color: "Black", groupset: "Shimano Altus" }] },
+    { brand: "Scott", category: "hybrid", product: "Sub Cross 50", variants: [{ size: "M", color: "Olive Green", groupset: "Shimano Tourney" }] },
+
+    // ── TREK MTB ──
+    { brand: "Trek", category: "mtb", product: "Marlin 5", variants: [{ size: "M", color: "Blue", groupset: "Shimano Cues" }] },
+    { brand: "Trek", category: "mtb", product: "Marlin 4", variants: [{ size: "M", color: "Purple", groupset: "Shimano Essa" }, { size: "L", color: "Black", groupset: "Shimano Essa" }] },
+    { brand: "Scott", category: "mtb", product: "Aspect 960", variants: [{ size: "L", color: "Orange", groupset: "Shimano Tourney" }] },
+    { brand: "Polygon", category: "mtb", product: "Cascade 2", variants: [{ size: "M", color: "Blue", groupset: "Shimano Tourney" }] },
+
+    // ── USED STOCK ──
+    { brand: "Java", category: "road", product: "Fuoco Disc", variants: [{ size: "S", color: "Ash", groupset: "Shimano 105 (11-speed)", condition: "used" }] },
+    { brand: "Trek", category: "road", product: "Domane AL5 Gen4 (Used)", variants: [{ size: "S", color: "Green", groupset: "Shimano 105 (11-speed)", condition: "used" }] },
+];
+
+// ═════════════════════════════════════════════════════
+// PRE-OWNED BIKES from Excel (Status = Available)
+// ═════════════════════════════════════════════════════
+const excelPreOwned: JsonBike[] = [
+    // HYBRID
+    { brand: "Bergamont", category: "hybrid", product: "Helix 1.5i", variants: [{ size: "M", color: "Blue", groupset: "Shimano Tourney", condition: "used" }] },
+    { brand: "Firefox", category: "hybrid", product: "Meteor", variants: [{ size: "M", color: "Blue", groupset: "Shimano Tourney", condition: "used" }] },
+    { brand: "Giant", category: "hybrid", product: "Escape", variants: [{ size: "XL", color: "Blue", groupset: "Shimano Altus", condition: "used" }] },
+    { brand: "Veloce", category: "hybrid", product: "Junior", variants: [{ size: "24", color: "Red", groupset: "Shimano Tourney", condition: "used" }] },
+    { brand: "Shnell", category: "hybrid", product: "1000", variants: [{ size: "L", color: "Grey", groupset: "Shimano Tourney", condition: "used" }] },
+    { brand: "Fantom", category: "hybrid", product: "SS", variants: [{ size: "M", color: "Red / Black", groupset: "Shimano Tourney", condition: "used" }] },
+    { brand: "Keysto", category: "hybrid", product: "Hybrid", variants: [{ size: "M", color: "Black", groupset: "Shimano Tourney", condition: "used" }] },
+    { brand: "Polygon", category: "hybrid", product: "Kids 20", variants: [{ size: "20", color: "Black / Blue", groupset: "Shimano Tourney", condition: "used" }] },
+    { brand: "Schwinn", category: "hybrid", product: "Hybrid", variants: [{ size: "M", color: "Blue", groupset: "Shimano Tourney", condition: "used" }] },
+    // ROAD
+    { brand: "Marin", category: "road", product: "Nicasio", variants: [{ size: "S", color: "Black", groupset: "Shimano Claris", condition: "used" }] },
+    { brand: "Urban", category: "road", product: "Track", variants: [{ size: "M", color: "White", groupset: "Shimano Tourney", condition: "used" }] },
+    { brand: "Trek", category: "road", product: "Domane AL5 Claris", variants: [{ size: "XXS", color: "Black", groupset: "Shimano Claris", condition: "used" }] },
+    { brand: "Trek", category: "road", product: "Domane AL5", variants: [{ size: "XL", color: "Green", groupset: "Shimano 105", condition: "used" }] },
+    { brand: "Titanium", category: "road", product: "Road Bike", variants: [{ size: "M", color: "Silver", groupset: "Shimano 105", condition: "used" }] },
+    { brand: "Lapierre", category: "road", product: "Road", variants: [{ size: "M", color: "Black", groupset: "Shimano 105", condition: "used" }] },
+    // MTB
+    { brand: "Marin", category: "mtb", product: "MTB", variants: [{ size: "M", color: "Blue", groupset: "Shimano Deore", condition: "used" }] },
+    { brand: "GT", category: "mtb", product: "Avalanche Sport", variants: [{ size: "M", color: "Black", groupset: "Shimano Deore", condition: "used" }] },
+    { brand: "Scott", category: "mtb", product: "Scale 940", variants: [{ size: "S", color: "Red", groupset: "SRAM Eagle NX", condition: "used" }] },
+    { brand: "Surly", category: "mtb", product: "Moonlander Fat Bike", variants: [{ size: "L", color: "Light Brown", groupset: "Shimano XT", condition: "used" }] },
+];
+
+// ═════════════════════════════════════════════════════
+// Convert JSON entries into Bike objects
+// ═════════════════════════════════════════════════════
+function convertJsonToBikes(entries: JsonBike[], startId: number, isPreOwned: boolean): Bike[] {
+    const result: Bike[] = [];
+    let id = startId;
+
+    for (const entry of entries) {
+        for (const variant of entry.variants) {
+            const gs = variant.groupset || "Shimano Tourney";
+            const fm = inferFrameMaterial(entry.brand, gs, entry.product);
+            const bt = inferBrakeType(entry.product, gs);
+            const gears = inferGears(gs);
+            const ws = inferWheelSize(entry.category);
+            const isUsed = variant.condition === "used" || isPreOwned;
+
+            // Determine category
+            let category: BikeCategory;
+            if (entry.category === "hybrid") {
+                category = "hybrid";
+            } else if (entry.category === "mtb") {
+                category = "mtb";
+            } else {
+                category = inferRoadCategory(entry.product, entry.brand);
+            }
+
+            // Determine bikeType label
+            let bikeType: string;
+            if (entry.category === "hybrid") bikeType = "Hybrid";
+            else if (entry.category === "mtb") bikeType = "MTB";
+            else {
+                const catMap: Record<string, string> = {
+                    "race-road": "Race Road",
+                    "endurance-road": "Endurance Road",
+                    "gravel": "Gravel",
+                    "city-fitness": "City & Fitness",
+                };
+                bikeType = catMap[category] || "Road";
+            }
+
+            const price = inferPrice(gs, fm, entry.category);
+            const img = brandImage(entry.brand);
+
+            // Tag logic
+            let tag: string | null = null;
+            if (isUsed) tag = "Pre-Owned";
+            else if (variant.year === 2025) tag = "New Arrival";
+            else if (variant.year === 2023) tag = "Stock Clearance/Sale";
+
+            const bike: Bike = {
+                id: id++,
+                name: `${entry.product}`,
+                brand: entry.brand,
+                category,
+                image: img,
+                images: [img, img],
+                color: variant.color,
+                size: variant.size,
+                tag,
+                price: isUsed ? Math.round(price * 0.6) : price,
+                originalPrice: isUsed ? price : (tag === "Stock Clearance/Sale" ? Math.round(price * 1.15) : undefined),
+                bikeType,
+                gears,
+                frameMaterial: fm,
+                groupset: gs,
+                brakeType: bt,
+                wheelSize: ws,
+                rating: isUsed ? 4 : (Math.random() > 0.5 ? 5 : 4),
+                reviews: Math.floor(Math.random() * 15) + 2,
+                stockStatus: "In Stock",
+                condition: isUsed ? "used" : "new",
+                year: variant.year,
+            };
+
+            result.push(bike);
+        }
+    }
+
+    return result;
+}
+
+const newStockBikes = convertJsonToBikes(jsonStock, 100, false);
+const preOwnedBikes = convertJsonToBikes(excelPreOwned, 500, true);
+
+// ═════════════════════════════════════════════════════
+// FINAL COMBINED EXPORT
+// ═════════════════════════════════════════════════════
+export const bikes: Bike[] = [
+    ...existingBikes,
+    ...newStockBikes,
+    ...preOwnedBikes,
 ];
 
 // Derive unique brands and their categories from the data

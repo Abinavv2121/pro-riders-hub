@@ -9,7 +9,7 @@ import { ArrowRight, Bike, Calendar, Ruler, Settings, Truck, Wrench } from "luci
 import { Link } from "react-router-dom";
 
 const services = [
-  { icon: Wrench, title: "Bike Servicing", description: "Complete maintenance packages from basic tune-ups to full overhauls. Our certified mechanics handle every brand with precision.", price: "From ₹999", link: "/servicing" },
+  { icon: Wrench, title: "Bike Servicing", description: "Complete maintenance packages from basic tune-ups to full overhauls. Our certified mechanics handle every brand with precision.", price: "From ₹500", link: "/servicing" },
   { icon: Ruler, title: "Professional Bike Fitting", description: "Advanced bike fitting using precision tools and biomechanical analysis. Maximize comfort and performance.", price: "From ₹2,499", link: "/servicing" },
   { icon: Settings, title: "Suspension Tuning", description: "Expert suspension setup and tuning for mountain bikes. Get the most out of your fork and shock.", price: "From ₹1,499", link: "/servicing" },
   { icon: Bike, title: "Custom Builds", description: "Dream bike, built to your exact specifications. Choose every component for the perfect machine.", price: "Contact Us", link: "/servicing" },

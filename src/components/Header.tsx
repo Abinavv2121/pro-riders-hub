@@ -15,20 +15,64 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
-import { bikeBrands, bikeCategories, bikes } from "@/data/bikes";
+import { bikes } from "@/data/bikes";
+import { accessoryCategories, accessoryBrands, apparelCategories, apparelBrands } from "@/data/accessories";
+import { cycleBrands } from "@/data/brands";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronRight, Menu, MessageCircle, Phone, Search, ShoppingCart, User as UserIcon, X } from "lucide-react";
+import { ChevronRight, Menu, MessageCircle, Phone, Search, ShoppingCart, User as UserIcon, X, ChevronDown } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import AnnouncementBar from "./AnnouncementBar";
 
 const navLinks = [
+  { label: "Sale", href: "/shop?sale=true" },
   { label: "Bikes", href: "/shop" },
-  { label: "Services", href: "/services" },
+  { label: "Apparels", href: "/shop?category=apparels" },
+  { label: "Accessories", href: "/shop?category=accessories" },
+  { label: "Service", href: "/servicing" },
   { label: "Community", href: "/community" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
+
+const bikeDropdownCategories = [
+  { label: "Road Bikes", key: "road", href: "/shop/race-road" },
+  { label: "Gravel Bikes", key: "gravel", href: "/shop/gravel" },
+  { label: "Mountain Bikes", key: "mtb", href: "/shop/mtb" },
+  { label: "Hybrid Bikes", key: "hybrid", href: "/shop/city-fitness" },
+  { label: "Kids Bikes", key: "kids", href: "/shop/kids" },
+  { label: "Pre-owned Bikes", key: "pre-owned", href: "/shop/pre-owned" },
+  { label: "Restoration Bikes", key: "restoration", href: "/shop/restoration" },
+  { label: "Stock Clearance/Sale", key: "sale", href: "/shop?sale=true" },
+];
+
+const getBikesForCategory = (key: string) => {
+  if (key === "road") {
+    return bikes.filter(b => b.category === "race-road" || b.category === "endurance-road");
+  }
+  if (key === "gravel") {
+    return bikes.filter(b => b.category === "gravel");
+  }
+  if (key === "mtb") {
+    return bikes.filter(b => b.category === "mtb");
+  }
+  if (key === "hybrid") {
+    return bikes.filter(b => b.category === "city-fitness" || b.category === "hybrid");
+  }
+  if (key === "sale") {
+    return bikes.filter(b => b.tag === "Sale" || b.tag === "Stock Clearance/Sale" || (b.originalPrice && b.originalPrice > b.price));
+  }
+  if (key === "kids") {
+    return bikes.filter(b => b.size === "20" || b.size === "24" || b.name.toLowerCase().includes("kids") || b.name.toLowerCase().includes("junior"));
+  }
+  if (key === "pre-owned") {
+    return bikes.filter(b => b.condition === "used" || b.tag === "Pre-Owned");
+  }
+  if (key === "restoration") {
+    return bikes.filter(b => b.tag === "Restoration" || b.condition === "restored");
+  }
+  return [];
+};
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -37,6 +81,7 @@ const Header = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [hoveredBrand, setHoveredBrand] = useState<string | null>(null);
+  const [mobileExpanded, setMobileExpanded] = useState<Record<string, boolean>>({});
   const dropdownTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const subTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const location = useLocation();
@@ -117,7 +162,7 @@ const Header = () => {
             <nav className="hidden lg:flex items-center gap-1">
               {navLinks.map((link) => {
                 const isActive = location.pathname === link.href;
-                const hasDropdown = link.label === "Bikes" || link.label === "Brands";
+                const hasDropdown = link.label === "Bikes" || link.label === "Apparels" || link.label === "Accessories";
                 return (
                   <div
                     key={link.label}
@@ -132,6 +177,7 @@ const Header = () => {
                       `}
                     >
                       {link.label}
+                      {hasDropdown && <ChevronDown className="w-3 h-3 opacity-60" />}
                       <span
                         className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-primary transition-all duration-300
                           ${isActive ? "w-6 opacity-100" : "w-0 opacity-0 group-hover:w-4 group-hover:opacity-100"}
@@ -140,64 +186,63 @@ const Header = () => {
                     </Link>
 
                     {/* Bikes Mega Dropdown */}
-                    {hasDropdown && activeDropdown === link.label && (
+                    {hasDropdown && activeDropdown === link.label && link.label === "Bikes" && (
                       <AnimatePresence>
-                        {link.label === "Bikes" && (
-                          <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 10 }}
-                            transition={{ duration: 0.2 }}
-                            className="absolute top-full left-0 mt-0 z-50 min-w-max pt-2"
-                            onMouseEnter={keepDropdownOpen}
-                            onMouseLeave={closeDropdown}
-                          >
-                            <div className="bg-white border border-[#CCE0F5] rounded-xl shadow-2xl p-1 inline-flex min-h-[200px]">
-                              {/* Category list */}
-                              <div className="w-56 border-r border-[#CCE0F5] p-3">
-                                <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-primary mb-2 px-3">Categories</p>
-                                {bikeCategories.map((cat) => (
-                                  <div
-                                    key={cat.key}
-                                    onMouseEnter={() => openSub(cat.key, "category")}
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 10 }}
+                          transition={{ duration: 0.2 }}
+                          className="absolute top-full left-0 mt-0 z-50 min-w-max pt-2"
+                          onMouseEnter={keepDropdownOpen}
+                          onMouseLeave={closeDropdown}
+                        >
+                          <div className="bg-white border border-[#CCE0F5] rounded-xl shadow-2xl p-1 inline-flex min-h-[200px]">
+                            {/* Category list */}
+                            <div className="w-56 border-r border-[#CCE0F5] p-3">
+                              <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-primary mb-2 px-3">Bikes</p>
+                              {bikeDropdownCategories.map((cat) => (
+                                <div
+                                  key={cat.key}
+                                  onMouseEnter={() => openSub(cat.key, "category")}
+                                  onMouseLeave={() => closeSub("category")}
+                                >
+                                  <Link
+                                    to={cat.href}
+                                    onClick={() => setActiveDropdown(null)}
+                                    className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-heading font-medium uppercase tracking-wider transition-all duration-150
+                                      ${hoveredCategory === cat.key
+                                        ? "bg-[#EBF4FF] text-primary"
+                                        : "text-[#111111] hover:bg-[#F0F6FF]"
+                                      }
+                                    `}
+                                  >
+                                    {cat.label}
+                                    <ChevronRight className="w-3.5 h-3.5 opacity-80" />
+                                  </Link>
+                                </div>
+                              ))}
+                            </div>
+
+                            {/* Bikes sub-panel */}
+                            <div className="w-64 p-4">
+                              <AnimatePresence mode="wait">
+                                {hoveredCategory ? (
+                                  <motion.div
+                                    key={hoveredCategory}
+                                    initial={{ opacity: 0, x: 5 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: 5 }}
+                                    transition={{ duration: 0.15 }}
+                                    onMouseEnter={keepSubOpen}
                                     onMouseLeave={() => closeSub("category")}
                                   >
-                                    <Link
-                                      to={`/shop/${cat.key}`}
-                                      onClick={() => setActiveDropdown(null)}
-                                      className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-heading font-medium uppercase tracking-wider transition-all duration-150
-                                        ${hoveredCategory === cat.key
-                                          ? "bg-[#EBF4FF] text-primary"
-                                          : "text-[#111111] hover:bg-[#F0F6FF]"
-                                        }
-                                      `}
-                                    >
-                                      {cat.label}
-                                      <ChevronRight className="w-3.5 h-3.5 opacity-80" />
-                                    </Link>
-                                  </div>
-                                ))}
-                              </div>
-
-                              {/* Bikes sub-panel */}
-                              <div className="w-64 p-4">
-                                <AnimatePresence mode="wait">
-                                  {hoveredCategory ? (
-                                    <motion.div
-                                      key={hoveredCategory}
-                                      initial={{ opacity: 0, x: 5 }}
-                                      animate={{ opacity: 1, x: 0 }}
-                                      exit={{ opacity: 0, x: 5 }}
-                                      transition={{ duration: 0.15 }}
-                                      onMouseEnter={keepSubOpen}
-                                      onMouseLeave={() => closeSub("category")}
-                                    >
-                                      <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-primary mb-3">
-                                        {bikeCategories.find((c) => c.key === hoveredCategory)?.label}
-                                      </p>
-                                      <div className="flex flex-col gap-1">
-                                        {bikes
-                                          .filter((b) => b.category === hoveredCategory)
+                                    <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-primary mb-3">
+                                      {bikeDropdownCategories.find((c) => c.key === hoveredCategory)?.label}
+                                    </p>
+                                    <div className="flex flex-col gap-1">
+                                      {getBikesForCategory(hoveredCategory).length > 0 ? (
+                                        getBikesForCategory(hoveredCategory)
                                           .slice(0, 6)
                                           .map((bike) => (
                                             <Link
@@ -211,104 +256,202 @@ const Header = () => {
                                                 <span className="text-[10px] text-[#888888] font-heading uppercase tracking-wider">{bike.brand}</span>
                                               </div>
                                             </Link>
-                                          ))}
-                                      </div>
-                                    </motion.div>
-                                  ) : (
-                                    <div className="h-full flex items-center justify-center text-center">
-                                      <p className="text-[10px] text-[#888888] font-heading uppercase tracking-widest leading-relaxed">Hover a category<br/>to see bikes</p>
+                                          ))
+                                      ) : (
+                                        <p className="text-[10px] text-[#888888] font-heading uppercase tracking-widest leading-relaxed p-2">Explore our collection online or at the store</p>
+                                      )}
                                     </div>
-                                  )}
-                                </AnimatePresence>
-                              </div>
-                            </div>
-                          </motion.div>
-                        )}
-                        {link.label === "Brands" && (
-                          <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 10 }}
-                            transition={{ duration: 0.2 }}
-                            className="absolute top-full left-0 mt-0 z-50 min-w-max pt-2"
-                            onMouseEnter={keepDropdownOpen}
-                            onMouseLeave={closeDropdown}
-                          >
-                            <div className="bg-white border border-[#CCE0F5] rounded-xl shadow-2xl p-1 inline-flex min-h-[200px]">
-                              {/* Brand list */}
-                              <div className="w-56 border-r border-[#CCE0F5] p-3">
-                                <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-primary mb-2 px-3">Brands</p>
-                                {bikeBrands.map((brand) => (
-                                  <div
-                                    key={brand.name}
-                                    onMouseEnter={() => openSub(brand.name, "brand")}
-                                    onMouseLeave={() => closeSub("brand")}
-                                  >
-                                    <div
-                                      className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-heading font-medium uppercase tracking-wider transition-all duration-150 cursor-default
-                                        ${hoveredBrand === brand.name
-                                          ? "bg-[#EBF4FF] text-primary"
-                                          : "text-[#111111] hover:bg-[#F0F6FF]"
-                                        }
-                                      `}
-                                    >
-                                      {brand.name}
-                                      <ChevronRight className="w-3.5 h-3.5 opacity-80" />
-                                    </div>
+                                  </motion.div>
+                                ) : (
+                                  <div className="h-full flex items-center justify-center text-center">
+                                    <p className="text-[10px] text-[#888888] font-heading uppercase tracking-widest leading-relaxed">Hover a category<br/>to see bikes</p>
                                   </div>
-                                ))}
-                              </div>
-
-                              {/* Brand categories sub-panel */}
-                              <div className="w-64 p-4">
-                                <AnimatePresence mode="wait">
-                                  {hoveredBrand ? (
-                                    <motion.div
-                                      key={hoveredBrand}
-                                      initial={{ opacity: 0, x: 5 }}
-                                      animate={{ opacity: 1, x: 0 }}
-                                      exit={{ opacity: 0, x: 5 }}
-                                      transition={{ duration: 0.15 }}
-                                      onMouseEnter={keepSubOpen}
-                                      onMouseLeave={() => closeSub("brand")}
-                                    >
-                                      <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-primary mb-3">{hoveredBrand}</p>
-                                      <div className="space-y-4">
-                                        {bikeBrands
-                                          .find((b) => b.name === hoveredBrand)
-                                          ?.categories.map((catKey) => {
-                                            const cat = bikeCategories.find((c) => c.key === catKey);
-                                            const brandBikes = bikes.filter((b) => b.brand === hoveredBrand && b.category === catKey);
-                                            return brandBikes.length > 0 ? (
-                                              <div key={catKey}>
-                                                <p className="text-[9px] font-heading font-bold text-primary/60 uppercase tracking-widest mb-1.5">{cat?.label}</p>
-                                                <div className="flex flex-col gap-1">
-                                                  {brandBikes.slice(0, 3).map((bike) => (
-                                                    <Link
-                                                      key={bike.id}
-                                                      to={`/product/${bike.id}`}
-                                                      onClick={() => setActiveDropdown(null)}
-                                                      className="flex items-center gap-3 p-1.5 rounded-lg hover:bg-[#F0F6FF] transition-all duration-150"
-                                                    >
-                                                      <span className="text-[11px] font-heading font-semibold text-[#111111] truncate">{bike.name}</span>
-                                                    </Link>
-                                                  ))}
-                                                </div>
-                                              </div>
-                                            ) : null;
-                                          })}
-                                      </div>
-                                    </motion.div>
-                                  ) : (
-                                    <div className="h-full flex items-center justify-center text-center">
-                                      <p className="text-[10px] text-[#888888] font-heading uppercase tracking-widest leading-relaxed">Hover a brand<br/>to see bikes</p>
-                                    </div>
-                                  )}
-                                </AnimatePresence>
-                              </div>
+                                )}
+                              </AnimatePresence>
                             </div>
-                          </motion.div>
-                        )}
+                          </div>
+                        </motion.div>
+                      </AnimatePresence>
+                    )}
+
+                    {/* Apparels Mega Dropdown */}
+                    {hasDropdown && activeDropdown === link.label && link.label === "Apparels" && (
+                      <AnimatePresence>
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 10 }}
+                          transition={{ duration: 0.2 }}
+                          className="absolute top-full left-0 mt-0 z-50 min-w-max pt-2"
+                          onMouseEnter={keepDropdownOpen}
+                          onMouseLeave={closeDropdown}
+                        >
+                          <div className="bg-white border border-[#CCE0F5] rounded-xl shadow-2xl p-1 inline-flex min-h-[200px]">
+                            {/* Category list */}
+                            <div className="w-56 border-r border-[#CCE0F5] p-3">
+                              <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-primary mb-2 px-3">Apparels</p>
+                              {apparelCategories.map((cat) => (
+                                <div
+                                  key={cat.name}
+                                  onMouseEnter={() => openSub(cat.name, "category")}
+                                  onMouseLeave={() => closeSub("category")}
+                                >
+                                  <Link
+                                    to={cat.href}
+                                    onClick={() => setActiveDropdown(null)}
+                                    className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-heading font-medium uppercase tracking-wider transition-all duration-150
+                                      ${hoveredCategory === cat.name
+                                        ? "bg-[#EBF4FF] text-primary"
+                                        : "text-[#111111] hover:bg-[#F0F6FF]"
+                                      }
+                                    `}
+                                  >
+                                    {cat.name}
+                                    <ChevronRight className="w-3.5 h-3.5 opacity-80" />
+                                  </Link>
+                                </div>
+                              ))}
+                            </div>
+
+                            {/* Brands sub-panel */}
+                            <div className="w-64 p-4">
+                              <AnimatePresence mode="wait">
+                                {hoveredCategory ? (
+                                  <motion.div
+                                    key={hoveredCategory}
+                                    initial={{ opacity: 0, x: 5 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: 5 }}
+                                    transition={{ duration: 0.15 }}
+                                    onMouseEnter={keepSubOpen}
+                                    onMouseLeave={() => closeSub("category")}
+                                  >
+                                    <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-primary mb-3">
+                                      Brands for {hoveredCategory}
+                                    </p>
+                                    <div className="grid grid-cols-2 gap-1">
+                                      {(apparelBrands[hoveredCategory as keyof typeof apparelBrands] || []).map((brand) => (
+                                        <Link
+                                          key={brand}
+                                          to={`/shop?category=${encodeURIComponent(hoveredCategory)}&brand=${encodeURIComponent(brand)}`}
+                                          onClick={() => setActiveDropdown(null)}
+                                          className="p-2 rounded-lg text-[11px] font-heading font-semibold text-[#111111] hover:bg-[#F0F6FF] transition-all duration-150 uppercase tracking-wider"
+                                        >
+                                          {brand}
+                                        </Link>
+                                      ))}
+                                    </div>
+                                  </motion.div>
+                                ) : (
+                                  <div className="h-full flex items-center justify-center text-center">
+                                    <p className="text-[10px] text-[#888888] font-heading uppercase tracking-widest leading-relaxed">Hover an apparel type<br/>to see brands</p>
+                                  </div>
+                                )}
+                              </AnimatePresence>
+                            </div>
+                          </div>
+                        </motion.div>
+                      </AnimatePresence>
+                    )}
+
+                    {/* Accessories Mega Dropdown */}
+                    {hasDropdown && activeDropdown === link.label && link.label === "Accessories" && (
+                      <AnimatePresence>
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 10 }}
+                          transition={{ duration: 0.2 }}
+                          className="absolute top-full left-0 mt-0 z-50 min-w-max pt-2"
+                          onMouseEnter={keepDropdownOpen}
+                          onMouseLeave={closeDropdown}
+                        >
+                          <div className="bg-white border border-[#CCE0F5] rounded-xl shadow-2xl p-1 inline-flex min-h-[200px]">
+                            {/* Category list */}
+                            <div className="w-56 border-r border-[#CCE0F5] p-3">
+                              <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-primary mb-2 px-3">Accessories</p>
+                              {accessoryCategories.map((cat) => (
+                                <div
+                                  key={cat.name}
+                                  onMouseEnter={() => openSub(cat.name, "category")}
+                                  onMouseLeave={() => closeSub("category")}
+                                >
+                                  <Link
+                                    to={cat.href}
+                                    onClick={() => setActiveDropdown(null)}
+                                    className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-heading font-medium uppercase tracking-wider transition-all duration-150
+                                      ${hoveredCategory === cat.name
+                                        ? "bg-[#EBF4FF] text-primary"
+                                        : "text-[#111111] hover:bg-[#F0F6FF]"
+                                      }
+                                    `}
+                                  >
+                                    {cat.name}
+                                    <ChevronRight className="w-3.5 h-3.5 opacity-80" />
+                                  </Link>
+                                </div>
+                              ))}
+                            </div>
+
+                            {/* Subcategories & Brands sub-panel */}
+                            <div className="w-72 p-4">
+                              <AnimatePresence mode="wait">
+                                {hoveredCategory ? (
+                                  <motion.div
+                                    key={hoveredCategory}
+                                    initial={{ opacity: 0, x: 5 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: 5 }}
+                                    transition={{ duration: 0.15 }}
+                                    onMouseEnter={keepSubOpen}
+                                    onMouseLeave={() => closeSub("category")}
+                                    className="space-y-4"
+                                  >
+                                    {/* Subcategories */}
+                                    {accessoryCategories.find(c => c.name === hoveredCategory)?.subcategories && (
+                                      <div>
+                                        <p className="text-[9px] font-heading font-bold text-primary/60 uppercase tracking-widest mb-1.5">Types</p>
+                                        <div className="grid grid-cols-2 gap-1">
+                                          {accessoryCategories.find(c => c.name === hoveredCategory)?.subcategories?.map((subcat) => (
+                                            <Link
+                                              key={subcat.name}
+                                              to={subcat.href}
+                                              onClick={() => setActiveDropdown(null)}
+                                              className="px-2 py-1 text-[11px] font-heading font-semibold text-[#111111] hover:text-primary transition-colors uppercase tracking-wider"
+                                            >
+                                              {subcat.name}
+                                            </Link>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    )}
+
+                                    {/* Brands */}
+                                    <div>
+                                      <p className="text-[9px] font-heading font-bold text-primary/60 uppercase tracking-widest mb-1.5">Brands</p>
+                                      <div className="grid grid-cols-2 gap-1">
+                                        {(accessoryBrands[hoveredCategory as keyof typeof accessoryBrands] || []).slice(0, 8).map((brand) => (
+                                          <Link
+                                            key={brand}
+                                            to={`/shop?category=${encodeURIComponent(hoveredCategory)}&brand=${encodeURIComponent(brand)}`}
+                                            onClick={() => setActiveDropdown(null)}
+                                            className="px-2 py-1.5 rounded-lg text-[10px] font-heading font-semibold text-muted-foreground hover:text-primary hover:bg-[#F0F6FF] transition-all duration-150 uppercase tracking-wider"
+                                          >
+                                            {brand}
+                                          </Link>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  </motion.div>
+                                ) : (
+                                  <div className="h-full flex items-center justify-center text-center">
+                                    <p className="text-[10px] text-[#888888] font-heading uppercase tracking-widest leading-relaxed">Hover an accessory<br/>to view details</p>
+                                  </div>
+                                )}
+                              </AnimatePresence>
+                            </div>
+                          </div>
+                        </motion.div>
                       </AnimatePresence>
                     )}
                   </div>
@@ -391,15 +534,96 @@ const Header = () => {
             </div>
             
             <nav className="flex-1 flex flex-col py-8 px-6 overflow-y-auto">
-              {navLinks.map((link, i) => (
-                <Link
-                  key={link.label}
-                  to={link.href}
-                  className="py-4 text-xl font-heading font-bold uppercase tracking-widest text-[#111111] border-b border-[#F0F6FF]"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks.map((link, i) => {
+                const hasDropdown = link.label === "Bikes" || link.label === "Apparels" || link.label === "Accessories";
+                const isExpanded = !!mobileExpanded[link.label];
+                
+                return (
+                  <div key={link.label} className="border-b border-[#F0F6FF] py-2">
+                    {hasDropdown ? (
+                      <div>
+                        <button
+                          onClick={() => toggleMobileExpanded(link.label)}
+                          className="w-full flex items-center justify-between py-2 text-lg font-heading font-bold uppercase tracking-widest text-[#111111]"
+                        >
+                          {link.label}
+                          <ChevronDown className={`w-5 h-5 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`} />
+                        </button>
+                        <AnimatePresence>
+                          {isExpanded && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              className="pl-4 pb-2 flex flex-col gap-2 overflow-hidden"
+                            >
+                              {link.label === "Bikes" &&
+                                bikeDropdownCategories.map((sub) => (
+                                  <Link
+                                    key={sub.label}
+                                    to={sub.href}
+                                    onClick={() => setMobileOpen(false)}
+                                    className="py-1 text-sm font-heading font-semibold text-muted-foreground hover:text-primary uppercase tracking-wider"
+                                  >
+                                    {sub.label}
+                                  </Link>
+                                ))
+                              }
+                              {link.label === "Apparels" &&
+                                apparelCategories.map((sub) => (
+                                  <Link
+                                    key={sub.name}
+                                    to={sub.href}
+                                    onClick={() => setMobileOpen(false)}
+                                    className="py-1 text-sm font-heading font-semibold text-muted-foreground hover:text-primary uppercase tracking-wider"
+                                  >
+                                    {sub.name}
+                                  </Link>
+                                ))
+                              }
+                              {link.label === "Accessories" &&
+                                accessoryCategories.map((sub) => (
+                                  <div key={sub.name} className="py-1">
+                                    <Link
+                                      to={sub.href}
+                                      onClick={() => setMobileOpen(false)}
+                                      className="text-sm font-heading font-bold text-muted-foreground hover:text-primary uppercase tracking-wider block"
+                                    >
+                                      {sub.name}
+                                    </Link>
+                                    {sub.subcategories && (
+                                      <div className="pl-3 mt-1 flex flex-col gap-1 border-l border-primary/10">
+                                        {sub.subcategories.map((subcat) => (
+                                          <Link
+                                            key={subcat.name}
+                                            to={subcat.href}
+                                            onClick={() => setMobileOpen(false)}
+                                            className="text-xs font-heading font-semibold text-muted-foreground/80 hover:text-primary uppercase tracking-wider"
+                                          >
+                                            {subcat.name}
+                                          </Link>
+                                        ))}
+                                      </div>
+                                    )}
+                                  </div>
+                                ))
+                              }
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    ) : (
+                      <Link
+                        to={link.href}
+                        onClick={() => setMobileOpen(false)}
+                        className="block py-2 text-lg font-heading font-bold uppercase tracking-widest text-[#111111]"
+                      >
+                        {link.label}
+                      </Link>
+                    )}
+                  </div>
+                );
+              })}
               
               <div className="mt-auto pt-10 grid grid-cols-2 gap-4">
                 <a href="tel:+919876543210" className="flex flex-col items-center justify-center p-4 bg-[#F0F6FF] rounded-xl text-center">

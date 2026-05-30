@@ -10,8 +10,9 @@ export interface ServicePackage {
   description: string;
   price: number;
   features: string[];
-  icon: "basic" | "standard" | "premium";
+  icon: "basic" | "standard" | "premium" | "safety" | "overhaul-alloy" | "overhaul-carbon";
   popular?: boolean;
+  category?: "hybrid-mtb" | "road";
 }
 
 interface ServicePackagesProps {
@@ -24,23 +25,24 @@ const iconMap = {
   basic: Zap,
   standard: Star,
   premium: Sparkles,
+  safety: Zap,
+  "overhaul-alloy": Star,
+  "overhaul-carbon": Sparkles,
 };
 
 const colorMap = {
   basic: "text-yellow-500",
   standard: "text-blue-500",
   premium: "text-purple-500",
+  safety: "text-emerald-500",
+  "overhaul-alloy": "text-blue-600",
+  "overhaul-carbon": "text-purple-600",
 };
 
 const ServicePackages = ({ packages, onSelectPackage, selectedPackageId }: ServicePackagesProps) => {
   return (
     <div className="space-y-6">
-      <div className="text-center">
-        <h3 className="font-heading text-h3 font-bold text-foreground mb-2">Choose Your Service Package</h3>
-        <p className="text-muted-foreground text-sm">Select the package that best fits your needs</p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6">
         {packages.map((pkg, index) => {
           const Icon = iconMap[pkg.icon];
           const isSelected = selectedPackageId === pkg.id;

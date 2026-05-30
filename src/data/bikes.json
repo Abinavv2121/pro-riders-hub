@@ -1,0 +1,511 @@
+[
+  {
+    "brand": "Trek",
+    "category": "road",
+    "product": "Speed Concept",
+    "variants": [
+      {
+        "size": "M",
+        "color": "Black",
+        "groupset": "Shimano Ultegra Di2",
+        "condition": "new"
+      }
+    ]
+  },
+  {
+    "brand": "Trek",
+    "category": "road",
+    "product": "Madone SL6 Gen8",
+    "variants": [
+      {
+        "size": "M/L",
+        "color": "Crimson",
+        "groupset": "Shimano 105 Di2",
+        "condition": "new"
+      }
+    ]
+  },
+  {
+    "brand": "Trek",
+    "category": "road",
+    "product": "Madone SL7 Gen8",
+    "variants": [
+      {
+        "size": "M/L",
+        "color": "Purple",
+        "groupset": "Shimano Ultegra Di2",
+        "condition": "new"
+      }
+    ]
+  },
+  {
+    "brand": "Trek",
+    "category": "road",
+    "product": "Madone SL5 Gen8",
+    "variants": [
+      {
+        "size": "L",
+        "color": "Black",
+        "groupset": "Shimano 105",
+        "condition": "new"
+      }
+    ]
+  },
+  {
+    "brand": "Trek",
+    "category": "road",
+    "product": "Emonda ALR 5",
+    "variants": [
+      {
+        "size": "L",
+        "color": "Red",
+        "groupset": "Shimano 105",
+        "condition": "new"
+      },
+      {
+        "size": "S",
+        "color": "Black/Grey",
+        "groupset": "Shimano 105",
+        "condition": "new"
+      }
+    ]
+  },
+  {
+    "brand": "Trek",
+    "category": "road",
+    "product": "Domane AL5 Gen4",
+    "variants": [
+      {
+        "size": "L",
+        "color": "Black",
+        "groupset": "Shimano 105",
+        "condition": "new"
+      },
+      {
+        "size": "XXXS",
+        "color": "Black",
+        "groupset": "Shimano 105",
+        "condition": "new"
+      }
+    ]
+  },
+  {
+    "brand": "Trek",
+    "category": "road",
+    "product": "Emonda SL5",
+    "variants": [
+      {
+        "size": "XS",
+        "color": "White",
+        "groupset": "Shimano 105 (11-speed)",
+        "condition": "new"
+      }
+    ]
+  },
+  {
+    "brand": "Trek",
+    "category": "road",
+    "product": "Domane AL4 Gen4",
+    "variants": [
+      {
+        "size": "M",
+        "color": "Blue",
+        "groupset": "Shimano Tiagra",
+        "condition": "new"
+      }
+    ]
+  },
+
+  {
+    "brand": "Scott",
+    "category": "road",
+    "product": "Addict 20",
+    "variants": [
+      {
+        "size": "L",
+        "color": "Green",
+        "groupset": "Shimano 105",
+        "year": 2023
+      },
+      {
+        "size": "S",
+        "color": "Green",
+        "groupset": "Shimano 105",
+        "year": 2023
+      }
+    ]
+  },
+  {
+    "brand": "Scott",
+    "category": "road",
+    "product": "Addict 50",
+    "variants": [
+      {
+        "size": "M",
+        "color": "Grey",
+        "groupset": "Shimano 105",
+        "year": 2025
+      }
+    ]
+  },
+  {
+    "brand": "Scott",
+    "category": "road",
+    "product": "Speedster Gravel 50",
+    "variants": [
+      {
+        "size": "S",
+        "color": "Olive Green",
+        "groupset": "Shimano Claris"
+      }
+    ]
+  },
+  {
+    "brand": "Scott",
+    "category": "road",
+    "product": "Speedster 40 Rim",
+    "variants": [
+      {
+        "size": "L",
+        "color": "Black/Green",
+        "groupset": "Shimano Sora"
+      }
+    ]
+  },
+  {
+    "brand": "Scott",
+    "category": "road",
+    "product": "Speedster 10",
+    "variants": [
+      {
+        "size": "XXS",
+        "color": "Black",
+        "groupset": "Shimano 105"
+      },
+      {
+        "size": "S",
+        "color": "Green",
+        "groupset": "Shimano 105"
+      }
+    ]
+  },
+  {
+    "brand": "Scott",
+    "category": "road",
+    "product": "Foil RC 20",
+    "variants": [
+      {
+        "size": "M",
+        "color": "Light Blue/Black",
+        "groupset": "Shimano Ultegra Di2"
+      }
+    ]
+  },
+
+  {
+    "brand": "Pinarello",
+    "category": "road",
+    "product": "Granger Gravel",
+    "variants": [
+      {
+        "size": "S",
+        "color": "Olive Green",
+        "groupset": "Shimano GRX",
+        "condition": "used"
+      }
+    ]
+  },
+
+  {
+    "brand": "Cannondale",
+    "category": "road",
+    "product": "SuperSix Evo",
+    "variants": [
+      {"size": "48", "color": "Black", "groupset": "Shimano 105"},
+      {"size": "54", "color": "Black", "groupset": "Shimano 105"},
+      {"size": "51", "color": "Black", "groupset": "Shimano 105"}
+    ]
+  },
+  {
+    "brand": "Cannondale",
+    "category": "road",
+    "product": "Synapse Carbon",
+    "variants": [
+      {
+        "size": "51",
+        "color": "Red",
+        "groupset": "Shimano 105 Di2"
+      }
+    ]
+  },
+  {
+    "brand": "Cannondale",
+    "category": "road",
+    "product": "Synapse Hi-Mod",
+    "variants": [
+      {
+        "size": "54",
+        "color": "Black",
+        "groupset": "Shimano Ultegra (11-speed)"
+      }
+    ]
+  },
+  {
+    "brand": "Cannondale",
+    "category": "road",
+    "product": "Synapse AL",
+    "variants": [
+      {"size": "54", "color": "Yellow", "groupset": "Shimano Claris"},
+      {"size": "54", "color": "Grey", "groupset": "Shimano Sora"},
+      {"size": "51", "color": "Black", "groupset": "Shimano 105"},
+      {"size": "51", "color": "White", "groupset": "Shimano 105"}
+    ]
+  },
+  {
+    "brand": "Cannondale",
+    "category": "road",
+    "product": "Optimo",
+    "variants": [
+      {"size": "51", "color": "Blue", "groupset": "Shimano Claris"},
+      {"size": "54", "color": "Blue", "groupset": "Shimano Claris"}
+    ]
+  },
+
+  {
+    "brand": "Merida",
+    "category": "road",
+    "product": "Reacto 4000",
+    "variants": [
+      {"size": "XS", "color": "Dark Blue", "groupset": "Shimano 105"},
+      {"size": "XXS", "color": "Dark Blue", "groupset": "Shimano 105"},
+      {"size": "S", "color": "Dark Blue", "groupset": "Shimano 105"}
+    ]
+  },
+  {
+    "brand": "Merida",
+    "category": "road",
+    "product": "Scultura Endurance 4000",
+    "variants": [
+      {"size": "XS", "color": "Grey", "groupset": "Shimano 105"}
+    ]
+  },
+  {
+    "brand": "Merida",
+    "category": "road",
+    "product": "Scultura 4000",
+    "variants": [
+      {"size": "S", "color": "Silver", "groupset": "Shimano 105"}
+    ]
+  },
+
+  {
+    "brand": "Colnago",
+    "category": "road",
+    "product": "V4RS",
+    "variants": [
+      {"size": "M", "color": "Black", "groupset": "Shimano Ultegra Di2"}
+    ]
+  },
+  {
+    "brand": "Guerciotti",
+    "category": "road",
+    "product": "Eureka Air",
+    "variants": [
+      {"size": "L", "color": "Black", "groupset": "Shimano 105 (11-speed)"}
+    ]
+  },
+  {
+    "brand": "Wilier",
+    "category": "road",
+    "product": "GTR Rim",
+    "variants": [
+      {"size": "M", "color": "Red", "groupset": "Shimano 105 (11-speed)"}
+    ]
+  },
+  {
+    "brand": "Lapierre",
+    "category": "road",
+    "product": "Xelius SL7",
+    "variants": [
+      {"size": "L", "color": "Blue", "groupset": "Shimano Ultegra Di2"}
+    ]
+  },
+  {
+    "brand": "Lapierre",
+    "category": "road",
+    "product": "Aircode DRS",
+    "variants": [
+      {"size": "XL", "color": "Gold", "groupset": "Shimano 105 (11-speed)"},
+      {"size": "M", "color": "Blue", "groupset": "Shimano 105 (11-speed)", "condition": "used"}
+    ]
+  },
+
+  {
+    "brand": "Argon 18",
+    "category": "road",
+    "product": "Nitrogen",
+    "variants": [
+      {"size": "L", "color": "Blue/Grey", "groupset": "Shimano 105"}
+    ]
+  },
+
+  {
+    "brand": "Bergamont",
+    "category": "road",
+    "product": "Grandurance Elite",
+    "variants": [
+      {"size": "L", "color": "Black", "groupset": "Shimano 105"}
+    ]
+  },
+  {
+    "brand": "Bergamont",
+    "category": "road",
+    "product": "Grandurance RB3",
+    "variants": [
+      {"size": "L", "color": "Silver", "groupset": "Shimano Claris"}
+    ]
+  },
+
+  {
+    "brand": "Cipollini",
+    "category": "road",
+    "product": "Bond",
+    "variants": [
+      {"size": "XS", "color": "Blue", "groupset": "Shimano 105"}
+    ]
+  },
+
+  {
+    "brand": "Polygon",
+    "category": "road",
+    "product": "Stratos S5D",
+    "variants": [
+      {"size": "M", "color": "White", "groupset": "Shimano 105"}
+    ]
+  },
+  {
+    "brand": "Polygon",
+    "category": "road",
+    "product": "Stratos S2",
+    "variants": [
+      {"size": "S", "color": "Light Blue", "groupset": "Shimano Claris"},
+      {"size": "M", "color": "Light Blue", "groupset": "Shimano Claris"},
+      {"size": "L", "color": "Light Blue", "groupset": "Shimano Claris"}
+    ]
+  },
+  {
+    "brand": "Polygon",
+    "category": "road",
+    "product": "Stratos 3",
+    "variants": [
+      {"size": "S", "color": "Dark Brown", "groupset": "Shimano Sora"}
+    ]
+  },
+  {
+    "brand": "Polygon",
+    "category": "road",
+    "product": "Stratos 4",
+    "variants": [
+      {"size": "M", "color": "Orangish Brown", "groupset": null}
+    ]
+  },
+
+  {
+    "brand": "Bottachia",
+    "category": "road",
+    "product": "Duello",
+    "variants": [
+      {"size": "L", "color": "Red", "groupset": "Campagnolo"}
+    ]
+  },
+
+
+  {
+    "brand": "Trek",
+    "category": "hybrid",
+    "product": "FX3",
+    "variants": [
+      {"size": "S", "color": "Grey", "groupset": "Shimano Deore"},
+      {"size": "M", "color": "Red", "groupset": "Shimano Deore"},
+      {"size": "L", "color": "Maroon", "groupset": "Shimano Deore"},
+      {"size": "XL", "color": "Grey", "groupset": "Shimano Deore"}
+    ]
+  },
+  {
+    "brand": "Trek",
+    "category": "hybrid",
+    "product": "FX2",
+    "variants": [
+      {"size": "L", "color": "Blue", "groupset": "Shimano Altus"}
+    ]
+  },
+  {
+    "brand": "Trek",
+    "category": "hybrid",
+    "product": "Dual Sport",
+    "variants": [
+      {"size": "M", "color": "Black", "groupset": "Shimano Altus"}
+    ]
+  },
+  {
+    "brand": "Scott",
+    "category": "hybrid",
+    "product": "Sub Cross 50",
+    "variants": [
+      {"size": "M", "color": "Olive Green", "groupset": "Shimano Tourney"}
+    ]
+  },
+
+  
+  {
+    "brand": "Trek",
+    "category": "mtb",
+    "product": "Marlin 5",
+    "variants": [
+      {"size": "M", "color": "Blue", "groupset": "Shimano Cues"}
+    ]
+  },
+  {
+    "brand": "Trek",
+    "category": "mtb",
+    "product": "Marlin 4",
+    "variants": [
+      {"size": "M", "color": "Purple", "groupset": "Shimano Essa"},
+      {"size": "L", "color": "Black", "groupset": "Shimano Essa"}
+    ]
+  },
+  {
+    "brand": "Scott",
+    "category": "mtb",
+    "product": "Aspect 960",
+    "variants": [
+      {"size": "L", "color": "Orange", "groupset": "Shimano Tourney"}
+    ]
+  },
+  {
+    "brand": "Polygon",
+    "category": "mtb",
+    "product": "Cascade 2",
+    "variants": [
+      {"size": "M", "color": "Blue", "groupset": "Shimano Tourney"}
+    ]
+  },
+
+
+  {
+    "brand": "Java",
+    "category": "road",
+    "product": "Fuoco Disc",
+    "variants": [
+      {"size": "S", "color": "Ash", "groupset": "Shimano 105 (11-speed)", "condition": "used"}
+    ]
+  },
+  {
+    "brand": "Trek",
+    "category": "road",
+    "product": "Domane AL5 Gen4 (Used)",
+    "variants": [
+      {"size": "S", "color": "Green", "groupset": "Shimano 105 (11-speed)", "condition": "used"}
+    ]
+  }
+]
