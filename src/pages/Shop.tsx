@@ -1,4 +1,5 @@
 import { BikeCard } from "@/components/BikeCard";
+import { ProductCard } from "@/components/ProductCard";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
@@ -7,8 +8,10 @@ import {
   bikeBrands, 
   bikeCategories, 
   bikes, 
-  priceRanges 
+  priceRanges,
+  Bike
 } from "@/data/bikes";
+import { products, Product } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -47,6 +50,13 @@ const Shop = () => {
   const [sortBy, setSortBy] = useState("featured");
   const [showFilters, setShowFilters] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  const allBrands = useMemo(() => {
+    const brands = new Set<string>();
+    bikes.forEach(b => brands.add(b.brand));
+    products.forEach(p => brands.add(p.brand));
+    return Array.from(brands).sort();
+  }, []);
 
   // Sync parameters from URL
   useEffect(() => {
@@ -91,8 +101,8 @@ const Shop = () => {
     }
   };
 
-  const filteredBikes = useMemo(() => {
-    let result = bikes.filter((bike) => {
+  const combinedItems = useMemo(() => {
+    const filteredBikes = bikes.filter((bike) => {
       const matchesSearch = 
         bike.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         bike.brand.toLowerCase().includes(searchQuery.toLowerCase());
@@ -114,6 +124,27 @@ const Shop = () => {
 
       return matchesSearch && matchesCategory && matchesBrand && matchesPrice && matchesSale;
     });
+
+    const filteredProducts = products.filter((product) => {
+      const matchesSearch = 
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.brand.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
+      
+      const matchesBrand = selectedBrand.length === 0 || selectedBrand.includes(product.brand);
+      
+      const matchesPrice = selectedPriceRange === null || (() => {
+        const range = priceRanges[selectedPriceRange];
+        return product.price >= range.min && product.price <= range.max;
+      })();
+
+      const matchesSale = !isSale || product.tag === "Sale" || (product.originalPrice !== undefined && product.originalPrice > product.price);
+
+      return matchesSearch && matchesCategory && matchesBrand && matchesPrice && matchesSale;
+    });
+
+    const result = [...filteredBikes, ...filteredProducts];
 
     // Sorting
     switch (sortBy) {
@@ -323,8 +354,8 @@ const Shop = () => {
             {/* Results Info */}
             <div className="flex items-center justify-between mb-8">
               <p className="text-[13px] text-[#666666]">
-                Showing <span className="font-bold text-[#111111]">{filteredBikes.length}</span> bikes 
-                {selectedCategory !== 'all' && <span> in <span className="text-primary font-bold uppercase tracking-wider">{selectedCategory}</span></span>}
+                Showing <span className="font-bold text-[#111111]">{combinedItems.length}</span> items 
+                {selectedCategory !== 'all' && <span> in <span className="text-primary font-bold uppercase tracking-wider">{selectedCategory.replace(/-/g, ' ')}</span></span>}
               </p>
               
               {(selectedCategory !== "all" || selectedBrand.length > 0 || selectedPriceRange !== null || searchQuery !== "") && (
@@ -357,16 +388,19 @@ const Shop = () => {
                     </div>
                   ))}
                 </motion.div>
-              ) : filteredBikes.length > 0 ? (
+              ) : combinedItems.length > 0 ? (
                 <motion.div 
                   key="grid"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8"
                 >
-                  {filteredBikes.map((bike, index) => (
-                    <BikeCard key={bike.id} bike={bike} index={index} onAddItem={addItem} />
-                  ))}
+                  {combinedItems.map((item, index) => {
+                    if ('gears' in item) {
+                      return <BikeCard key={`bike-${item.id}`} bike={item as Bike} index={index} onAddItem={addItem} />;
+                    }
+                    return <ProductCard key={`prod-${item.id}`} product={item as Product} index={index} onAddItem={addItem} />;
+                  })}
                 </motion.div>
               ) : (
                 <motion.div 
@@ -380,7 +414,7 @@ const Shop = () => {
                   </div>
                   <h3 className="text-2xl font-heading font-black text-[#111111] uppercase tracking-tight mb-2">No Matches Found</h3>
                   <p className="text-[#666666] mb-8 max-w-sm">
-                    We couldn't find any bikes matching your current filters. Try adjusting your search or resetting all filters.
+                    We couldn't find any items matching your current filters. Try adjusting your search or resetting all filters.
                   </p>
                   <Button onClick={clearFilters} className="bg-primary hover:bg-primary/90 text-white rounded-full font-heading font-bold uppercase tracking-wider px-8">
                     Reset All Filters
@@ -422,15 +456,15 @@ const Shop = () => {
                 <div>
                   <h4 className="font-heading font-bold text-[#111111] text-[12px] uppercase tracking-widest mb-6 border-b border-primary/20 pb-2">Brands</h4>
                   <div className="space-y-4">
-                    {bikeBrands.map((brand) => (
-                      <label key={brand.name} className="flex items-center gap-3">
+                    {allBrands.map((brand) => (
+                      <label key={brand} className="flex items-center gap-3">
                         <input 
                           type="checkbox" 
                           className="w-5 h-5 accent-primary border-[#CCE0F5] rounded"
-                          checked={selectedBrand.includes(brand.name)}
-                          onChange={() => toggleBrand(brand.name)}
+                          checked={selectedBrand.includes(brand)}
+                          onChange={() => toggleBrand(brand)}
                         />
-                        <span className="text-[14px] text-[#555555]">{brand.name}</span>
+                        <span className="text-[14px] text-[#555555]">{brand}</span>
                       </label>
                     ))}
                   </div>
@@ -468,7 +502,7 @@ const Shop = () => {
               </div>
               <div className="p-6 border-t border-[#CCE0F5] bg-[#F9FBFF]">
                 <Button onClick={() => setShowFilters(false)} className="w-full bg-[#111111] hover:bg-primary text-white rounded-xl h-14 font-heading font-bold uppercase tracking-widest shadow-xl">
-                  Show {filteredBikes.length} Results
+                  Show {combinedItems.length} Results
                 </Button>
               </div>
             </motion.div>

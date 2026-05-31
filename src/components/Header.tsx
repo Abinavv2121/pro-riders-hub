@@ -82,6 +82,10 @@ const Header = () => {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [hoveredBrand, setHoveredBrand] = useState<string | null>(null);
   const [mobileExpanded, setMobileExpanded] = useState<Record<string, boolean>>({});
+  
+  const toggleMobileExpanded = (key: string) => {
+    setMobileExpanded(prev => ({ ...prev, [key]: !prev[key] }));
+  };
   const dropdownTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const subTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const location = useLocation();
@@ -333,7 +337,7 @@ const Header = () => {
                                       {(apparelBrands[hoveredCategory as keyof typeof apparelBrands] || []).map((brand) => (
                                         <Link
                                           key={brand}
-                                          to={`/shop?category=${encodeURIComponent(hoveredCategory)}&brand=${encodeURIComponent(brand)}`}
+                                          to={`/shop?category=${apparelCategories.find(c => c.name === hoveredCategory)?.href.split('category=')[1] || hoveredCategory}&brand=${encodeURIComponent(brand)}`}
                                           onClick={() => setActiveDropdown(null)}
                                           className="p-2 rounded-lg text-[11px] font-heading font-semibold text-[#111111] hover:bg-[#F0F6FF] transition-all duration-150 uppercase tracking-wider"
                                         >
@@ -433,7 +437,7 @@ const Header = () => {
                                         {(accessoryBrands[hoveredCategory as keyof typeof accessoryBrands] || []).slice(0, 8).map((brand) => (
                                           <Link
                                             key={brand}
-                                            to={`/shop?category=${encodeURIComponent(hoveredCategory)}&brand=${encodeURIComponent(brand)}`}
+                                            to={`/shop?category=${accessoryCategories.find(c => c.name === hoveredCategory)?.href.split('category=')[1] || hoveredCategory}&brand=${encodeURIComponent(brand)}`}
                                             onClick={() => setActiveDropdown(null)}
                                             className="px-2 py-1.5 rounded-lg text-[10px] font-heading font-semibold text-muted-foreground hover:text-primary hover:bg-[#F0F6FF] transition-all duration-150 uppercase tracking-wider"
                                           >

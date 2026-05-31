@@ -11,6 +11,7 @@ import About from "./pages/About";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminLogin from "./pages/AdminLogin";
 import Auth from "./pages/Auth";
+import ApparelAccessoryPage from "./pages/ApparelAccessoryPage";
 import BikeServicing from "./pages/BikeServicing";
 import BrandGallery from "./pages/BrandGallery";
 import Community from "./pages/Community";
@@ -58,6 +59,8 @@ const App = () => {
                 <Route path="/dashboard" element={<UserDashboard />} />
                 <Route path="*" element={<NotFound />} />
                 <Route path="/product/:id" element={<ProductPage />} />
+                <Route path="/product/apparel/:id" element={<ApparelAccessoryPage />} />
+                <Route path="/product/accessory/:id" element={<ApparelAccessoryPage />} />
                 <Route path="/brand/:brandSlug" element={<BrandGallery />} />
               </Routes>
             </BrowserRouter>

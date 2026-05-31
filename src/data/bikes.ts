@@ -71,7 +71,7 @@ export interface Bike {
     features?: string[];
     specifications?: Record<string, string>;
     components?: Record<string, string>;
-    condition?: "new" | "used";
+    condition?: "new" | "used" | "restored";
     year?: number;
 }
 
@@ -560,7 +560,7 @@ const existingBikes: Bike[] = [
 // (only bikes NOT already present as existing entries)
 // ═════════════════════════════════════════════════════
 
-let nextId = 100;
+const nextId = 100;
 
 interface JsonVariant {
     size: string;
