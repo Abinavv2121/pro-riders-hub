@@ -27,8 +27,8 @@ import AnnouncementBar from "./AnnouncementBar";
 const navLinks = [
   { label: "Sale", href: "/shop?sale=true" },
   { label: "Bikes", href: "/shop" },
-  { label: "Apparels", href: "/shop?category=apparels" },
-  { label: "Accessories", href: "/shop?category=accessories" },
+  { label: "Apparels", href: "/apparels" },
+  { label: "Accessories", href: "/accessories" },
   { label: "Service", href: "/servicing" },
   { label: "Community", href: "/community" },
   { label: "About", href: "/about" },
@@ -337,7 +337,7 @@ const Header = () => {
                                       {(apparelBrands[hoveredCategory as keyof typeof apparelBrands] || []).map((brand) => (
                                         <Link
                                           key={brand}
-                                          to={`/shop?category=${apparelCategories.find(c => c.name === hoveredCategory)?.href.split('category=')[1] || hoveredCategory}&brand=${encodeURIComponent(brand)}`}
+                                          to={`/apparels?category=${apparelCategories.find(c => c.name === hoveredCategory)?.href.split('category=')[1] || hoveredCategory}&brand=${encodeURIComponent(brand)}`}
                                           onClick={() => setActiveDropdown(null)}
                                           className="p-2 rounded-lg text-[11px] font-heading font-semibold text-[#111111] hover:bg-[#F0F6FF] transition-all duration-150 uppercase tracking-wider"
                                         >
@@ -437,7 +437,7 @@ const Header = () => {
                                         {(accessoryBrands[hoveredCategory as keyof typeof accessoryBrands] || []).slice(0, 8).map((brand) => (
                                           <Link
                                             key={brand}
-                                            to={`/shop?category=${accessoryCategories.find(c => c.name === hoveredCategory)?.href.split('category=')[1] || hoveredCategory}&brand=${encodeURIComponent(brand)}`}
+                                            to={`/accessories?category=${accessoryCategories.find(c => c.name === hoveredCategory)?.href.split('category=')[1] || hoveredCategory}&brand=${encodeURIComponent(brand)}`}
                                             onClick={() => setActiveDropdown(null)}
                                             className="px-2 py-1.5 rounded-lg text-[10px] font-heading font-semibold text-muted-foreground hover:text-primary hover:bg-[#F0F6FF] transition-all duration-150 uppercase tracking-wider"
                                           >

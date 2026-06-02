@@ -12,6 +12,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminLogin from "./pages/AdminLogin";
 import Auth from "./pages/Auth";
 import ApparelAccessoryPage from "./pages/ApparelAccessoryPage";
+import CategoryListingPage from "./pages/CategoryListingPage";
 import BikeServicing from "./pages/BikeServicing";
 import BrandGallery from "./pages/BrandGallery";
 import Community from "./pages/Community";
@@ -46,6 +47,8 @@ const App = () => {
                 <Route path="/" element={<Index />} />
                 <Route path="/shop" element={<Shop />} />
                 <Route path="/shop/:category" element={<Shop />} />
+                <Route path="/apparels" element={<CategoryListingPage type="apparel" title="Apparels" description="Cycling apparel built for comfort, performance, and every ride." />} />
+                <Route path="/accessories" element={<CategoryListingPage type="accessory" title="Accessories" description="Essential cycling accessories for safer, smoother, and smarter rides." />} />
                 <Route path="/services" element={<Services />} />
                 <Route path="/servicing" element={<BikeServicing />} />
                 <Route path="/rental" element={<Rental />} />

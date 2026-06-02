@@ -354,7 +354,7 @@ const ApparelAccessoryPage = () => {
               Similar {product.type === "apparel" ? "Apparel" : "Accessories"}
             </h2>
             <Link
-              to={`/shop?category=${product.category}`}
+              to={`/${product.type === "apparel" ? "apparels" : "accessories"}?category=${product.category}`}
               className="absolute right-0 text-[12px] font-heading font-black text-primary uppercase tracking-widest flex items-center gap-1.5 hover:underline"
             >
               View All <ArrowRight className="w-4 h-4" />
