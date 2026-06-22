@@ -180,10 +180,10 @@ const CategoryListingPage = ({ type, title, description }: CategoryListingPagePr
             <div className="h-6 w-px bg-[#CCE0F5] flex-shrink-0" />
 
             {/* Category Buttons */}
-            <div className="flex items-center justify-start md:justify-center gap-4 overflow-x-auto no-scrollbar flex-1">
+            <div className="flex items-center justify-start md:justify-center gap-4 flex-1">
               <button
                 onClick={() => setSelectedCategory("all")}
-                className={`whitespace-nowrap px-6 py-2.5 rounded-full font-heading font-bold text-[11px] uppercase tracking-widest transition-all duration-300 border ${
+                className={`whitespace-nowrap flex-shrink-0 px-6 py-2.5 rounded-full font-heading font-bold text-[11px] uppercase tracking-widest transition-all duration-300 border ${
                   selectedCategory === "all"
                     ? "bg-primary border-primary text-white shadow-lg"
                     : "bg-white border-[#CCE0F5] text-[#111111] hover:border-primary hover:text-primary"
@@ -195,7 +195,7 @@ const CategoryListingPage = ({ type, title, description }: CategoryListingPagePr
                 <button
                   key={cat}
                   onClick={() => handleSubcategoryClick(cat)}
-                  className={`whitespace-nowrap px-6 py-2.5 rounded-full font-heading font-bold text-[11px] uppercase tracking-widest transition-all duration-300 border ${
+                  className={`whitespace-nowrap flex-shrink-0 px-6 py-2.5 rounded-full font-heading font-bold text-[11px] uppercase tracking-widest transition-all duration-300 border ${
                     selectedCategory === cat
                       ? "bg-primary border-primary text-white shadow-lg"
                       : "bg-white border-[#CCE0F5] text-[#111111] hover:border-primary hover:text-primary"
@@ -252,7 +252,7 @@ const CategoryListingPage = ({ type, title, description }: CategoryListingPagePr
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8"
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
                 >
                   {[...Array(6)].map((_, i) => (
                     <div
@@ -272,13 +272,14 @@ const CategoryListingPage = ({ type, title, description }: CategoryListingPagePr
                   key="grid"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8"
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
                 >
-                  {filteredItems.map((item, index) => (
+                   {filteredItems.map((item, index) => (
                     <ProductCard
                       key={`prod-${item.id}`}
                       product={item as Product}
                       index={index}
+                      layout="left"
                       onAddItem={addItem}
                     />
                   ))}

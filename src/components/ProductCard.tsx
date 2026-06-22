@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 interface ProductCardProps {
   product: Product;
   index: number;
+  layout?: "center" | "left";
   onAddItem?: (item: {
     id: number;
     name: string;
@@ -15,7 +16,7 @@ interface ProductCardProps {
   }) => void;
 }
 
-export const ProductCard = ({ product, index }: ProductCardProps) => {
+export const ProductCard = ({ product, index, layout = "center" }: ProductCardProps) => {
   const navigate = useNavigate();
 
   const formatPrice = (price: number) => {
@@ -43,11 +44,11 @@ export const ProductCard = ({ product, index }: ProductCardProps) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.05, ease: [0.4, 0, 0.2, 1] }}
       onClick={() => navigate(`/product/${routePrefix}/${product.id}`)}
-      className="group relative bg-white transition-all duration-300 cursor-pointer flex flex-col items-center select-none"
+      className={`product-card group relative bg-white transition-all duration-300 cursor-pointer flex flex-col items-center select-none ${layout === "left" ? "layout-left" : ""}`}
     >
 
       {/* Stock Status Badge */}
-      <div className="absolute top-2 right-2 z-20 pointer-events-none">
+      <div className={`absolute top-2 ${layout === "left" ? "left-2" : "right-2"} z-20 pointer-events-none`}>
         <span className={`text-[8px] font-sans font-extrabold uppercase tracking-widest px-2 py-0.5 rounded border ${getStockBadgeClass(product.stockStatus)}`}>
           {product.stockStatus || "In Stock"}
         </span>
@@ -72,110 +73,62 @@ export const ProductCard = ({ product, index }: ProductCardProps) => {
       </div>
 
       {/* Product Details */}
-      <div className="w-full text-center" style={{ padding: '22px 18px 34px' }}>
+      <div className="product-card-info">
 
         {/* Product Name */}
-        <h3
-          className="font-tenor text-[#0b0f14] uppercase"
-          style={{
-            fontSize: '16px',
-            lineHeight: 1.45,
-            fontWeight: 700,
-            letterSpacing: '0.15em',
-            margin: '0 0 6px',
-          }}
-        >
-          {product.name}
-        </h3>
+        {layout === "left" ? (
+          <div className="product-card-title-row">
+            <h3 className="product-card-title">
+              {product.name}
+            </h3>
+            <div className="product-card-rating-inline">
+              <span className="rating-star">★</span>
+              <span>{Math.round(product.rating || 5)}</span>
+            </div>
+          </div>
+        ) : (
+          <h3 className="product-card-title">
+            {product.name}
+          </h3>
+        )}
 
         {/* Brand / Category */}
-        <p
-          className="font-tenor text-[#0b0f14] uppercase"
-          style={{
-            fontSize: '12px',
-            lineHeight: 1.4,
-            fontWeight: 600,
-            letterSpacing: '0.16em',
-            marginBottom: '10px',
-            color: '#666',
-          }}
-        >
+        <p className="product-card-variant">
           {product.brand} • {product.category.replace(/-/g, ' ')}
         </p>
 
         {/* Price Row */}
-        <div
-          className="font-outfit flex items-center justify-center gap-2 flex-wrap"
-          style={{ marginBottom: '12px' }}
-        >
+        <div className="product-card-price">
           {isOnSale ? (
             <>
-              <span
-                style={{
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  color: '#9ca3af',
-                  textDecoration: 'line-through',
-                  letterSpacing: '0.04em',
-                }}
-              >
+              <span className="original-price">
                 {formatPrice(product.originalPrice!)}
               </span>
-              <span
-                style={{
-                  fontSize: '16px',
-                  fontWeight: 700,
-                  color: '#0b0f14',
-                  letterSpacing: '0.04em',
-                }}
-              >
+              <span className="current-price">
                 {formatPrice(product.price)}
               </span>
             </>
           ) : (
-            <span
-              style={{
-                fontSize: '16px',
-                fontWeight: 700,
-                color: '#0b0f14',
-                letterSpacing: '0.04em',
-              }}
-            >
+            <span className="current-price">
               {formatPrice(product.price)}
             </span>
           )}
         </div>
 
         {/* Star Rating & Review Count */}
-        <div
-          className="flex items-center justify-center"
-          style={{ gap: '6px', marginTop: '8px' }}
-        >
-          <span
-            style={{
-              color: '#f5b400',
-              fontSize: '15px',
-              letterSpacing: '0.08em',
-              lineHeight: 1,
-            }}
-          >
-            {"★".repeat(Math.round(product.rating || 5))}
-            <span style={{ color: '#d4d4d4' }}>
-              {"☆".repeat(5 - Math.round(product.rating || 5))}
+        {layout !== "left" && (
+          <div className="product-card-reviews">
+            <span className="review-stars">
+              {"★".repeat(Math.round(product.rating || 5))}
+              <span style={{ color: '#d4d4d4' }}>
+                {"☆".repeat(5 - Math.round(product.rating || 5))}
+              </span>
             </span>
-          </span>
-          <span
-            className="font-outfit"
-            style={{
-              fontSize: '13px',
-              fontWeight: 600,
-              color: '#0b0f14',
-              lineHeight: 1,
-            }}
-          >
-            {product.reviews || 2} reviews
-          </span>
-        </div>
+            <span className="review-count">
+              {product.reviews || 2} reviews
+            </span>
+          </div>
+        )}
 
       </div>
     </motion.div>

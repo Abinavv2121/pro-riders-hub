@@ -18,7 +18,6 @@ const HotDealsGrid = () => {
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center mb-12 text-center">
           <div className="flex items-center gap-3 mb-3">
-            <span className="text-3xl">🔥</span>
             <h2 className="text-3xl md:text-4xl font-heading font-black text-[#111111] uppercase tracking-tight">
               Hot Deals
             </h2>
@@ -34,6 +33,7 @@ const HotDealsGrid = () => {
               key={bike.id} 
               bike={bike} 
               index={index} 
+              layout="left"
               onAddItem={addItem}
             />
           ))}

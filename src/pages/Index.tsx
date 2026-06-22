@@ -8,7 +8,7 @@ import HotDealsGrid from "@/components/home/HotDealsGrid";
 import ShopByCategory from "@/components/home/ShopByCategory";
 import FeaturedBrands from "@/components/home/FeaturedBrands";
 import NewArrivalsGrid from "@/components/home/NewArrivalsGrid";
-import PromoBanners from "@/components/home/PromoBanners";
+
 import WhyChoose from "@/components/home/WhyChoose";
 import CustomerTestimonials from "@/components/home/CustomerTestimonials";
 import { motion } from "framer-motion";
@@ -60,10 +60,7 @@ const Index = () => {
           <NewArrivalsGrid />
         </motion.div>
         
-        {/* 9. Promo Banners */}
-        <motion.div {...revealProps}>
-          <PromoBanners />
-        </motion.div>
+
         
         {/* 10. Why Choose Pro-Bikers */}
         <motion.div {...revealProps}>

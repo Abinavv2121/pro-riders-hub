@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 interface BikeCardProps {
   bike: Bike;
   index: number;
+  layout?: "center" | "left";
   onAddItem?: (item: {
     id: number;
     name: string;
@@ -15,7 +16,7 @@ interface BikeCardProps {
   }) => void;
 }
 
-export const BikeCard = ({ bike, index }: BikeCardProps) => {
+export const BikeCard = ({ bike, index, layout = "center" }: BikeCardProps) => {
   const navigate = useNavigate();
 
   const formatPrice = (price: number) => {
@@ -47,11 +48,11 @@ export const BikeCard = ({ bike, index }: BikeCardProps) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.05, ease: [0.4, 0, 0.2, 1] }}
       onClick={() => navigate(`/product/${bike.id}`)}
-      className="group relative bg-white transition-all duration-300 cursor-pointer flex flex-col items-center select-none"
+      className={`bike-product-card group relative bg-white transition-all duration-300 cursor-pointer flex flex-col items-center select-none ${layout === "left" ? "layout-left" : ""}`}
     >
 
       {/* Stock Status Badge */}
-      <div className="absolute top-2 right-2 z-20 pointer-events-none">
+      <div className={`absolute top-2 ${layout === "left" ? "left-2" : "right-2"} z-20 pointer-events-none`}>
         <span className={`text-[8px] font-sans font-extrabold uppercase tracking-widest px-2 py-0.5 rounded border ${getStockBadgeClass(bike.stockStatus)}`}>
           {bike.stockStatus || "In Stock"}
         </span>
@@ -69,135 +70,78 @@ export const BikeCard = ({ bike, index }: BikeCardProps) => {
       </div>
 
       {/* Product Details */}
-      <div className="w-full text-center" style={{ padding: '22px 18px 34px' }}>
+      <div className="bike-card-info">
 
         {/* Product Name */}
-        <h3
-          className="font-tenor text-[#0b0f14] uppercase"
-          style={{
-            fontSize: '18px',
-            lineHeight: 1.45,
-            fontWeight: 700,
-            letterSpacing: '0.18em',
-            margin: '0 0 6px',
-          }}
-        >
-          {bike.name.toLowerCase().startsWith(bike.brand.toLowerCase())
-            ? bike.name
-            : `${bike.brand} ${bike.name}`}
-        </h3>
+        {layout === "left" ? (
+          <div className="bike-card-title-row">
+            <h3 className="bike-card-title">
+              {bike.name.toLowerCase().startsWith(bike.brand.toLowerCase())
+                ? bike.name
+                : `${bike.brand} ${bike.name}`}
+            </h3>
+            <div className="bike-card-rating-inline">
+              <span className="rating-star">★</span>
+              <span>{Math.round(bike.rating || 5)}</span>
+            </div>
+          </div>
+        ) : (
+          <h3 className="bike-card-title">
+            {bike.name.toLowerCase().startsWith(bike.brand.toLowerCase())
+              ? bike.name
+              : `${bike.brand} ${bike.name}`}
+          </h3>
+        )}
 
         {/* Color / Variant */}
-        <p
-          className="font-tenor text-[#0b0f14] uppercase"
-          style={{
-            fontSize: '14px',
-            lineHeight: 1.4,
-            fontWeight: 600,
-            letterSpacing: '0.16em',
-            marginBottom: '10px',
-          }}
-        >
+        <p className="bike-card-variant">
           ({bike.color})
         </p>
 
         {/* Price Row */}
-        <div
-          className="font-outfit flex items-center justify-center gap-2 flex-wrap"
-          style={{ marginBottom: '6px' }}
-        >
+        <div className="bike-card-price">
           {isOnSale ? (
             <>
-              <span
-                style={{
-                  fontSize: '16px',
-                  fontWeight: 600,
-                  color: '#9ca3af',
-                  textDecoration: 'line-through',
-                  letterSpacing: '0.04em',
-                }}
-              >
+              <span className="original-price">
                 {formatPrice(bike.originalPrice!)}
               </span>
-              <span
-                style={{
-                  fontSize: '18px',
-                  fontWeight: 700,
-                  color: '#0b0f14',
-                  letterSpacing: '0.04em',
-                }}
-              >
+              <span className="current-price">
                 {formatPrice(bike.price)}
               </span>
             </>
           ) : (
-            <span
-              style={{
-                fontSize: '18px',
-                fontWeight: 700,
-                color: '#0b0f14',
-                letterSpacing: '0.04em',
-              }}
-            >
+            <span className="current-price">
               {formatPrice(bike.price)}
             </span>
           )}
         </div>
 
         {/* EMI Row */}
-        <p
-          className="font-outfit"
-          style={{
-            fontSize: '14px',
-            lineHeight: 1.45,
-            fontWeight: 600,
-            color: '#0b0f14',
-            marginBottom: '10px',
-          }}
-        >
+        <p className="bike-card-emi">
           or{' '}
-          <span style={{ fontWeight: 800, color: '#0b0f14', fontSize: '14px' }}>
+          <strong>
             Rs.{emiAmount.toLocaleString('en-IN')}
-          </span>
+          </strong>
           /Month{' '}
-          <span
-            className="hover:underline transition-colors cursor-pointer"
-            style={{ fontWeight: 700, color: '#4338ca', fontSize: '14px' }}
-          >
+          <span className="hover:underline transition-colors cursor-pointer">
             Buy on EMI &gt;
           </span>
         </p>
 
         {/* Star Rating & Review Count */}
-        <div
-          className="flex items-center justify-center"
-          style={{ gap: '6px', marginTop: '8px' }}
-        >
-          <span
-            style={{
-              color: '#f5b400',
-              fontSize: '17px',
-              letterSpacing: '0.08em',
-              lineHeight: 1,
-            }}
-          >
-            {"★".repeat(Math.round(bike.rating || 5))}
-            <span style={{ color: '#d4d4d4' }}>
-              {"☆".repeat(5 - Math.round(bike.rating || 5))}
+        {layout !== "left" && (
+          <div className="bike-card-reviews">
+            <span className="review-stars">
+              {"★".repeat(Math.round(bike.rating || 5))}
+              <span style={{ color: '#d4d4d4' }}>
+                {"☆".repeat(5 - Math.round(bike.rating || 5))}
+              </span>
             </span>
-          </span>
-          <span
-            className="font-outfit"
-            style={{
-              fontSize: '15px',
-              fontWeight: 600,
-              color: '#0b0f14',
-              lineHeight: 1,
-            }}
-          >
-            {bike.reviews || 2} reviews
-          </span>
-        </div>
+            <span className="review-count">
+              {bike.reviews || 2} reviews
+            </span>
+          </div>
+        )}
 
       </div>
     </motion.div>

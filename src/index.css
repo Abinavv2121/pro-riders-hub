@@ -391,6 +391,7 @@ html {
 .product-brand-row {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 10px;
   margin-bottom: 12px;
 }
@@ -402,32 +403,48 @@ html {
   background: rgba(0, 166, 214, 0.1);
   color: #00a6d6;
   padding: 6px 12px;
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 0.08em;
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", "Manrope", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
+.product-category {
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", "Manrope", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #4b5563;
+}
+
 .product-title {
-  font-size: clamp(42px, 4.5vw, 64px);
-  line-height: 0.95;
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  margin: 0 0 16px;
-  color: #0b0f14;
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", "Manrope", sans-serif;
+  font-size: clamp(38px, 4vw, 56px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: #0f172a;
+  text-align: left;
+  margin: 0 0 14px;
 }
 
 .product-price-row {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 14px;
   margin-bottom: 24px;
 }
 
 .product-price {
-  font-size: clamp(32px, 3.2vw, 44px);
-  font-weight: 900;
-  color: #0b0f14;
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+  font-size: clamp(28px, 2.8vw, 38px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #0f172a;
+  text-align: left;
 }
 
 .stock-badge {
@@ -435,15 +452,22 @@ html {
   background: #d8f8e6;
   color: #067647;
   padding: 6px 12px;
+  font-family: "Inter", "Manrope", "DM Sans", system-ui, sans-serif;
   font-size: 11px;
   font-weight: 900;
   text-transform: uppercase;
 }
 
 .product-description {
-  font-size: 16px;
-  line-height: 1.8;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.6;
   color: #4b5563;
+  text-align: left;
+  max-width: 640px;
+  margin-left: 0;
+  margin-right: 0;
   margin-bottom: 28px;
 }
 
@@ -454,49 +478,60 @@ html {
 }
 
 .product-section-title {
-  font-size: 14px;
-  font-weight: 900;
-  letter-spacing: 0.34em;
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  margin-bottom: 18px;
-  color: #0b0f14;
+  color: #111827;
+  text-align: left;
+  margin-bottom: 16px;
 }
 
 .product-bullet-list {
   margin: 0;
   padding-left: 20px;
+  list-style: disc;
+  max-width: none;
 }
 
 .product-bullet-list li {
-  margin-bottom: 10px;
-  font-size: 16px;
-  line-height: 1.7;
-  color: #344054;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #4b5563;
+  text-align: left;
+  margin-bottom: 8px;
 }
 
 .product-spec-list {
   display: grid;
   gap: 0;
   border-top: 1px solid #eef2f6;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
 }
 
 .product-spec-row {
   display: grid;
   grid-template-columns: 180px 1fr;
   gap: 20px;
-  padding: 12px 0;
+  padding: 10px 0;
   border-bottom: 1px solid #eef2f6;
-  font-size: 16px;
-  line-height: 1.7;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 .product-spec-label {
-  font-weight: 900;
-  color: #0b0f14;
+  font-weight: 500;
+  color: #6b7280;
+  text-align: left;
 }
 
 .product-spec-value {
-  color: #344054;
+  font-weight: 400;
+  color: #0b0f14;
+  text-align: left;
 }
 
 .purchase-panel {
@@ -514,18 +549,19 @@ html {
   border: 1px solid #f0d9a6;
   border-radius: 14px;
   background: #fff7e6;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
 }
 
 .emi-options-title {
   font-size: 13px;
-  font-weight: 900;
+  font-weight: 600;
   color: #0b0f14;
   margin-bottom: 6px;
 }
 
 .emi-options-text {
-  font-size: 14px;
-  color: #344054;
+  font-size: 13px;
+  color: #4b5563;
   line-height: 1.5;
 }
 
@@ -537,20 +573,24 @@ html {
 
 .option-group {
   margin-bottom: 22px;
+  text-align: left;
 }
 
 .option-label {
-  font-size: 13px;
-  font-weight: 900;
-  letter-spacing: 0.16em;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #667085;
+  color: #374151;
   margin-bottom: 10px;
+  text-align: left;
 }
 
 .size-selector {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 10px;
 }
 
@@ -560,7 +600,8 @@ html {
   border: 1px solid #d0d5dd;
   background: #ffffff;
   border-radius: 8px;
-  font-weight: 800;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -574,15 +615,17 @@ html {
 .quantity-selector {
   display: inline-flex;
   align-items: center;
-  height: 44px;
+  justify-content: center;
+  height: 40px;
   border: 1px solid #dce5ea;
-  border-radius: 12px;
+  border-radius: 8px;
   overflow: hidden;
+  margin: 0;
 }
 
 .quantity-selector button {
-  width: 42px;
-  height: 44px;
+  width: 38px;
+  height: 40px;
   border: none;
   background: #ffffff;
   cursor: pointer;
@@ -590,9 +633,10 @@ html {
 
 .quantity-selector span,
 .quantity-selector input {
-  width: 48px;
+  width: 44px;
   text-align: center;
-  font-weight: 800;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+  font-weight: 600;
 }
 
 .product-actions {
@@ -603,11 +647,17 @@ html {
 }
 
 .product-actions button {
-  height: 54px;
-  border-radius: 12px;
-  font-weight: 900;
-  letter-spacing: 0.08em;
+  height: 50px;
+  border-radius: 10px;
+  font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 13px;
 }
 
 .add-to-cart-button {
@@ -635,9 +685,10 @@ html {
   display: flex;
   align-items: center;
   gap: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
   font-size: 12px;
-  font-weight: 800;
-  color: #1e2933;
+  font-weight: 500;
+  color: #4b5563;
 }
 
 .product-section.features-section {
@@ -677,16 +728,23 @@ html {
   border-radius: 8px;
 }
 
-.sticky-product-name {
-  font-weight: 900;
-  color: #0b0f14;
+.sticky-product-name,
+.sticky-product-title,
+.bottom-product-title {
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
   font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #0b0f14;
   text-transform: uppercase;
 }
 
-.sticky-product-brand {
-  font-size: 12px;
-  color: #667085;
+.sticky-product-brand,
+.bottom-product-brand {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: #6b7280;
   margin-top: 3px;
 }
 
@@ -697,15 +755,17 @@ html {
 }
 
 .sticky-price {
-  font-weight: 900;
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+  font-weight: 600;
   color: #0b0f14;
 }
 
 .sticky-add-to-cart {
-  height: 48px;
-  min-width: 180px;
-  border-radius: 10px;
-  font-weight: 900;
+  height: 44px;
+  min-width: 160px;
+  border-radius: 8px;
+  font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+  font-weight: 600;
   text-transform: uppercase;
 }
 
@@ -778,3 +838,357 @@ html {
   }
 }
 
+/* View Fit Guide Button Styles */
+.view-fit-guide-button,
+.fit-guide-button {
+  background: #00A6D6 !important;
+  border-color: #00A6D6 !important;
+  color: #ffffff !important;
+}
+
+.view-fit-guide-button:hover,
+.fit-guide-button:hover {
+  background: #008DB8 !important;
+  border-color: #008DB8 !important;
+  color: #ffffff !important;
+}
+
+/* Category/Filter Chip Styles */
+.category-chip,
+.filter-chip,
+.bike-category-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0 24px;
+  border: 1px solid #b9dbea;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #0b0f14;
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  visibility: visible;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.category-chip.active,
+.filter-chip.active,
+.bike-category-button.active {
+  background: #00A6D6;
+  border-color: #00A6D6;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 166, 214, 0.25);
+}
+
+.category-chip:hover:not(.active),
+.filter-chip:hover:not(.active),
+.bike-category-button:hover:not(.active) {
+  border-color: #00A6D6;
+  color: #00A6D6;
+}
+.category-tabs-wrapper,
+.filter-tabs-wrapper,
+.category-scroll-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-left: 12px;
+  padding-right: 24px;
+  scroll-padding-left: 12px;
+}
+
+.category-tabs,
+.filter-tabs,
+.category-chip-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: max-content;
+  padding-left: 0;
+}
+
+.category-chip,
+.filter-chip,
+.bike-category-button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  min-width: fit-content;
+}
+
+.category-chip:first-child,
+.filter-chip:first-child,
+.bike-category-button:first-child {
+  margin-left: 36px;
+}
+
+/* ── Product & Bike Card Typography and Spacing ── */
+.product-card-info,
+.product-info,
+.bike-card-info {
+  text-align: center;
+  padding: 22px 16px 32px;
+}
+
+.product-card-title,
+.product-name,
+.bike-card-title {
+  font-family: "Inter", "Manrope", "DM Sans", system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.45;
+  text-transform: uppercase;
+  color: #0b0f14;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.product-card-variant,
+.product-variant,
+.bike-card-variant {
+  font-family: "Inter", "Manrope", "DM Sans", system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: #374151;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.product-card-price,
+.product-price-row,
+.bike-card-price {
+  font-family: "Inter", "Manrope", "DM Sans", system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+  text-align: center;
+  color: #0b0f14;
+  margin-bottom: 6px;
+}
+
+.product-card-mrp,
+.compare-price,
+.original-price {
+  font-size: 14px;
+  font-weight: 500;
+  color: #9ca3af;
+  text-decoration: line-through;
+  margin-right: 8px;
+}
+
+.product-card-sale-price,
+.sale-price,
+.current-price {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0b0f14;
+}
+
+.product-card-emi,
+.emi-text,
+.bike-card-emi {
+  font-family: "Inter", "Manrope", "DM Sans", system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: #0b0f14;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.product-card-emi strong,
+.emi-text strong,
+.bike-card-emi strong {
+  font-weight: 800;
+}
+
+.product-card-emi span,
+.emi-text span,
+.bike-card-emi span,
+.product-card-emi a,
+.emi-text a,
+.bike-card-emi a {
+  font-size: 12px;
+  font-weight: 700;
+  color: #00a6d6;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.product-card-emi span:hover,
+.emi-text span:hover,
+.bike-card-emi span:hover,
+.product-card-emi a:hover,
+.emi-text a:hover,
+.bike-card-emi a:hover {
+  color: #008db8;
+}
+
+.product-card-reviews,
+.review-row,
+.bike-card-reviews {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: "Inter", "Manrope", "DM Sans", system-ui, sans-serif;
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1;
+  color: #0b0f14;
+  margin-top: 8px;
+}
+
+.review-stars,
+.stars {
+  color: #f5b400;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+}
+
+.review-count {
+  font-size: 13px;
+  font-weight: 500;
+  color: #0b0f14;
+}
+
+@media (max-width: 768px) {
+  .product-card-title,
+  .product-name,
+  .bike-card-title {
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+  }
+
+  .product-card-variant,
+  .product-variant,
+  .bike-card-variant {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+
+  .product-card-price,
+  .bike-card-price {
+    font-size: 14px;
+  }
+}
+
+/* ── Product & Bike Card Custom Borders ── */
+.bike-product-card,
+.product-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 166, 214, 0.18) !important;
+  border-radius: 0px !important;
+  overflow: hidden !important;
+  box-shadow: none !important;
+}
+
+.bike-product-card:hover,
+.product-card:hover {
+  border-color: rgba(0, 166, 214, 0.35) !important;
+}
+
+/* ── Product & Bike Card Layout Left (Shop Page specific) ── */
+.layout-left .bike-card-info,
+.layout-left .product-card-info {
+  text-align: left !important;
+  width: 100% !important;
+  padding: 20px 20px 28px !important;
+  align-items: flex-start !important;
+}
+
+.layout-left .bike-card-title,
+.layout-left .product-card-title {
+  text-align: left !important;
+  margin-left: 0 !important;
+}
+
+.layout-left .bike-card-variant,
+.layout-left .product-card-variant {
+  text-align: left !important;
+  margin-left: 0 !important;
+}
+
+.layout-left .bike-card-price,
+.layout-left .product-card-price {
+  text-align: left !important;
+  display: flex !important;
+  justify-content: flex-start !important;
+  margin-left: 0 !important;
+}
+
+.layout-left .bike-card-emi,
+.layout-left .product-card-emi {
+  text-align: left !important;
+  margin-left: 0 !important;
+}
+
+.product-rating-badge,
+.bike-rating-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0b0f14;
+  background: #ffffff;
+  border: 1px solid rgba(0, 166, 214, 0.18);
+  border-radius: 999px;
+  padding: 5px 9px;
+  z-index: 20 !important;
+}
+
+.product-rating-badge .star,
+.bike-rating-badge .star {
+  color: #f5b400;
+  font-size: 13px;
+  line-height: 1;
+}
+
+/* Inline Rating Layout (Shop Page specific title row) */
+.product-card-title-row,
+.bike-card-title-row {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  width: 100% !important;
+  margin-bottom: 6px !important;
+}
+
+.product-card-rating-inline,
+.bike-card-rating-inline {
+  flex: 0 0 auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 4px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #0b0f14 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  margin-top: 3px !important; /* aligns vertically with the uppercase title */
+}
+
+.product-card-rating-inline .rating-star,
+.bike-card-rating-inline .rating-star {
+  color: #f5b400 !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+}
+
+.layout-left .product-rating-badge,
+.layout-left .bike-rating-badge {
+  display: none !important;
+}

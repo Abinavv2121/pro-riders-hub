@@ -326,15 +326,13 @@ const Shop = () => {
             <div className="h-6 w-px bg-[#CCE0F5] flex-shrink-0" />
 
             {/* The 6 Buttons */}
-            <div className="flex items-center justify-start md:justify-center gap-4 overflow-x-auto no-scrollbar flex-1">
+            <div className="flex items-center justify-start gap-4 overflow-x-auto no-scrollbar flex-1">
               {bikeCategories.map((cat) => (
                 <button
                   key={cat.key}
                   onClick={() => setSelectedCategory(cat.key)}
-                  className={`whitespace-nowrap px-6 py-2.5 rounded-full font-heading font-bold text-[11px] uppercase tracking-widest transition-all duration-300 border ${
-                    selectedCategory === cat.key
-                      ? "bg-primary border-primary text-white shadow-lg"
-                      : "bg-white border-[#CCE0F5] text-[#111111] hover:border-primary hover:text-primary"
+                  className={`bike-category-button flex-shrink-0 transition-all duration-300 ${
+                    selectedCategory === cat.key ? "active" : ""
                   }`}
                 >
                   {cat.label}
@@ -376,7 +374,7 @@ const Shop = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8"
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
                 >
                   {[...Array(6)].map((_, i) => (
                     <div key={i} className="bg-white p-4 h-auto flex flex-col items-center select-none py-2">
@@ -393,13 +391,13 @@ const Shop = () => {
                   key="grid"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8"
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
                 >
                   {combinedItems.map((item, index) => {
                     if ('gears' in item) {
-                      return <BikeCard key={`bike-${item.id}`} bike={item as Bike} index={index} onAddItem={addItem} />;
+                      return <BikeCard key={`bike-${item.id}`} bike={item as Bike} index={index} layout="left" onAddItem={addItem} />;
                     }
-                    return <ProductCard key={`prod-${item.id}`} product={item as Product} index={index} onAddItem={addItem} />;
+                    return <ProductCard key={`prod-${item.id}`} product={item as Product} index={index} layout="left" onAddItem={addItem} />;
                   })}
                 </motion.div>
               ) : (

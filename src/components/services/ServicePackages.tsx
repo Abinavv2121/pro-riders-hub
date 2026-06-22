@@ -42,7 +42,7 @@ const colorMap = {
 const ServicePackages = ({ packages, onSelectPackage, selectedPackageId }: ServicePackagesProps) => {
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch w-full">
         {packages.map((pkg, index) => {
           const Icon = iconMap[pkg.icon];
           const isSelected = selectedPackageId === pkg.id;
@@ -55,11 +55,11 @@ const ServicePackages = ({ packages, onSelectPackage, selectedPackageId }: Servi
               transition={{ delay: index * 0.1, duration: 0.4 }}
             >
               <Card
-                className={`h-full relative overflow-hidden transition-all duration-300 cursor-pointer ${
+                className={`h-full relative overflow-hidden transition-all duration-300 cursor-pointer flex flex-col ${
                   isSelected
                     ? "border-primary ring-2 ring-primary/20"
                     : "border-border hover:border-primary/50"
-                } ${pkg.popular ? "md:-mt-4 md:mb-4" : ""}`}
+                }`}
                 onClick={() => onSelectPackage(pkg)}
                 style={{ backgroundColor: "#FFFFFF", color: "#000000" }}
               >
@@ -79,7 +79,7 @@ const ServicePackages = ({ packages, onSelectPackage, selectedPackageId }: Servi
                   <CardDescription className="text-xs mt-1 text-[#000000]">{pkg.description}</CardDescription>
                 </CardHeader>
 
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-4 flex-grow">
                   <div className="text-center">
                     <span className="font-heading text-3xl font-bold text-primary">₹{pkg.price}</span>
                     <span className="text-[#000000] text-sm">/service</span>
@@ -95,7 +95,7 @@ const ServicePackages = ({ packages, onSelectPackage, selectedPackageId }: Servi
                   </ul>
                 </CardContent>
 
-                <CardFooter>
+                <CardFooter className="mt-auto">
                   <Button
                     className={`w-full bg-primary text-white hover:bg-primary/80 hover:scale-[1.03] hover:shadow-lg transition-all duration-300 ease-out cursor-pointer ${isSelected ? "ring-2 ring-primary/40" : ""}`}
                   >

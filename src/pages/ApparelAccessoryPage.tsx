@@ -165,15 +165,15 @@ const ApparelAccessoryPage = () => {
               {/* 1. Brand / category badge */}
               <div className="product-brand-row">
                 <span className="product-brand-badge">{product.brand}</span>
-                <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">{categoryLabel}</span>
+                <span className="product-category">{categoryLabel}</span>
               </div>
 
               {/* 2. Product title */}
-              <h1 className="product-title uppercase font-heading">{product.name}</h1>
+              <h1 className="product-title uppercase">{product.name}</h1>
               
               {/* 3. Price + stock badge */}
               <div className="product-price-row">
-                <span className="product-price text-[#0b0f14]">₹{product.price.toLocaleString("en-IN")}</span>
+                <span className="product-price">₹{product.price.toLocaleString("en-IN")}</span>
                 {product.originalPrice && (
                   <span className="text-xl text-[#999] line-through font-medium">
                     ₹{product.originalPrice.toLocaleString("en-IN")}
@@ -185,7 +185,7 @@ const ApparelAccessoryPage = () => {
               </div>
 
               {/* 4. Short description */}
-              <p className="product-description font-body leading-relaxed text-[#4b5563]">
+              <p className="product-description">
                 {product.description}
               </p>
 
@@ -263,8 +263,8 @@ const ApparelAccessoryPage = () => {
               {/* 5. FEATURES */}
               {features.length > 0 && (
                 <div className="product-section features-section">
-                  <h3 className="product-section-title">F E A T U R E S</h3>
-                  <ul className="product-bullet-list font-body text-[#344054]">
+                  <h3 className="product-section-title">Features</h3>
+                  <ul className="product-bullet-list">
                     {features.map((feature, i) => (
                       <li key={i}>{feature}</li>
                     ))}
@@ -275,7 +275,7 @@ const ApparelAccessoryPage = () => {
               {/* 6. SPECIFICATIONS */}
               {specifications.length > 0 && (
                 <div className="product-section">
-                  <h3 className="product-section-title">S P E C I F I C A T I O N S</h3>
+                  <h3 className="product-section-title">Specifications</h3>
                   <div className="product-spec-list">
                     {specifications.map((spec, i) => (
                       <div className="product-spec-row" key={i}>
@@ -395,8 +395,8 @@ const ApparelAccessoryPage = () => {
             <div className="sticky-actions">
               {/* Size Selector in Sticky Bar */}
               <div className="flex items-center gap-2 mr-2 sticky-size">
-                <span className="text-[11px] font-heading font-black uppercase text-[#666] tracking-widest hidden md:inline">Size:</span>
-                <span className="bg-[#f0f4f8] text-[#0b0f14] text-xs font-heading font-black px-3 py-1.5 rounded-lg border border-[#e5eaf0]">
+                <span className="text-[11px] font-semibold uppercase text-[#666] tracking-wider hidden md:inline">Size:</span>
+                <span className="bg-[#f0f4f8] text-[#0b0f14] text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#e5eaf0]">
                   {selectedSize || product.size.split(" / ")[0]}
                 </span>
               </div>
@@ -409,7 +409,7 @@ const ApparelAccessoryPage = () => {
                 >
                   <Minus className="w-3" />
                 </button>
-                <span className="w-8 text-center font-heading font-bold text-xs text-[#0b0f14]">
+                <span className="w-8 text-center font-semibold text-xs text-[#0b0f14]">
                   {quantity}
                 </span>
                 <button
@@ -421,12 +421,12 @@ const ApparelAccessoryPage = () => {
               </div>
 
               <div className="flex items-center gap-3">
-                <span className="text-sm font-heading font-black text-[#0b0f14] mr-1 sticky-price">
+                <span className="text-sm font-semibold text-[#0b0f14] mr-1 sticky-price">
                   ₹{product.price.toLocaleString("en-IN")}
                 </span>
                 <Button
                   onClick={handleAddToCart}
-                  className="sticky-add-to-cart bg-[#0b0f14] text-white hover:bg-primary h-11 text-xs tracking-wider font-heading font-black px-6 shadow-md"
+                  className="sticky-add-to-cart bg-[#0b0f14] text-white hover:bg-primary h-11 text-xs tracking-wider px-6 shadow-md"
                 >
                   <ShoppingBag className="w-4 h-4 mr-1.5" />
                   Add to Cart
