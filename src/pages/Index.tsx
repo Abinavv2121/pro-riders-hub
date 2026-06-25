@@ -3,7 +3,6 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import HomeHero from "@/components/home/HomeHero";
 import TrustBar from "@/components/home/TrustBar";
-import SummerSaleBanner from "@/components/home/SummerSaleBanner";
 import HotDealsGrid from "@/components/home/HotDealsGrid";
 import ShopByCategory from "@/components/home/ShopByCategory";
 import FeaturedBrands from "@/components/home/FeaturedBrands";
@@ -26,21 +25,16 @@ const Index = () => {
       <Header />
       <main>
         {/* 1. Announcement Bar is inside Header */}
-        
+
         {/* 2. Hero Section */}
         <HomeHero />
-        
+
         {/* 3. Hot Deals Grid */}
         <motion.div {...revealProps}>
           <HotDealsGrid />
         </motion.div>
-        
-        {/* 4. Summer Sale Banner */}
-        <motion.div {...revealProps}>
-          <SummerSaleBanner />
-        </motion.div>
 
-        {/* 5. Trust Bar */}
+        {/* 4. Trust Bar */}
         <motion.div {...revealProps}>
           <TrustBar />
         </motion.div>

@@ -1,8 +1,10 @@
 import { ProductCard } from "@/components/ProductCard";
+import { DbProductCard } from "@/components/DbProductCard";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { products, Product } from "@/data/products";
+import { supabase, DbProduct } from "@/lib/supabase";
 import { useCart } from "@/contexts/CartContext";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -31,6 +33,17 @@ const CategoryListingPage = ({ type, title, description }: CategoryListingPagePr
   const [sortBy, setSortBy] = useState("featured");
   const [showFilters, setShowFilters] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [dbProducts, setDbProducts] = useState<DbProduct[]>([]);
+
+  useEffect(() => {
+    supabase
+      .from("db_products")
+      .select("*")
+      .eq("is_active", true)
+      .eq("type", type)
+      .order("created_at", { ascending: false })
+      .then(({ data }) => setDbProducts(data || []));
+  }, [type]);
 
   // Get all products of this type
   const typeProducts = useMemo(
@@ -42,15 +55,17 @@ const CategoryListingPage = ({ type, title, description }: CategoryListingPagePr
   const availableCategories = useMemo(() => {
     const catSet = new Set<string>();
     typeProducts.forEach((p) => catSet.add(p.category));
+    dbProducts.forEach((p) => catSet.add(p.category));
     return Array.from(catSet).sort();
-  }, [typeProducts]);
+  }, [typeProducts, dbProducts]);
 
   // Derive available brands from products
   const availableBrands = useMemo(() => {
     const brandSet = new Set<string>();
     typeProducts.forEach((p) => brandSet.add(p.brand));
+    dbProducts.forEach((p) => brandSet.add(p.brand));
     return Array.from(brandSet).sort();
-  }, [typeProducts]);
+  }, [typeProducts, dbProducts]);
 
   // Sync from URL search params
   useEffect(() => {
@@ -77,40 +92,26 @@ const CategoryListingPage = ({ type, title, description }: CategoryListingPagePr
   }, [type]);
 
   const filteredItems = useMemo(() => {
-    let result = typeProducts.filter((product) => {
-      const matchesSearch =
-        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.brand.toLowerCase().includes(searchQuery.toLowerCase());
+    const filter = (p: { name: string; brand: string; category: string }) =>
+      (p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.brand.toLowerCase().includes(searchQuery.toLowerCase())) &&
+      (selectedCategory === "all" || p.category === selectedCategory) &&
+      (selectedBrand.length === 0 || selectedBrand.includes(p.brand));
 
-      const matchesCategory =
-        selectedCategory === "all" || product.category === selectedCategory;
+    const staticFiltered = typeProducts.filter(filter);
+    const dbFiltered = dbProducts.filter(filter);
+    const combined: (Product | DbProduct)[] = [...staticFiltered, ...dbFiltered];
 
-      const matchesBrand =
-        selectedBrand.length === 0 || selectedBrand.includes(product.brand);
-
-      return matchesSearch && matchesCategory && matchesBrand;
-    });
-
-    // Sorting
     switch (sortBy) {
-      case "price-low":
-        result.sort((a, b) => a.price - b.price);
-        break;
-      case "price-high":
-        result.sort((a, b) => b.price - a.price);
-        break;
-      case "best-selling":
-        result.sort((a, b) => (b.reviews || 0) - (a.reviews || 0));
-        break;
-      case "newest":
-        result.sort((a, b) => b.id - a.id);
-        break;
-      default:
-        break;
+      case "price-low": combined.sort((a, b) => a.price - b.price); break;
+      case "price-high": combined.sort((a, b) => b.price - a.price); break;
+      case "best-selling": combined.sort((a, b) => (('reviews' in b ? b.reviews : 0) || 0) - (('reviews' in a ? a.reviews : 0) || 0)); break;
+      case "newest": combined.sort((a, b) => (typeof b.id === 'number' ? b.id : 0) - (typeof a.id === 'number' ? a.id : 0)); break;
+      default: break;
     }
 
-    return result;
-  }, [typeProducts, searchQuery, selectedCategory, selectedBrand, sortBy]);
+    return combined;
+  }, [typeProducts, dbProducts, searchQuery, selectedCategory, selectedBrand, sortBy]);
 
   const toggleBrand = (brand: string) => {
     setSelectedBrand((prev) =>
@@ -274,15 +275,24 @@ const CategoryListingPage = ({ type, title, description }: CategoryListingPagePr
                   animate={{ opacity: 1 }}
                   className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
                 >
-                   {filteredItems.map((item, index) => (
-                    <ProductCard
-                      key={`prod-${item.id}`}
-                      product={item as Product}
-                      index={index}
-                      layout="left"
-                      onAddItem={addItem}
-                    />
-                  ))}
+                   {filteredItems.map((item, index) =>
+                    'stock_status' in item ? (
+                      <DbProductCard
+                        key={`db-${(item as DbProduct).id}`}
+                        product={item as DbProduct}
+                        index={index}
+                        layout="left"
+                      />
+                    ) : (
+                      <ProductCard
+                        key={`prod-${item.id}`}
+                        product={item as Product}
+                        index={index}
+                        layout="left"
+                        onAddItem={addItem}
+                      />
+                    )
+                  )}
                 </motion.div>
               ) : (
                 <motion.div

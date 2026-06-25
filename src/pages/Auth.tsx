@@ -31,7 +31,7 @@ const Auth = () => {
                     password,
                 });
                 error = signUpError;
-                if (!error) toast.success("Account created successfully! You can now log in.");
+                if (!error) toast.success("Account created! Check your email to confirm, then log in.");
             } else {
                 const { error: signInError } = await supabase.auth.signInWithPassword({
                     email,
@@ -49,7 +49,12 @@ const Auth = () => {
 
         if (error) {
             console.error("Supabase Auth Error:", error);
-            toast.error(error.message || "An error occurred during authentication.");
+            const msg = (error as { message?: string }).message || "";
+            if (msg.toLowerCase().includes("email not confirmed")) {
+                toast.error("Please confirm your email first — check your inbox for the confirmation link.");
+            } else {
+                toast.error(msg || "An error occurred during authentication.");
+            }
         }
 
         setLoading(false);

@@ -1,6 +1,9 @@
 import PageShell from "@/components/PageShell";
+import ProductQueryForm from "@/components/ProductQueryForm";
+import ReviewSection from "@/components/ReviewSection";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { bikes, bikeCategories } from "@/data/bikes";
 import { BikeCard } from "@/components/BikeCard";
 import {
@@ -24,6 +27,7 @@ const ProductPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addItem, updateQuantity } = useCart();
+  const { user, loading: authLoading } = useAuth();
 
   const bike = bikes.find((b) => b.id === parseInt(id || "0"));
   const images: string[] = bike?.images?.length ? bike.images : bike ? [bike.image] : [];
@@ -72,6 +76,10 @@ const ProductPage = () => {
         updateQuantity(bike.id, quantity);
       }, 50);
     }
+  };
+
+  const handleBuyNow = () => {
+    handleAddToCart();
   };
 
   const similarBikes = useMemo(() => {
@@ -140,7 +148,43 @@ const ProductPage = () => {
     return list;
   }, [bike]);
 
+  if (authLoading) {
+    return (
+      <PageShell>
+        <div className="min-h-[60vh] flex items-center justify-center text-muted-foreground font-body">
+          Loading...
+        </div>
+      </PageShell>
+    );
+  }
+
   if (!bike) return <Navigate to="/shop" />;
+
+  if (!user) {
+    return (
+      <PageShell>
+        <div className="min-h-[70vh] flex items-center justify-center px-4">
+          <div className="text-center max-w-sm">
+            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-5">
+              <ShoppingBag className="w-8 h-8 text-primary" />
+            </div>
+            <h2 className="text-2xl font-heading font-bold mb-2">Sign in to Continue</h2>
+            <p className="text-muted-foreground font-body text-sm mb-6">
+              Create a free account or log in to browse product details and place orders.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button onClick={() => navigate(`/auth?redirect=/product/${id}`)}>
+                Sign In / Sign Up
+              </Button>
+              <Button variant="outline" onClick={() => navigate("/shop")}>
+                Back to Shop
+              </Button>
+            </div>
+          </div>
+        </div>
+      </PageShell>
+    );
+  }
 
   const categoryLabel = bikeCategories.find((c) => c.key === bike.category)?.label || bike.bikeType;
 
@@ -283,13 +327,20 @@ const ProductPage = () => {
                       Add to Cart
                     </button>
                     <button
-                      className="enquire-button transition-all cursor-pointer flex items-center justify-center hover:bg-[#0b0f14] hover:text-white"
-                      onClick={() => window.open("https://wa.me/919876543210", "_blank")}
+                      className="buy-now-button transition-all cursor-pointer flex items-center justify-center hover:opacity-90"
+                      onClick={handleBuyNow}
                     >
-                      <MessageCircle className="w-4.5 h-4.5 mr-2" />
-                      Enquire Now
+                      <CreditCard className="w-4.5 h-4.5 mr-2" />
+                      Buy Now
                     </button>
                   </div>
+                  <button
+                    className="enquire-now-button transition-all cursor-pointer flex items-center justify-center hover:bg-[#0b0f14] hover:text-white"
+                    onClick={() => window.open("https://wa.me/919876543210", "_blank")}
+                  >
+                    <MessageCircle className="w-4.5 h-4.5 mr-2" />
+                    Enquire Now
+                  </button>
                 </div>
 
                 <div className="product-trust-grid">
@@ -435,6 +486,16 @@ const ProductPage = () => {
             </Button>
           </div>
         </div>
+      </section>
+
+      {/* ── Reviews ── */}
+      <section className="container mx-auto px-4 md:px-6 py-12 border-t border-border">
+        <ReviewSection productId={String(bike.id)} productName={bike.name} />
+      </section>
+
+      {/* ── Product Query Form ── */}
+      <section className="container mx-auto px-4 md:px-6 py-12">
+        <ProductQueryForm productId={bike.id} productName={bike.name} />
       </section>
 
       {/* ── Similar Products ── */}

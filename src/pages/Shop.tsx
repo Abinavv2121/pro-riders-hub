@@ -1,17 +1,19 @@
 import { BikeCard } from "@/components/BikeCard";
 import { ProductCard } from "@/components/ProductCard";
+import { DbProductCard } from "@/components/DbProductCard";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { 
-  bikeBrands, 
-  bikeCategories, 
-  bikes, 
+import {
+  bikeBrands,
+  bikeCategories,
+  bikes,
   priceRanges,
   Bike
 } from "@/data/bikes";
 import { products, Product } from "@/data/products";
+import { supabase, DbProduct } from "@/lib/supabase";
 import { useCart } from "@/contexts/CartContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -50,13 +52,24 @@ const Shop = () => {
   const [sortBy, setSortBy] = useState("featured");
   const [showFilters, setShowFilters] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [dbProducts, setDbProducts] = useState<DbProduct[]>([]);
+
+  useEffect(() => {
+    supabase
+      .from("db_products")
+      .select("*")
+      .eq("is_active", true)
+      .order("created_at", { ascending: false })
+      .then(({ data }) => setDbProducts(data || []));
+  }, []);
 
   const allBrands = useMemo(() => {
     const brands = new Set<string>();
     bikes.forEach(b => brands.add(b.brand));
     products.forEach(p => brands.add(p.brand));
+    dbProducts.forEach(p => brands.add(p.brand));
     return Array.from(brands).sort();
-  }, []);
+  }, [dbProducts]);
 
   // Sync parameters from URL
   useEffect(() => {
@@ -102,6 +115,20 @@ const Shop = () => {
   };
 
   const combinedItems = useMemo(() => {
+    const filteredDb = dbProducts.filter((p) => {
+      const matchesSearch =
+        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.brand.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategory = selectedCategory === "all" || p.category === selectedCategory;
+      const matchesBrand = selectedBrand.length === 0 || selectedBrand.includes(p.brand);
+      const matchesPrice = selectedPriceRange === null || (() => {
+        const range = priceRanges[selectedPriceRange];
+        return p.price >= range.min && p.price <= range.max;
+      })();
+      const matchesSale = !isSale || p.tag === "Sale" || (p.original_price !== undefined && p.original_price > p.price);
+      return matchesSearch && matchesCategory && matchesBrand && matchesPrice && matchesSale;
+    });
+
     const filteredBikes = bikes.filter((bike) => {
       const matchesSearch = 
         bike.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -144,19 +171,19 @@ const Shop = () => {
       return matchesSearch && matchesCategory && matchesBrand && matchesPrice && matchesSale;
     });
 
-    const result = [...filteredBikes, ...filteredProducts];
+    const result = [...filteredBikes, ...filteredProducts, ...filteredDb];
 
     // Sorting
     switch (sortBy) {
       case "price-low": result.sort((a, b) => a.price - b.price); break;
       case "price-high": result.sort((a, b) => b.price - a.price); break;
-      case "best-selling": result.sort((a, b) => (b.reviews || 0) - (a.reviews || 0)); break;
-      case "newest": result.sort((a, b) => b.id - a.id); break;
+      case "best-selling": result.sort((a, b) => (('reviews' in b ? b.reviews : 0) || 0) - (('reviews' in a ? a.reviews : 0) || 0)); break;
+      case "newest": result.sort((a, b) => (typeof b.id === 'number' ? b.id : 0) - (typeof a.id === 'number' ? a.id : 0)); break;
       default: break;
     }
 
     return result;
-  }, [searchQuery, selectedCategory, selectedBrand, selectedPriceRange, sortBy, isSale]);
+  }, [searchQuery, selectedCategory, selectedBrand, selectedPriceRange, sortBy, isSale, dbProducts]);
 
   const toggleBrand = (brand: string) => {
     setSelectedBrand(prev => 
@@ -396,6 +423,9 @@ const Shop = () => {
                   {combinedItems.map((item, index) => {
                     if ('gears' in item) {
                       return <BikeCard key={`bike-${item.id}`} bike={item as Bike} index={index} layout="left" onAddItem={addItem} />;
+                    }
+                    if ('stock_status' in item) {
+                      return <DbProductCard key={`db-${(item as DbProduct).id}`} product={item as DbProduct} index={index} layout="left" />;
                     }
                     return <ProductCard key={`prod-${item.id}`} product={item as Product} index={index} layout="left" onAddItem={addItem} />;
                   })}

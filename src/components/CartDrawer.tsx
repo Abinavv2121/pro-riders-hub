@@ -5,16 +5,18 @@ import { useCart } from "@/contexts/CartContext";
 import { sendCustomerAutoReply } from "@/lib/emailjs";
 import { supabase } from "@/lib/supabase";
 import { AnimatePresence, motion } from "framer-motion";
-import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
+import { Minus, Plus, ShoppingBag, Trash2, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import CheckoutModal from "@/components/CheckoutModal";
 
 const CartDrawer = () => {
   const { items, removeItem, updateQuantity, clearCart, totalItems, isOpen, setIsOpen } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   const handleCartEnquiry = async () => {
     if (!user) {
@@ -69,6 +71,8 @@ const CartDrawer = () => {
   };
 
   return (
+    <>
+    <CheckoutModal open={checkoutOpen} onClose={() => { setCheckoutOpen(false); setIsOpen(false); }} />
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetContent className="w-full sm:max-w-md bg-background border-border flex flex-col" aria-describedby="cart-description">
         <SheetHeader className="border-b border-border pb-4">
@@ -134,10 +138,26 @@ const CartDrawer = () => {
               </AnimatePresence>
             </div>
 
-            <div className="border-t border-border pt-4 space-y-3">
+            <div className="border-t border-border pt-4 space-y-2">
               <Button
-                className="w-full"
+                className="w-full gap-2"
                 size="lg"
+                onClick={() => {
+                  if (!user) {
+                    setIsOpen(false);
+                    navigate("/auth?redirect=/shop");
+                    return;
+                  }
+                  setIsOpen(false);
+                  setCheckoutOpen(true);
+                }}
+              >
+                <ShoppingCart className="w-4 h-4" /> Place Order
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full"
+                size="sm"
                 onClick={handleCartEnquiry}
                 disabled={isSubmitting}
               >
@@ -151,6 +171,7 @@ const CartDrawer = () => {
         )}
       </SheetContent>
     </Sheet>
+    </>
   );
 };
 

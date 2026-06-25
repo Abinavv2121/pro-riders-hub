@@ -21,11 +21,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
+    const upsertProfile = async (userId: string, email: string | undefined) => {
+        await supabase.from("profiles").upsert({ id: userId, email: email ?? null }, { onConflict: "id" });
+    };
+
     useEffect(() => {
         // Check initial auth state
         supabase.auth.getSession().then(({ data: { session } }) => {
             setSession(session);
             setUser(session?.user ?? null);
+            if (session?.user) {
+                upsertProfile(session.user.id, session.user.email).catch(console.error);
+            }
             setLoading(false);
         });
 
@@ -33,6 +40,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             setSession(session);
             setUser(session?.user ?? null);
+            if (session?.user && _event === "SIGNED_IN") {
+                upsertProfile(session.user.id, session.user.email).catch(console.error);
+            }
             setLoading(false);
         });
 

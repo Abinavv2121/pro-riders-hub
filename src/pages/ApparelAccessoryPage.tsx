@@ -1,4 +1,6 @@
 import PageShell from "@/components/PageShell";
+import ProductQueryForm from "@/components/ProductQueryForm";
+import ReviewSection from "@/components/ReviewSection";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { products } from "@/data/products";
@@ -71,6 +73,10 @@ const ApparelAccessoryPage = () => {
         updateQuantity(product.id, quantity);
       }, 50);
     }
+  };
+
+  const handleBuyNow = () => {
+    handleAddToCart();
   };
 
   const similarProducts = useMemo(() => {
@@ -237,13 +243,20 @@ const ApparelAccessoryPage = () => {
                       Add to Cart
                     </button>
                     <button
-                      className="enquire-button transition-all cursor-pointer flex items-center justify-center hover:bg-[#0b0f14] hover:text-white"
-                      onClick={() => window.open("https://wa.me/919876543210", "_blank")}
+                      className="buy-now-button transition-all cursor-pointer flex items-center justify-center hover:opacity-90"
+                      onClick={handleBuyNow}
                     >
-                      <MessageCircle className="w-4.5 h-4.5 mr-2" />
-                      Enquire Now
+                      <CreditCard className="w-4.5 h-4.5 mr-2" />
+                      Buy Now
                     </button>
                   </div>
+                  <button
+                    className="enquire-now-button transition-all cursor-pointer flex items-center justify-center hover:bg-[#0b0f14] hover:text-white"
+                    onClick={() => window.open("https://wa.me/919876543210", "_blank")}
+                  >
+                    <MessageCircle className="w-4.5 h-4.5 mr-2" />
+                    Enquire Now
+                  </button>
                 </div>
 
                 <div className="product-trust-grid">
@@ -344,6 +357,16 @@ const ApparelAccessoryPage = () => {
             </Button>
           </div>
         </div>
+      </section>
+
+      {/* ── Reviews ── */}
+      <section className="container mx-auto px-4 md:px-6 py-12 border-t border-border">
+        <ReviewSection productId={String(product.id)} productName={product.name} />
+      </section>
+
+      {/* ── Product Query Form ── */}
+      <section className="container mx-auto px-4 md:px-6 py-12">
+        <ProductQueryForm productId={product.id} productName={product.name} />
       </section>
 
       {/* ── Similar Products ── */}

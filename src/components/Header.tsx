@@ -19,10 +19,11 @@ import { bikes } from "@/data/bikes";
 import { accessoryCategories, accessoryBrands, apparelCategories, apparelBrands } from "@/data/accessories";
 import { cycleBrands } from "@/data/brands";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronRight, Menu, MessageCircle, Phone, Search, ShoppingCart, User as UserIcon, X, ChevronDown } from "lucide-react";
+import { ChevronRight, Menu, MessageCircle, Phone, Search, ShoppingCart, User as UserIcon, X, ChevronDown, Tag } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import AnnouncementBar from "./AnnouncementBar";
+import { supabase, Sale } from "@/lib/supabase";
 
 const navLinks = [
   { label: "Sale", href: "/shop?sale=true" },
@@ -82,6 +83,21 @@ const Header = () => {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [hoveredBrand, setHoveredBrand] = useState<string | null>(null);
   const [mobileExpanded, setMobileExpanded] = useState<Record<string, boolean>>({});
+  const [activeSales, setActiveSales] = useState<Sale[]>([]);
+
+  useEffect(() => {
+    const fetchSales = async () => {
+      const now = new Date().toISOString();
+      const { data } = await supabase
+        .from("sales")
+        .select("*")
+        .eq("is_active", true)
+        .or(`valid_until.is.null,valid_until.gte.${now}`)
+        .order("created_at", { ascending: false });
+      if (data) setActiveSales(data);
+    };
+    fetchSales();
+  }, []);
   
   const toggleMobileExpanded = (key: string) => {
     setMobileExpanded(prev => ({ ...prev, [key]: !prev[key] }));
@@ -166,7 +182,7 @@ const Header = () => {
             <nav className="hidden lg:flex items-center gap-1">
               {navLinks.map((link) => {
                 const isActive = location.pathname === link.href;
-                const hasDropdown = link.label === "Bikes" || link.label === "Apparels" || link.label === "Accessories";
+                const hasDropdown = link.label === "Bikes" || link.label === "Apparels" || link.label === "Accessories" || link.label === "Sale";
                 return (
                   <div
                     key={link.label}
@@ -177,11 +193,17 @@ const Header = () => {
                     <Link
                       to={link.href}
                       className={`relative px-4 py-2 text-[13px] font-heading font-bold uppercase tracking-[0.1em] transition-colors duration-300 ease-out flex items-center gap-1
-                        ${isActive ? "text-primary" : "text-[#111111] hover:text-primary"}
+                        ${isActive ? "text-primary" : link.label === "Sale" ? "text-red-500 hover:text-red-600" : "text-[#111111] hover:text-primary"}
                       `}
                     >
                       {link.label}
-                      {hasDropdown && <ChevronDown className="w-3 h-3 opacity-60" />}
+                      {link.label === "Sale" && activeSales.length > 0 && (
+                        <span className="ml-1 inline-flex items-center bg-red-500 text-white text-[8px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full leading-none">
+                          LIVE
+                        </span>
+                      )}
+                      {hasDropdown && link.label !== "Sale" && <ChevronDown className="w-3 h-3 opacity-60" />}
+                      {link.label === "Sale" && activeSales.length > 0 && <ChevronDown className="w-3 h-3 opacity-60" />}
                       <span
                         className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-primary transition-all duration-300
                           ${isActive ? "w-6 opacity-100" : "w-0 opacity-0 group-hover:w-4 group-hover:opacity-100"}
@@ -454,6 +476,69 @@ const Header = () => {
                                 )}
                               </AnimatePresence>
                             </div>
+                          </div>
+                        </motion.div>
+                      </AnimatePresence>
+                    )}
+
+                    {/* Sale Dropdown */}
+                    {hasDropdown && activeDropdown === link.label && link.label === "Sale" && activeSales.length > 0 && (
+                      <AnimatePresence>
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 10 }}
+                          transition={{ duration: 0.2 }}
+                          className="absolute top-full left-0 mt-0 z-50 min-w-max pt-2"
+                          onMouseEnter={keepDropdownOpen}
+                          onMouseLeave={closeDropdown}
+                        >
+                          <div className="bg-white border border-red-100 rounded-xl shadow-2xl p-4 w-80">
+                            <p className="text-[10px] font-heading font-semibold uppercase tracking-[0.2em] text-red-500 mb-3 flex items-center gap-1.5">
+                              <Tag className="w-3 h-3" /> Active Sales
+                            </p>
+                            <div className="flex flex-col gap-3">
+                              {activeSales.slice(0, 3).map((sale) => (
+                                <Link
+                                  key={sale.id}
+                                  to="/shop?sale=true"
+                                  onClick={() => setActiveDropdown(null)}
+                                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-red-50 transition-all duration-150 group"
+                                >
+                                  {sale.banner_image ? (
+                                    <img
+                                      src={sale.banner_image}
+                                      alt={sale.title}
+                                      className="w-16 h-10 object-cover rounded-md border border-gray-100 shrink-0"
+                                    />
+                                  ) : (
+                                    <div className="w-16 h-10 bg-gradient-to-br from-red-400 to-red-600 rounded-md shrink-0 flex items-center justify-center">
+                                      <Tag className="w-4 h-4 text-white" />
+                                    </div>
+                                  )}
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-xs font-heading font-bold text-[#111111] truncate">{sale.title}</p>
+                                    {sale.discount_percentage && (
+                                      <span className="text-[10px] font-heading font-semibold text-red-500 uppercase tracking-wider">
+                                        {sale.discount_percentage}% OFF
+                                      </span>
+                                    )}
+                                  </div>
+                                </Link>
+                              ))}
+                            </div>
+                            {activeSales.length > 3 && (
+                              <p className="text-[10px] text-[#888888] font-heading uppercase tracking-wider mt-2 text-center">
+                                +{activeSales.length - 3} more active sale{activeSales.length - 3 > 1 ? "s" : ""}
+                              </p>
+                            )}
+                            <Link
+                              to="/shop?sale=true"
+                              onClick={() => setActiveDropdown(null)}
+                              className="mt-3 w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-heading font-bold uppercase tracking-[0.1em] text-[11px] px-4 py-2.5 rounded-lg transition-colors"
+                            >
+                              Shop All Sales
+                            </Link>
                           </div>
                         </motion.div>
                       </AnimatePresence>

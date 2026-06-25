@@ -24,6 +24,7 @@ import Rental from "./pages/Rental";
 import Services from "./pages/Services";
 import Shop from "./pages/Shop";
 import UserDashboard from "./pages/UserDashboard";
+import DBProductPage from "./pages/DBProductPage";
 
 const queryClient = new QueryClient();
 
@@ -65,6 +66,7 @@ const App = () => {
                 <Route path="/product/apparel/:id" element={<ApparelAccessoryPage />} />
                 <Route path="/product/accessory/:id" element={<ApparelAccessoryPage />} />
                 <Route path="/brand/:brandSlug" element={<BrandGallery />} />
+                <Route path="/db-product/:id" element={<DBProductPage />} />
               </Routes>
             </BrowserRouter>
           </CartProvider>
