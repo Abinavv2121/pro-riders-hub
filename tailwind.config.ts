@@ -15,9 +15,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ["Montserrat", "sans-serif"],
-        body: ["Inter", "sans-serif"],
-        micro: ["DM Sans", "sans-serif"],
+        heading: ["Inter", "-apple-system", "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Helvetica", "Arial", "sans-serif"],
+        body: ["Inter", "-apple-system", "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Helvetica", "Arial", "sans-serif"],
+        micro: ["Inter", "-apple-system", "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Helvetica", "Arial", "sans-serif"],
       },
       fontSize: {
         "hero": ["4.5rem", { lineHeight: "1.1", fontWeight: "800" }],
@@ -28,6 +28,17 @@ export default {
         "h3": ["1.75rem", { lineHeight: "1.3", fontWeight: "600" }],
         "body": ["1rem", { lineHeight: "1.6", fontWeight: "400" }],
         "small": ["0.8125rem", { lineHeight: "1.5", fontWeight: "400" }],
+        "large-title": ["1.9375rem", { lineHeight: "2.375rem", fontWeight: "400" }],
+        "title-1": ["1.5625rem", { lineHeight: "1.9375rem", fontWeight: "400" }],
+        "title-2": ["1.1875rem", { lineHeight: "1.5rem", fontWeight: "400" }],
+        "title-3": ["1.0625rem", { lineHeight: "1.375rem", fontWeight: "400" }],
+        "headline": ["0.875rem", { lineHeight: "1.1875rem", fontWeight: "600" }],
+        "body-spec": ["0.875rem", { lineHeight: "1.1875rem", fontWeight: "400" }],
+        "callout": ["0.8125rem", { lineHeight: "1.125rem", fontWeight: "400" }],
+        "subhead": ["0.75rem", { lineHeight: "1rem", fontWeight: "400" }],
+        "footnote": ["0.75rem", { lineHeight: "1rem", fontWeight: "400" }],
+        "caption-1": ["0.6875rem", { lineHeight: "0.8125rem", fontWeight: "400" }],
+        "caption-2": ["0.6875rem", { lineHeight: "0.8125rem", fontWeight: "400" }],
       },
       spacing: {
         "xs": "0.5rem",
