@@ -38,10 +38,6 @@ export const DbProductCard = ({ product, index, layout = "center" }: DbProductCa
   const priceClass = isBike ? "bike-card-price" : "product-card-price";
   const emiClass = isBike ? "bike-card-emi" : "product-card-emi";
 
-  // Pick up to 2 key specs to show as pills (bikes only)
-  const specPills = isBike
-    ? Object.entries(product.specifications || {}).slice(0, 2)
-    : [];
 
   return (
     <motion.div
@@ -51,29 +47,38 @@ export const DbProductCard = ({ product, index, layout = "center" }: DbProductCa
       onClick={() => navigate(`/db-product/${product.id}`)}
       className={`${cardClass} group relative bg-white transition-all duration-300 cursor-pointer flex flex-col items-center select-none ${layout === "left" ? "layout-left" : ""}`}
     >
-      {/* Stock Badge */}
-      <div className={`absolute top-2 ${layout === "left" ? "left-2" : "right-2"} z-20 pointer-events-none`}>
-        <span className={`text-[8px] font-sans font-extrabold uppercase tracking-widest px-2 py-0.5 rounded border ${getStockBadgeClass(product.stock_status)}`}>
-          {product.stock_status || "In Stock"}
-        </span>
+      {/* Top Badges */}
+      <div className="absolute top-2 left-2 right-2 z-20 pointer-events-none flex justify-between items-start gap-2">
+        <div className="flex flex-col gap-1.5 items-start">
+          {layout === "left" && (
+            <span className={`inline-block whitespace-nowrap text-[8px] font-sans font-extrabold uppercase tracking-widest px-2 py-0.5 rounded border ${getStockBadgeClass(product.stock_status)}`}>
+              {product.stock_status || "In Stock"}
+            </span>
+          )}
+          {product.tag && (
+            <span className="inline-block whitespace-nowrap text-[8px] font-sans font-extrabold uppercase tracking-widest px-2 py-0.5 rounded border bg-primary/10 text-primary border-primary/20">
+              {product.tag}
+            </span>
+          )}
+        </div>
+        {layout !== "left" && (
+          <div className="flex flex-col items-end">
+            <span className={`inline-block whitespace-nowrap text-[8px] font-sans font-extrabold uppercase tracking-widest px-2 py-0.5 rounded border ${getStockBadgeClass(product.stock_status)}`}>
+              {product.stock_status || "In Stock"}
+            </span>
+          </div>
+        )}
       </div>
 
-      {/* Tag badge */}
-      {product.tag && (
-        <div className="absolute top-2 left-2 z-20 pointer-events-none">
-          <span className="text-[8px] font-sans font-extrabold uppercase tracking-widest px-2 py-0.5 rounded border bg-primary/10 text-primary border-primary/20">
-            {product.tag}
-          </span>
-        </div>
-      )}
-
       {/* Image */}
-      <div className="relative w-full aspect-square flex items-center justify-center p-1 overflow-hidden">
+      <div className="relative w-full aspect-square flex items-center justify-center overflow-hidden">
         {image ? (
           <img
             src={image}
             alt={product.name}
-            className="w-full h-full object-contain relative z-10"
+            className={`w-full h-full object-contain mix-blend-multiply relative z-10 ${
+              product.type !== 'bike' ? 'scale-[1.35]' : 'scale-[1.15]'
+            }`}
             loading="lazy"
             draggable={false}
           />
@@ -99,16 +104,6 @@ export const DbProductCard = ({ product, index, layout = "center" }: DbProductCa
           {product.brand} · {readableCategory(product.category)}
         </p>
 
-        {/* Spec pills for bikes */}
-        {specPills.length > 0 && (
-          <div className="flex flex-wrap gap-1 my-1">
-            {specPills.map(([k, v]) => (
-              <span key={k} className="text-[9px] font-sans font-semibold bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">
-                {v}
-              </span>
-            ))}
-          </div>
-        )}
 
         <div className={priceClass}>
           {isOnSale ? (

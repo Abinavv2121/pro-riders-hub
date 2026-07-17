@@ -26,7 +26,7 @@ import AnnouncementBar from "./AnnouncementBar";
 import { supabase, Sale } from "@/lib/supabase";
 
 const navLinks = [
-  { label: "Sale", href: "/shop?sale=true" },
+  { label: "Sale", href: "/sales" },
   { label: "Bikes", href: "/shop" },
   { label: "Apparels", href: "/apparels" },
   { label: "Accessories", href: "/accessories" },
@@ -44,7 +44,7 @@ const bikeDropdownCategories = [
   { label: "Kids Bikes", key: "kids", href: "/shop/kids" },
   { label: "Pre-owned Bikes", key: "pre-owned", href: "/shop/pre-owned" },
   { label: "Restoration Bikes", key: "restoration", href: "/shop/restoration" },
-  { label: "Stock Clearance/Sale", key: "sale", href: "/shop?sale=true" },
+  { label: "Stock Clearance/Sale", key: "sale", href: "/sales" },
 ];
 
 const getBikesForCategory = (key: string) => {
@@ -501,7 +501,7 @@ const Header = () => {
                               {activeSales.slice(0, 3).map((sale) => (
                                 <Link
                                   key={sale.id}
-                                  to="/shop?sale=true"
+                                  to="/sales"
                                   onClick={() => setActiveDropdown(null)}
                                   className="flex items-center gap-3 p-2 rounded-lg hover:bg-red-50 transition-all duration-150 group"
                                 >
@@ -533,7 +533,7 @@ const Header = () => {
                               </p>
                             )}
                             <Link
-                              to="/shop?sale=true"
+                              to="/sales"
                               onClick={() => setActiveDropdown(null)}
                               className="mt-3 w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-heading font-bold uppercase tracking-[0.1em] text-[11px] px-4 py-2.5 rounded-lg transition-colors"
                             >

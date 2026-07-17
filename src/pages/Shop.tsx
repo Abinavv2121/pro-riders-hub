@@ -73,10 +73,18 @@ const Shop = () => {
 
   // Sync parameters from URL
   useEffect(() => {
+    const catParam = searchParams.get("category");
+    const isMainHeaderClick = !category && !catParam && !brandParam && !isSale;
+
+    if (isMainHeaderClick) {
+      setSearchQuery("");
+      setSelectedPriceRange(null);
+      setSortBy("featured");
+    }
+
     if (category) {
       setSelectedCategory(category);
     } else {
-      const catParam = searchParams.get("category");
       if (catParam) {
         setSelectedCategory(catParam);
       } else {
@@ -89,7 +97,7 @@ const Shop = () => {
     } else {
       setSelectedBrand([]);
     }
-  }, [category, searchParams, brandParam]);
+  }, [category, searchParams, brandParam, isSale]);
 
   useEffect(() => {
     // Simulate loading for skeletons
@@ -119,7 +127,21 @@ const Shop = () => {
       const matchesSearch =
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.brand.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesCategory = selectedCategory === "all" || p.category === selectedCategory;
+      
+      const pCat = p.category ? p.category.toLowerCase() : "";
+      
+      const matchesCategory = selectedCategory === "all" || 
+        pCat === selectedCategory ||
+        (selectedCategory === "city-fitness" && (pCat === "hybrid" || pCat === "city & fitness" || pCat === "city fitness" || pCat === "city-fitness")) ||
+        (selectedCategory === "hybrid" && (pCat === "hybrid" || pCat === "city-fitness")) ||
+        (selectedCategory === "race-road" && (pCat === "road" || pCat === "race-road" || pCat === "race road")) ||
+        (selectedCategory === "endurance-road" && (pCat === "road" || pCat === "endurance-road" || pCat === "endurance road")) ||
+        (selectedCategory === "gravel" && (pCat === "gravel" || pCat === "road")) ||
+        (selectedCategory === "mtb" && (pCat === "mtb" || pCat === "mountain")) ||
+        (selectedCategory === "kids" && (p.size === "20" || p.size === "24" || p.name.toLowerCase().includes("kids") || p.name.toLowerCase().includes("junior") || pCat === "kids")) ||
+        (selectedCategory === "pre-owned" && (p.tag === "Pre-Owned" || p.name.toLowerCase().includes("used") || p.name.toLowerCase().includes("pre-owned") || (p.description && p.description.toLowerCase().includes("used")) || pCat === "pre-owned")) ||
+        (selectedCategory === "restoration" && (p.tag === "Restoration" || pCat === "restoration"));
+
       const matchesBrand = selectedBrand.length === 0 || selectedBrand.includes(p.brand);
       const matchesPrice = selectedPriceRange === null || (() => {
         const range = priceRanges[selectedPriceRange];
@@ -135,10 +157,16 @@ const Shop = () => {
         bike.brand.toLowerCase().includes(searchQuery.toLowerCase());
       
       const matchesCategory = selectedCategory === "all" || 
+        bike.category === selectedCategory ||
+        (selectedCategory === "city-fitness" && (bike.category === "hybrid" || bike.category === "city-fitness")) ||
+        (selectedCategory === "hybrid" && (bike.category === "hybrid" || bike.category === "city-fitness")) ||
+        (selectedCategory === "race-road" && (bike.category === "road" || bike.category === "race-road")) ||
+        (selectedCategory === "endurance-road" && (bike.category === "road" || bike.category === "endurance-road")) ||
+        (selectedCategory === "gravel" && (bike.category === "gravel" || bike.category === "road")) ||
+        (selectedCategory === "mtb" && (bike.category === "mtb")) ||
         (selectedCategory === "kids" && (bike.size === "20" || bike.size === "24" || bike.name.toLowerCase().includes("kids") || bike.name.toLowerCase().includes("junior"))) ||
         (selectedCategory === "pre-owned" && (bike.condition === "used" || bike.tag === "Pre-Owned")) ||
-        (selectedCategory === "restoration" && (bike.tag === "Restoration" || bike.condition === "restored")) ||
-        bike.category === selectedCategory;
+        (selectedCategory === "restoration" && (bike.tag === "Restoration" || bike.condition === "restored"));
       
       const matchesBrand = selectedBrand.length === 0 || selectedBrand.includes(bike.brand);
       
@@ -157,7 +185,16 @@ const Shop = () => {
         product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         product.brand.toLowerCase().includes(searchQuery.toLowerCase());
       
-      const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
+      const pCat = product.category ? product.category.toLowerCase() : "";
+      
+      const matchesCategory = selectedCategory === "all" || 
+        pCat === selectedCategory ||
+        (selectedCategory === "city-fitness" && (pCat === "hybrid" || pCat === "city & fitness" || pCat === "city-fitness")) ||
+        (selectedCategory === "hybrid" && (pCat === "hybrid" || pCat === "city-fitness")) ||
+        (selectedCategory === "race-road" && (pCat === "road" || pCat === "race-road")) ||
+        (selectedCategory === "endurance-road" && (pCat === "road" || pCat === "endurance-road")) ||
+        (selectedCategory === "gravel" && (pCat === "gravel" || pCat === "road")) ||
+        (selectedCategory === "mtb" && (pCat === "mtb"));
       
       const matchesBrand = selectedBrand.length === 0 || selectedBrand.includes(product.brand);
       

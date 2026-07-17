@@ -78,8 +78,8 @@ const DynamicSaleBanner = () => {
                       <p className="text-white/80 text-sm md:text-base mb-5 max-w-xl">{sale.description}</p>
                     )}
                     <Link
-                      to="/shop?sale=true"
-                      className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white font-heading font-bold uppercase tracking-[0.1em] text-sm px-6 py-3 rounded-lg transition-colors"
+                      to="/sales"
+                      className="inline-flex items-center gap-2 bg-[#111111] hover:bg-black text-white px-8 py-3.5 rounded-full font-heading font-black text-xs uppercase tracking-widest transition-all hover:scale-105 active:scale-95 group/btn"
                     >
                       <ShoppingBag className="w-4 h-4" />
                       Shop the Sale
@@ -102,7 +102,7 @@ const DynamicSaleBanner = () => {
                       <p className="text-white/80 text-sm md:text-base mb-5">{sale.description}</p>
                     )}
                     <Link
-                      to="/shop?sale=true"
+                      to="/sales"
                       className="inline-flex items-center gap-2 bg-white text-primary font-heading font-bold uppercase tracking-[0.1em] text-sm px-6 py-3 rounded-lg hover:bg-white/90 transition-colors"
                     >
                       <ShoppingBag className="w-4 h-4" />

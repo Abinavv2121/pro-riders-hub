@@ -335,6 +335,10 @@ html {
   width: 100%;
 }
 
+.product-media.no-thumbnails {
+  grid-template-columns: 1fr;
+}
+
 .product-thumbnails {
   display: flex;
   flex-direction: column;

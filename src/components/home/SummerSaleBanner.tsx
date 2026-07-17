@@ -184,7 +184,7 @@ const SummerSaleBanner = () => {
 
             <div className="mt-8">
               <Link
-                to="/shop?sale=true"
+                to="/sales"
                 className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white font-heading font-bold uppercase tracking-[0.1em] text-sm px-8 py-3 rounded-lg transition-colors"
               >
                 View All Sale Items

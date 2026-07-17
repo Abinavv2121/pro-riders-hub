@@ -49,7 +49,7 @@ export const ProductCard = ({ product, index, layout = "center" }: ProductCardPr
 
       {/* Stock Status Badge */}
       <div className={`absolute top-2 ${layout === "left" ? "left-2" : "right-2"} z-20 pointer-events-none`}>
-        <span className={`text-[8px] font-sans font-extrabold uppercase tracking-widest px-2 py-0.5 rounded border ${getStockBadgeClass(product.stockStatus)}`}>
+        <span className={`inline-block whitespace-nowrap text-[8px] font-sans font-extrabold uppercase tracking-widest px-2 py-0.5 rounded border ${getStockBadgeClass(product.stockStatus)}`}>
           {product.stockStatus || "In Stock"}
         </span>
       </div>

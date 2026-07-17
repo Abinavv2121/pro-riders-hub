@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import PageShell from "@/components/PageShell";
 import { supabase, DbProduct } from "@/lib/supabase";
@@ -6,10 +6,12 @@ import { useCart } from "@/contexts/CartContext";
 import ProductQueryForm from "@/components/ProductQueryForm";
 import ReviewSection from "@/components/ReviewSection";
 import { DbProductCard } from "@/components/DbProductCard";
+import TrimmedProductImage from "@/components/TrimmedProductImage";
 import { Button } from "@/components/ui/button";
 import {
   ShoppingBag, ArrowLeft, Loader2, CreditCard, MessageCircle,
   ShieldCheck, Truck, CheckCircle2, Users, Plus, Minus, ArrowRight,
+  Check,
 } from "lucide-react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
@@ -26,7 +28,6 @@ const DBProductPage = () => {
   const [currentImg, setCurrentImg] = useState(0);
   const [selectedSize, setSelectedSize] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const [showStickyBar, setShowStickyBar] = useState(false);
   const [similarProducts, setSimilarProducts] = useState<DbProduct[]>([]);
 
   useEffect(() => {
@@ -60,12 +61,6 @@ const DBProductPage = () => {
     };
     if (id) fetchProduct();
   }, [id, navigate]);
-
-  useEffect(() => {
-    const onScroll = () => setShowStickyBar(window.scrollY > 450);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   const handleAddToCart = () => {
     if (!product) return;
@@ -101,13 +96,19 @@ const DBProductPage = () => {
 
   const images = product.images.length > 0 ? product.images : [];
   const sizes = product.size ? product.size.split(" / ") : [];
-  const specs = Object.entries(product.specifications || {});
+  const allSpecs = Object.entries(product.specifications || {});
+  const keyFeaturesEntry = allSpecs.find(([k]) => k === "Key Features");
+  const keyFeatures = keyFeaturesEntry
+    ? keyFeaturesEntry[1].split("|").map((f) => f.trim()).filter(Boolean)
+    : [];
+  const specs = allSpecs.filter(([k]) => k !== "Key Features");
   const discount = product.original_price && product.original_price > product.price
     ? Math.round(((product.original_price - product.price) / product.price) * 100)
     : null;
   const categoryLabel = (product.category || "").replace(/-/g, " ");
   const typeLabel = product.type === "bike" ? "Bikes" : product.type === "apparel" ? "Apparels" : "Accessories";
   const viewAllLink = product.type === "bike" ? "/shop" : product.type === "apparel" ? "/apparels" : "/accessories";
+
 
   return (
     <PageShell>
@@ -126,7 +127,7 @@ const DBProductPage = () => {
           <div className="product-layout">
 
             {/* LEFT: Image gallery */}
-            <div className="product-media">
+            <div className={`product-media ${images.length <= 1 ? "no-thumbnails" : ""}`}>
               {images.length > 1 && (
                 <div className="product-thumbnails">
                   {images.map((img, idx) => (
@@ -154,16 +155,21 @@ const DBProductPage = () => {
                 )}
                 {images.length > 0 ? (
                   <AnimatePresence mode="wait">
-                    <motion.img
+                    <motion.div
                       key={currentImg}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.2 }}
-                      src={images[currentImg]}
-                      alt={product.name}
-                      className="product-main-image object-contain"
-                    />
+                      className="w-full h-full flex items-center justify-center"
+                    >
+                      <TrimmedProductImage
+                        src={images[currentImg]}
+                        alt={product.name}
+                        className="product-main-image"
+                        style={{ mixBlendMode: 'multiply' }}
+                      />
+                    </motion.div>
                   </AnimatePresence>
                 ) : (
                   <div className="w-full h-[500px] flex flex-col items-center justify-center text-[#ccc]">
@@ -210,7 +216,7 @@ const DBProductPage = () => {
                 <div className="product-options">
                   {sizes.length > 0 && (
                     <div className="option-group">
-                      <span className="option-label block">Select Size</span>
+                      <span className="option-label block tracking-[0.25em]">S I Z E</span>
                       <div className="size-selector">
                         {sizes.map((s) => (
                           <button
@@ -292,6 +298,23 @@ const DBProductPage = () => {
                   ))}
                 </div>
               </div>
+
+              {/* Key Features (Trek/Cannondale style) */}
+              {keyFeatures.length > 0 && (
+                <div className="product-section features-section">
+                  <h3 className="product-section-title">Key Features</h3>
+                  <ul className="product-bullet-list" style={{ listStyle: "none", paddingLeft: 0 }}>
+                    {keyFeatures.map((feature, i) => (
+                      <li key={i} className="flex items-start gap-2.5 mb-2.5">
+                        <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center">
+                          <Check className="w-3 h-3 text-primary" />
+                        </span>
+                        <span className="text-[14px] text-[#374151] leading-snug">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               {/* Specifications */}
               {specs.length > 0 && (
@@ -395,73 +418,6 @@ const DBProductPage = () => {
         </section>
       )}
 
-      {/* Sticky bottom bar */}
-      <AnimatePresence>
-        {showStickyBar && (
-          <motion.div
-            initial={{ y: 80, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 80, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="sticky-cart-bar"
-          >
-            <div className="sticky-product-info">
-              {images[0] ? (
-                <img src={images[0]} alt={product.name} />
-              ) : (
-                <div className="w-[50px] h-[50px] bg-[#fafafa] flex items-center justify-center border border-[#eee] rounded-md mr-3">
-                  <span className="text-[8px] text-[#ccc] font-bold uppercase">No Img</span>
-                </div>
-              )}
-              <div>
-                <span className="sticky-product-name block">{product.name}</span>
-                <span className="sticky-product-brand block">{product.brand}</span>
-              </div>
-            </div>
-
-            <div className="sticky-actions">
-              {selectedSize && (
-                <div className="flex items-center gap-2 mr-2 sticky-size">
-                  <span className="text-[11px] font-semibold uppercase text-[#666] tracking-wider hidden md:inline">Size:</span>
-                  <span className="bg-[#f0f4f8] text-[#0b0f14] text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#e5eaf0]">
-                    {selectedSize}
-                  </span>
-                </div>
-              )}
-
-              <div className="hidden md:flex items-center border border-[#e5eaf0] rounded-xl bg-white p-0.5 mr-2 sticky-quantity">
-                <button
-                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="w-7 h-7 flex items-center justify-center text-[#666] hover:bg-slate-50 rounded-lg transition-colors"
-                >
-                  <Minus className="w-3" />
-                </button>
-                <span className="w-8 text-center font-semibold text-xs text-[#0b0f14]">{quantity}</span>
-                <button
-                  onClick={() => setQuantity((q) => q + 1)}
-                  className="w-7 h-7 flex items-center justify-center text-[#666] hover:bg-slate-50 rounded-lg transition-colors"
-                >
-                  <Plus className="w-3" />
-                </button>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <span className="text-sm font-semibold text-[#0b0f14] mr-1 sticky-price">
-                  ₹{product.price.toLocaleString("en-IN")}
-                </span>
-                <Button
-                  onClick={handleAddToCart}
-                  disabled={product.stock_status === "Out of Stock"}
-                  className="sticky-add-to-cart bg-[#0b0f14] text-white hover:bg-primary h-11 text-xs tracking-wider px-6 shadow-md"
-                >
-                  <ShoppingBag className="w-4 h-4 mr-1.5" />
-                  Add to Cart
-                </Button>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </PageShell>
   );
 };

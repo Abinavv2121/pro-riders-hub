@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageShell from "@/components/PageShell";
 import { useAuth } from "@/contexts/AuthContext";
@@ -92,7 +92,7 @@ const UserDashboard = () => {
                     {loading ? (
                         <div className="text-center py-10">Loading your orders...</div>
                     ) : orders.length === 0 ? (
-                        <div className="text-center py-12 px-4 border border-border rounded-xl bg-card">
+                        <div className="text-center py-12 px-4 border border-gray-200 rounded-xl bg-white">
                             <Package className="w-10 h-10 mx-auto text-muted-foreground/40 mb-3" />
                             <p className="text-muted-foreground font-body mb-4">You haven't placed any orders yet.</p>
                             <Button onClick={() => navigate("/shop")}>Start Shopping</Button>
@@ -104,10 +104,10 @@ const UserDashboard = () => {
                                 const itemsArr = Array.isArray(order.items) ? order.items : [];
                                 const date = order.created_at ? new Date(order.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "—";
                                 return (
-                                    <div key={order.id} className="border border-border rounded-xl bg-card overflow-hidden">
+                                    <div key={order.id} className="border border-gray-200 rounded-xl bg-white overflow-hidden">
                                         {/* Order summary row */}
                                         <div
-                                            className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-5 cursor-pointer hover:bg-muted/20 transition-colors"
+                                            className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-5 cursor-pointer hover:bg-gray-50 transition-colors"
                                             onClick={() => setExpandedOrder(isExpanded ? null : (order.id ?? null))}
                                         >
                                             <div className="flex items-start gap-4">
@@ -141,7 +141,7 @@ const UserDashboard = () => {
 
                                         {/* Expanded details */}
                                         {isExpanded && (
-                                            <div className="border-t border-border px-5 py-4 bg-muted/10 space-y-4">
+                                            <div className="border-t border-gray-200 px-5 py-4 bg-gray-50 space-y-4">
                                                 <div className="grid sm:grid-cols-2 gap-3 text-sm">
                                                     <div>
                                                         <span className="text-xs text-muted-foreground uppercase tracking-wider font-heading block mb-0.5">Delivery Address</span>
@@ -156,9 +156,9 @@ const UserDashboard = () => {
                                                     <span className="text-xs text-muted-foreground uppercase tracking-wider font-heading block mb-2">Items ({itemsArr.length})</span>
                                                     <div className="space-y-2">
                                                         {itemsArr.map((item: { id?: string | number; name?: string; brand?: string; image?: string; color?: string; size?: string; quantity?: number; price?: number }, idx: number) => (
-                                                            <div key={idx} className="flex items-center gap-3 bg-card border border-border rounded-lg p-3">
+                                                            <div key={idx} className="flex items-center gap-3 bg-white border border-gray-200 rounded-lg p-3">
                                                                 {item.image && (
-                                                                    <img src={item.image} alt={item.name} className="w-12 h-12 object-contain rounded-md bg-white border border-border shrink-0" />
+                                                                    <img src={item.image} alt={item.name} className="w-12 h-12 object-contain rounded-md bg-white border border-gray-200 shrink-0" />
                                                                 )}
                                                                 <div className="flex-1 min-w-0">
                                                                     <p className="font-heading font-bold text-sm truncate">{item.name}</p>
@@ -190,14 +190,14 @@ const UserDashboard = () => {
                     {loading ? (
                         <div className="text-center py-10">Loading your enquiries...</div>
                     ) : enquiries.length === 0 ? (
-                        <div className="text-center py-12 px-4 border border-border rounded-xl bg-card">
+                        <div className="text-center py-12 px-4 border border-gray-200 rounded-xl bg-white">
                             <p className="text-muted-foreground font-body mb-4">You haven't made any enquiries yet.</p>
                             <Button onClick={() => navigate("/shop")}>Browse Shop</Button>
                         </div>
                     ) : (
                         <div className="grid gap-4">
                             {enquiries.map((enq) => (
-                                <div key={enq.id} className="p-6 border border-border rounded-xl bg-card hover:border-border/80 transition-colors">
+                                <div key={enq.id} className="p-6 border border-gray-200 rounded-xl bg-white hover:border-gray-300 transition-colors">
                                     <div className="flex flex-col md:flex-row justify-between gap-4 mb-4">
                                         <h3 className="font-heading font-bold text-lg">{enq.subject || "General Enquiry"}</h3>
                                         <div className="flex items-center gap-2 text-sm text-muted-foreground pt-1">
@@ -205,7 +205,7 @@ const UserDashboard = () => {
                                             {new Date(enq.created_at || "").toLocaleDateString()}
                                         </div>
                                     </div>
-                                    <p className="text-muted-foreground font-body text-sm line-clamp-3 bg-muted/30 p-4 rounded-lg">
+                                    <p className="text-muted-foreground font-body text-sm line-clamp-3 bg-gray-50 p-4 rounded-lg">
                                         {enq.message}
                                     </p>
                                 </div>

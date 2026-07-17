@@ -678,95 +678,10 @@ const excelPreOwned: JsonBike[] = [
 // ═════════════════════════════════════════════════════
 // Convert JSON entries into Bike objects
 // ═════════════════════════════════════════════════════
-function convertJsonToBikes(entries: JsonBike[], startId: number, isPreOwned: boolean): Bike[] {
-    const result: Bike[] = [];
-    let id = startId;
-
-    for (const entry of entries) {
-        for (const variant of entry.variants) {
-            const gs = variant.groupset || "Shimano Tourney";
-            const fm = inferFrameMaterial(entry.brand, gs, entry.product);
-            const bt = inferBrakeType(entry.product, gs);
-            const gears = inferGears(gs);
-            const ws = inferWheelSize(entry.category);
-            const isUsed = variant.condition === "used" || isPreOwned;
-
-            // Determine category
-            let category: BikeCategory;
-            if (entry.category === "hybrid") {
-                category = "hybrid";
-            } else if (entry.category === "mtb") {
-                category = "mtb";
-            } else {
-                category = inferRoadCategory(entry.product, entry.brand);
-            }
-
-            // Determine bikeType label
-            let bikeType: string;
-            if (entry.category === "hybrid") bikeType = "Hybrid";
-            else if (entry.category === "mtb") bikeType = "MTB";
-            else {
-                const catMap: Record<string, string> = {
-                    "race-road": "Race Road",
-                    "endurance-road": "Endurance Road",
-                    "gravel": "Gravel",
-                    "city-fitness": "City & Fitness",
-                };
-                bikeType = catMap[category] || "Road";
-            }
-
-            const price = inferPrice(gs, fm, entry.category);
-            const img = brandImage(entry.brand);
-
-            // Tag logic
-            let tag: string | null = null;
-            if (isUsed) tag = "Pre-Owned";
-            else if (variant.year === 2025) tag = "New Arrival";
-            else if (variant.year === 2023) tag = "Stock Clearance/Sale";
-
-            const bike: Bike = {
-                id: id++,
-                name: `${entry.product}`,
-                brand: entry.brand,
-                category,
-                image: img,
-                images: [img, img],
-                color: variant.color,
-                size: variant.size,
-                tag,
-                price: isUsed ? Math.round(price * 0.6) : price,
-                originalPrice: isUsed ? price : (tag === "Stock Clearance/Sale" ? Math.round(price * 1.15) : undefined),
-                bikeType,
-                gears,
-                frameMaterial: fm,
-                groupset: gs,
-                brakeType: bt,
-                wheelSize: ws,
-                rating: isUsed ? 4 : (Math.random() > 0.5 ? 5 : 4),
-                reviews: Math.floor(Math.random() * 15) + 2,
-                stockStatus: "In Stock",
-                condition: isUsed ? "used" : "new",
-                year: variant.year,
-            };
-
-            result.push(bike);
-        }
-    }
-
-    return result;
-}
-
-const newStockBikes = convertJsonToBikes(jsonStock, 100, false);
-const preOwnedBikes = convertJsonToBikes(excelPreOwned, 500, true);
-
-// ═════════════════════════════════════════════════════
 // FINAL COMBINED EXPORT
 // ═════════════════════════════════════════════════════
-export const bikes: Bike[] = [
-    ...existingBikes,
-    ...newStockBikes,
-    ...preOwnedBikes,
-];
+// Hardcoded bikes removed. We only use db_products now.
+export const bikes: Bike[] = [];
 
 // Derive unique brands and their categories from the data
 export const bikeBrands = (() => {

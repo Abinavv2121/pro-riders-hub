@@ -1,6 +1,7 @@
 import PageShell from "@/components/PageShell";
 import ProductQueryForm from "@/components/ProductQueryForm";
 import ReviewSection from "@/components/ReviewSection";
+import TrimmedProductImage from "@/components/TrimmedProductImage";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -202,22 +203,24 @@ const ProductPage = () => {
           <div className="product-layout">
             
             {/* LEFT: Media Stage */}
-            <div className="product-media">
+             <div className={`product-media ${images.length <= 1 ? "no-thumbnails" : ""}`}>
               {/* Thumbnails */}
-              <div className="product-thumbnails">
-                {images.map((img, idx) => (
-                  <div
-                    key={idx}
-                    onClick={() => setCurrentIndex(idx)}
-                    className={`product-thumbnail ${idx === currentIndex ? "active" : ""}`}
-                  >
-                    <img src={img} alt={`View ${idx + 1}`} />
-                  </div>
-                ))}
-              </div>
+              {images.length > 1 && (
+                <div className="product-thumbnails">
+                  {images.map((img, idx) => (
+                    <div
+                      key={idx}
+                      onClick={() => setCurrentIndex(idx)}
+                      className={`product-thumbnail ${idx === currentIndex ? "active" : ""}`}
+                    >
+                      <img src={img} alt={`View ${idx + 1}`} />
+                    </div>
+                  ))}
+                </div>
+              )}
 
               {/* Main Image Stage */}
-              <div className="product-image-stage relative overflow-hidden">
+              <div className="product-image-stage relative overflow-hidden bg-[#fafafa]">
                 {bike.tag && (
                   <span className="absolute top-5 left-5 z-10 bg-[#111111] text-white text-[10px] font-heading font-black uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full">
                     {bike.tag}
@@ -229,16 +232,21 @@ const ProductPage = () => {
                   </span>
                 )}
                 <AnimatePresence mode="wait">
-                  <motion.img
+                  <motion.div
                     key={currentIndex}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.2 }}
-                    src={images[currentIndex]}
-                    alt={bike.name}
-                    className="product-main-image"
-                  />
+                    className="w-full h-full flex items-center justify-center"
+                  >
+                    <TrimmedProductImage
+                      src={images[currentIndex]}
+                      alt={bike.name}
+                      className="product-main-image"
+                      style={{ mixBlendMode: 'multiply' }}
+                    />
+                  </motion.div>
                 </AnimatePresence>
               </div>
             </div>
@@ -283,7 +291,7 @@ const ProductPage = () => {
 
                 <div className="product-options">
                   <div className="option-group">
-                    <span className="option-label block">Select Size</span>
+                    <span className="option-label block tracking-[0.25em]">S I Z E</span>
                     <div className="size-selector">
                       {bike.size.split(" / ").map((s) => (
                         <button

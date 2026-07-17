@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { supabase, DbProduct } from "@/lib/supabase";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, X, Upload, Loader2, Package, Image as ImageIcon, Pencil } from "lucide-react";
+import { Plus, Trash2, X, Upload, Loader2, Package, Image as ImageIcon, Pencil, Search } from "lucide-react";
 
 const STOCK_STATUSES = ["In Stock", "Limited Stock", "Out of Stock"] as const;
 const PRODUCT_TYPES = ["bike", "apparel", "accessory"] as const;
@@ -31,9 +31,32 @@ const CATEGORIES_BY_TYPE: Record<string, { key: string; label: string }[]> = {
     { key: "shoe-covers",label: "Shoe Covers" },
   ],
   accessory: [
-    { key: "helmets",         label: "Helmets" },
+    // helmets
+    { key: "road-helmets",    label: "Road Helmets" },
+    { key: "mtb-helmets",     label: "MTB Helmets" },
+    { key: "aero-helmets",    label: "Aero Helmets" },
+    { key: "kids-helmets",    label: "Kids Helmets" },
+    { key: "helmets",         label: "Helmets (General)" },
+    // bar tape & grips
+    { key: "bar-tape",        label: "Bar Tape" },
+    { key: "grips",           label: "Grips" },
+    // cockpit / components
+    { key: "skewers",         label: "Skewers" },
+    { key: "fenders",         label: "Fenders" },
+    // lighting & safety
     { key: "lights",          label: "Lights" },
+    // carrying & storage
     { key: "bags",            label: "Bags" },
+    { key: "mounts",          label: "Mounts" },
+    // security
+    { key: "locks",           label: "Locks" },
+    { key: "clamps",          label: "Clamps" },
+    // utility
+    { key: "pumps",           label: "Pumps" },
+    { key: "tools",           label: "Tools" },
+    { key: "mirrors",         label: "Mirrors" },
+    { key: "bells",           label: "Bells" },
+    // other
     { key: "hydration",       label: "Hydration" },
     { key: "car-racks",       label: "Car Racks" },
     { key: "training-tech",   label: "Training Tech" },
@@ -59,6 +82,15 @@ const emptyForm = (): Omit<DbProduct, "id" | "created_at"> => ({
   is_active: true,
 });
 
+const TYPE_FILTERS = [
+  { key: "all",       label: "All" },
+  { key: "bike",      label: "Bikes" },
+  { key: "apparel",   label: "Apparels" },
+  { key: "accessory", label: "Accessories" },
+] as const;
+
+type TypeFilter = typeof TYPE_FILTERS[number]["key"];
+
 const ProductsManagement = () => {
   const [products, setProducts] = useState<DbProduct[]>([]);
   const [loading, setLoading] = useState(true);
@@ -71,6 +103,26 @@ const ProductsManagement = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [uploadingImage, setUploadingImage] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [search, setSearch] = useState("");
+  const [typeFilter, setTypeFilter] = useState<TypeFilter>("all");
+
+  const filteredProducts = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return products.filter((p) => {
+      const matchesType = typeFilter === "all" || p.type === typeFilter;
+      if (!matchesType) return false;
+      if (!q) return true;
+      const categoryLabel =
+        CATEGORIES_BY_TYPE[p.type]?.find((c) => c.key === p.category)?.label ??
+        p.category;
+      return (
+        p.name.toLowerCase().includes(q) ||
+        p.brand.toLowerCase().includes(q) ||
+        categoryLabel.toLowerCase().includes(q) ||
+        p.type.toLowerCase().includes(q)
+      );
+    });
+  }, [products, search, typeFilter]);
 
   useEffect(() => {
     fetchProducts();
@@ -209,14 +261,61 @@ const ProductsManagement = () => {
 
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Products</h2>
-          <p className="text-sm text-gray-500 mt-0.5">{products.length} products in database</p>
+          <p className="text-sm text-gray-500 mt-0.5">
+            {filteredProducts.length === products.length
+              ? `${products.length} products in database`
+              : `${filteredProducts.length} of ${products.length} products`}
+          </p>
         </div>
         <Button onClick={() => setShowForm(true)} className="gap-2">
           <Plus className="w-4 h-4" /> Add Product
         </Button>
+      </div>
+
+      {/* Search + Type Filter */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search by name, brand or category…"
+            className="w-full pl-9 pr-9 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-gray-500 bg-white"
+          />
+          {search && (
+            <button
+              onClick={() => setSearch("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+        <div className="flex gap-1.5 shrink-0">
+          {TYPE_FILTERS.map(({ key, label }) => (
+            <button
+              key={key}
+              onClick={() => setTypeFilter(key)}
+              className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors border ${
+                typeFilter === key
+                  ? "bg-gray-900 text-white border-gray-900"
+                  : "bg-white text-gray-600 border-gray-300 hover:border-gray-400"
+              }`}
+            >
+              {label}
+              {key !== "all" && (
+                <span className="ml-1.5 opacity-60">
+                  {products.filter((p) => p.type === key).length}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Create Product Modal */}
@@ -312,14 +411,57 @@ const ProductsManagement = () => {
 
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-600 mb-1.5">Size</label>
-                  <input
-                    type="text"
-                    value={form.size || ""}
-                    onChange={(e) => setForm((f) => ({ ...f, size: e.target.value }))}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gray-500"
-                    placeholder="S / M / L / XL"
-                  />
+                  <label className="block text-xs font-semibold text-gray-600 mb-2">Size</label>
+                  <div className="flex flex-wrap gap-1.5 mb-2 p-2 border border-gray-200 rounded-lg min-h-[42px] bg-gray-50">
+                    {(form.size || "").split(" / ").filter(Boolean).length > 0 ? (
+                      (form.size || "").split(" / ").filter(Boolean).map((s, idx) => (
+                        <span key={idx} className="inline-flex items-center gap-1 bg-white px-2 py-1 rounded text-xs font-medium text-gray-800 border border-gray-200 shadow-sm">
+                          {s}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const sizes = (form.size || "").split(" / ").filter(Boolean);
+                              sizes.splice(idx, 1);
+                              setForm(f => ({ ...f, size: sizes.join(" / ") }));
+                            }}
+                            className="text-gray-400 hover:text-red-500 transition-colors"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-xs text-gray-400 my-auto ml-1">No sizes added</span>
+                    )}
+                  </div>
+                  <select
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (!val) return;
+                      const sizes = (form.size || "").split(" / ").filter(Boolean);
+                      if (!sizes.includes(val)) {
+                        sizes.push(val);
+                        setForm((f) => ({ ...f, size: sizes.join(" / ") }));
+                      }
+                      e.target.value = "";
+                    }}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gray-500 bg-white"
+                  >
+                    <option value="">Select size to add...</option>
+                    <option value="XS">XS</option>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                    <option value="XXL">XXL</option>
+                    <option value="48">48</option>
+                    <option value="50">50</option>
+                    <option value="52">52</option>
+                    <option value="54">54</option>
+                    <option value="56">56</option>
+                    <option value="58">58</option>
+                    <option value="60">60</option>
+                  </select>
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-600 mb-1.5">Color</label>
@@ -481,11 +623,20 @@ const ProductsManagement = () => {
         <div className="flex items-center justify-center py-16 text-gray-400">
           <Loader2 className="w-6 h-6 animate-spin mr-2" /> Loading products...
         </div>
-      ) : products.length === 0 ? (
+      ) : filteredProducts.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 text-gray-400 border-2 border-dashed border-gray-200 rounded-xl">
           <Package className="w-10 h-10 mb-3 opacity-50" />
-          <p className="font-medium">No products yet</p>
-          <p className="text-sm mt-1">Click "Add Product" to create your first product</p>
+          {search || typeFilter !== "all" ? (
+            <>
+              <p className="font-medium">No products match your search</p>
+              <p className="text-sm mt-1">Try a different name, brand, or filter</p>
+            </>
+          ) : (
+            <>
+              <p className="font-medium">No products yet</p>
+              <p className="text-sm mt-1">Click "Add Product" to create your first product</p>
+            </>
+          )}
         </div>
       ) : (
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
@@ -502,7 +653,7 @@ const ProductsManagement = () => {
                 </tr>
               </thead>
               <tbody>
-                {products.map((p) => (
+                {filteredProducts.map((p) => (
                   <tr key={p.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                     <td className="p-4">
                       <div className="flex items-center gap-3">

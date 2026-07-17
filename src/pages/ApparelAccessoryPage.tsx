@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { products } from "@/data/products";
 import { ProductCard } from "@/components/ProductCard";
+import TrimmedProductImage from "@/components/TrimmedProductImage";
 import {
   ShoppingBag,
   ArrowRight,
@@ -124,7 +125,7 @@ const ApparelAccessoryPage = () => {
           <div className="product-layout">
             
             {/* LEFT: Media Stage */}
-            <div className="product-media">
+            <div className={`product-media ${images.length <= 1 ? "no-thumbnails" : ""}`}>
               {/* Main Image Stage */}
               <div className="product-image-stage relative overflow-hidden bg-[#fafafa]">
                 {product.tag && (
@@ -139,16 +140,21 @@ const ApparelAccessoryPage = () => {
                 )}
                 <AnimatePresence mode="wait">
                   {images[currentIndex] ? (
-                    <motion.img
+                    <motion.div
                       key={currentIndex}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.2 }}
-                      src={images[currentIndex]}
-                      alt={product.name}
-                      className="product-main-image object-contain"
-                    />
+                      className="w-full h-full flex items-center justify-center"
+                    >
+                      <TrimmedProductImage
+                        src={images[currentIndex]}
+                        alt={product.name}
+                        className="product-main-image"
+                        style={{ mixBlendMode: 'multiply' }}
+                      />
+                    </motion.div>
                   ) : (
                     <motion.div
                       key={currentIndex}
@@ -199,7 +205,7 @@ const ApparelAccessoryPage = () => {
               <div className="purchase-panel">
                 <div className="product-options">
                   <div className="option-group">
-                    <span className="option-label block">Select Size</span>
+                    <span className="option-label block tracking-[0.25em]">S I Z E</span>
                     <div className="size-selector">
                       {product.size.split(" / ").map((s) => (
                         <button

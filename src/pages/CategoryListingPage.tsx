@@ -29,6 +29,7 @@ const CategoryListingPage = ({ type, title, description }: CategoryListingPagePr
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedSubType, setSelectedSubType] = useState<string | null>(null);
   const [selectedBrand, setSelectedBrand] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("featured");
   const [showFilters, setShowFilters] = useState(false);
@@ -71,11 +72,25 @@ const CategoryListingPage = ({ type, title, description }: CategoryListingPagePr
   useEffect(() => {
     const catParam = searchParams.get("category");
     const brandParam = searchParams.get("brand");
+    const subTypeParam = searchParams.get("type");
+
+    const isMainHeaderClick = !catParam && !brandParam && !subTypeParam;
+
+    if (isMainHeaderClick) {
+      setSearchQuery("");
+      setSortBy("featured");
+    }
 
     if (catParam) {
       setSelectedCategory(catParam);
     } else {
       setSelectedCategory("all");
+    }
+
+    if (subTypeParam) {
+      setSelectedSubType(subTypeParam);
+    } else {
+      setSelectedSubType(null);
     }
 
     if (brandParam) {
@@ -92,10 +107,51 @@ const CategoryListingPage = ({ type, title, description }: CategoryListingPagePr
   }, [type]);
 
   const filteredItems = useMemo(() => {
+    const matchesCategory = (pCategory: string) => {
+      const pCat = pCategory ? pCategory.toLowerCase() : "";
+      const selCat = selectedCategory ? selectedCategory.toLowerCase() : "all";
+      const subType = selectedSubType ? selectedSubType.toLowerCase() : null;
+
+      if (selCat === "all") return true;
+
+      // 1. Helmets
+      if (selCat === "helmets") {
+        if (subType) {
+          if (subType === "road") return pCat === "road-helmets";
+          if (subType === "mtb") return pCat === "mtb-helmets";
+          if (subType === "aero") return pCat === "aero-helmets";
+          if (subType === "kids") return pCat === "kids-helmets";
+          return pCat.includes("helmets");
+        }
+        return pCat.includes("helmets");
+      }
+
+      // 2. Handlebars & Grips
+      if (selCat === "handlebars-grips") {
+        if (subType) {
+          if (subType === "bar-tape") return pCat === "bar-tape";
+          if (subType === "grips") return pCat === "grips";
+        }
+        return pCat === "bar-tape" || pCat === "grips";
+      }
+
+      // 3. Record Your Training / Training Tech
+      if (selCat === "training-tech") {
+        if (subType) {
+          if (subType === "mounts") return pCat === "mounts";
+          if (subType === "hrm") return pCat === "hrm";
+        }
+        return pCat === "training-tech" || pCat === "mounts" || pCat === "hrm";
+      }
+
+      // 4. Default case-insensitive match
+      return pCat === selCat;
+    };
+
     const filter = (p: { name: string; brand: string; category: string }) =>
       (p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.brand.toLowerCase().includes(searchQuery.toLowerCase())) &&
-      (selectedCategory === "all" || p.category === selectedCategory) &&
+      matchesCategory(p.category) &&
       (selectedBrand.length === 0 || selectedBrand.includes(p.brand));
 
     const staticFiltered = typeProducts.filter(filter);
@@ -111,7 +167,7 @@ const CategoryListingPage = ({ type, title, description }: CategoryListingPagePr
     }
 
     return combined;
-  }, [typeProducts, dbProducts, searchQuery, selectedCategory, selectedBrand, sortBy]);
+  }, [typeProducts, dbProducts, searchQuery, selectedCategory, selectedSubType, selectedBrand, sortBy]);
 
   const toggleBrand = (brand: string) => {
     setSelectedBrand((prev) =>
