@@ -47,21 +47,18 @@ export const DbProductCard = ({ product, index, layout = "center" }: DbProductCa
       onClick={() => navigate(`/db-product/${product.id}`)}
       className={`${cardClass} group relative bg-white transition-all duration-300 cursor-pointer flex flex-col items-center select-none ${layout === "left" ? "layout-left" : ""} ${product.on_sale ? "ring-1 ring-red-300" : ""}`}
     >
-      {/* ── SALE badge (top-left corner ribbon) ── */}
-      {product.on_sale && (
-        <div className="absolute top-0 left-0 z-30 pointer-events-none">
-          <div className="bg-red-600 text-white text-[9px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-br-lg rounded-tl-[inherit] shadow-sm select-none">
-            SALE
-          </div>
-        </div>
-      )}
-
-      {/* Top Badges */}
+      {/* ── Top Badges (stacked vertically, no overlap) ── */}
       <div className="absolute top-2 left-2 right-2 z-20 pointer-events-none flex justify-between items-start gap-2">
-        <div className="flex flex-col gap-1.5 items-start">
-          {/* push stock badge down when SALE ribbon is present */}
+
+        {/* Left column: SALE (first) → stock status (below) → tag (below) */}
+        <div className="flex flex-col gap-1 items-start">
+          {product.on_sale && (
+            <span className="inline-block text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-0.5 rounded bg-red-600 text-white shadow-sm">
+              SALE
+            </span>
+          )}
           {layout === "left" && (
-            <span className={`inline-block whitespace-nowrap text-[8px] font-sans font-extrabold uppercase tracking-widest px-2 py-0.5 rounded border ${getStockBadgeClass(product.stock_status)} ${product.on_sale ? "mt-5" : ""}`}>
+            <span className={`inline-block whitespace-nowrap text-[8px] font-sans font-extrabold uppercase tracking-widest px-2 py-0.5 rounded border ${getStockBadgeClass(product.stock_status)}`}>
               {product.stock_status || "In Stock"}
             </span>
           )}
@@ -71,6 +68,8 @@ export const DbProductCard = ({ product, index, layout = "center" }: DbProductCa
             </span>
           )}
         </div>
+
+        {/* Right column: stock status (center layout only) */}
         {layout !== "left" && (
           <div className="flex flex-col items-end">
             <span className={`inline-block whitespace-nowrap text-[8px] font-sans font-extrabold uppercase tracking-widest px-2 py-0.5 rounded border ${getStockBadgeClass(product.stock_status)}`}>
@@ -79,6 +78,7 @@ export const DbProductCard = ({ product, index, layout = "center" }: DbProductCa
           </div>
         )}
       </div>
+
 
       {/* Image */}
       <div className="relative w-full aspect-square flex items-center justify-center overflow-hidden">
