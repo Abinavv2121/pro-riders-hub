@@ -32,6 +32,7 @@ export interface DbProduct {
   size?: string;
   color?: string;
   is_active?: boolean;
+  on_sale?: boolean;
   created_at?: string;
 }
 

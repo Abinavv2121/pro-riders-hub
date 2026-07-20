@@ -35,8 +35,13 @@ CREATE TABLE IF NOT EXISTS db_products (
   size text,
   color text,
   is_active boolean DEFAULT true,
+  on_sale boolean DEFAULT false,        -- true when product is currently on sale
   created_at timestamp with time zone DEFAULT now()
 );
+
+-- If the table already exists, run this to add the on_sale column:
+-- ALTER TABLE db_products ADD COLUMN IF NOT EXISTS on_sale boolean DEFAULT false;
+
 
 -- ============================================================
 -- SALES / PROMOTIONS

@@ -45,13 +45,23 @@ export const DbProductCard = ({ product, index, layout = "center" }: DbProductCa
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.05, ease: [0.4, 0, 0.2, 1] }}
       onClick={() => navigate(`/db-product/${product.id}`)}
-      className={`${cardClass} group relative bg-white transition-all duration-300 cursor-pointer flex flex-col items-center select-none ${layout === "left" ? "layout-left" : ""}`}
+      className={`${cardClass} group relative bg-white transition-all duration-300 cursor-pointer flex flex-col items-center select-none ${layout === "left" ? "layout-left" : ""} ${product.on_sale ? "ring-1 ring-red-300" : ""}`}
     >
+      {/* ── SALE badge (top-left corner ribbon) ── */}
+      {product.on_sale && (
+        <div className="absolute top-0 left-0 z-30 pointer-events-none">
+          <div className="bg-red-600 text-white text-[9px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-br-lg rounded-tl-[inherit] shadow-sm select-none">
+            SALE
+          </div>
+        </div>
+      )}
+
       {/* Top Badges */}
       <div className="absolute top-2 left-2 right-2 z-20 pointer-events-none flex justify-between items-start gap-2">
         <div className="flex flex-col gap-1.5 items-start">
+          {/* push stock badge down when SALE ribbon is present */}
           {layout === "left" && (
-            <span className={`inline-block whitespace-nowrap text-[8px] font-sans font-extrabold uppercase tracking-widest px-2 py-0.5 rounded border ${getStockBadgeClass(product.stock_status)}`}>
+            <span className={`inline-block whitespace-nowrap text-[8px] font-sans font-extrabold uppercase tracking-widest px-2 py-0.5 rounded border ${getStockBadgeClass(product.stock_status)} ${product.on_sale ? "mt-5" : ""}`}>
               {product.stock_status || "In Stock"}
             </span>
           )}
