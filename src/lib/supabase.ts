@@ -123,7 +123,19 @@ export interface ServiceRequest {
   problem_description: string;
   bike_photos?: string[];
   invoice_url?: string;
-  status?: 'received' | 'diagnosing' | 'in-service' | 'ready' | 'delivered';
+  status?: 'received' | 'diagnosing' | 'awaiting-approval' | 'in-service' | 'ready' | 'delivered';
   created_at?: string;
 }
+
+export interface CommunityEvent {
+  id?: string;
+  name: string;
+  description: string;
+  banner_image: string;
+  faqs: string;
+  register_details: string;
+  rules: string;
+  created_at?: string;
+}
+
 

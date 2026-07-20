@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { supabase, Enquiry, Order, ServiceRequest } from "@/lib/supabase";
 import { toast } from "sonner";
 import { ShoppingBag, Calendar, Mail, Package, ChevronDown, ChevronUp, Truck, CheckCircle2, Wrench, Clock } from "lucide-react";
+import { ServiceStatusTracker } from "@/components/services";
 
 const UserDashboard = () => {
     const { user, loading: authLoading, signOut } = useAuth();
@@ -242,6 +243,10 @@ const UserDashboard = () => {
                                                     }
                                                 </span>
                                             </div>
+                                        </div>
+
+                                        <div className="mt-6 border-t pt-6">
+                                            <ServiceStatusTracker currentStage={req.status || "received"} />
                                         </div>
 
                                         {req.problem_description && (

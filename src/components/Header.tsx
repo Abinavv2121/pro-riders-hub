@@ -565,7 +565,7 @@ const Header = () => {
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-48 bg-white border border-[#CCE0F5] shadow-xl">
-                    <DropdownMenuItem onClick={() => navigate("/dashboard")} className="cursor-pointer font-heading font-semibold text-xs uppercase tracking-wider p-3 focus:bg-[#F0F6FF]">
+                    <DropdownMenuItem onClick={() => navigate("/dashboard")} className="text-black cursor-pointer font-heading font-semibold text-xs uppercase tracking-wider p-3 focus:bg-[#F0F6FF]">
                       Dashboard
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={async () => { await signOut(); navigate("/"); }} className="cursor-pointer font-heading font-semibold text-xs uppercase tracking-wider p-3 text-destructive focus:text-destructive focus:bg-destructive/5">

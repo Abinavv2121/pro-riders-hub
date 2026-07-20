@@ -18,6 +18,7 @@ import {
   AlertCircle,
   Star,
   Wrench,
+  Calendar,
 } from "lucide-react";
 import ProductsManagement from "@/components/admin/ProductsManagement";
 import SalesManagement from "@/components/admin/SalesManagement";
@@ -25,8 +26,9 @@ import OrdersManagement from "@/components/admin/OrdersManagement";
 import QueriesManagement from "@/components/admin/QueriesManagement";
 import ReviewsManagement from "@/components/admin/ReviewsManagement";
 import ServicesManagement from "@/components/admin/ServicesManagement";
+import EventsManagement from "@/components/admin/EventsManagement";
 
-type Section = "overview" | "products" | "sales" | "orders" | "queries" | "reviews" | "services";
+type Section = "overview" | "products" | "sales" | "orders" | "queries" | "reviews" | "services" | "events";
 
 interface Stats {
   products: number;
@@ -44,6 +46,7 @@ const NAV = [
   { id: "services" as Section, label: "Services", icon: Wrench },
   { id: "queries" as Section, label: "Queries", icon: MessageSquare },
   { id: "reviews" as Section, label: "Reviews", icon: Star },
+  { id: "events" as Section, label: "Community Events", icon: Calendar },
 ];
 
 const AdminDashboard = () => {
@@ -198,6 +201,7 @@ const AdminDashboard = () => {
           {section === "services" && <ServicesManagement />}
           {section === "queries" && <QueriesManagement />}
           {section === "reviews" && <ReviewsManagement />}
+          {section === "events" && <EventsManagement />}
         </main>
       </div>
     </div>

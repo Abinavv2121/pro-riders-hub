@@ -173,3 +173,37 @@ DO $$ BEGIN
   END IF;
 END $$;
 
+
+-- ============================================================
+-- COMMUNITY EVENTS
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS community_events (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  name text NOT NULL,
+  description text NOT NULL,
+  banner_image text NOT NULL,
+  faqs text NOT NULL,
+  register_details text NOT NULL,
+  rules text NOT NULL,
+  created_at timestamp with time zone DEFAULT now()
+);
+
+ALTER TABLE community_events ENABLE ROW LEVEL SECURITY;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='community_events' AND policyname='Allow public insert on community_events') THEN
+    CREATE POLICY "Allow public insert on community_events" ON community_events FOR INSERT WITH CHECK (true);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='community_events' AND policyname='Allow public select on community_events') THEN
+    CREATE POLICY "Allow public select on community_events" ON community_events FOR SELECT USING (true);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='community_events' AND policyname='Allow public update on community_events') THEN
+    CREATE POLICY "Allow public update on community_events" ON community_events FOR UPDATE USING (true);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='community_events' AND policyname='Allow public delete on community_events') THEN
+    CREATE POLICY "Allow public delete on community_events" ON community_events FOR DELETE USING (true);
+  END IF;
+END $$;
+
+

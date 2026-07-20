@@ -36,12 +36,11 @@ const ServiceStatusTracker = ({ currentStage, showLabels = true }: ServiceStatus
   const currentStageIndex = stages.findIndex((s) => s.id === currentStage);
 
   return (
-    <Card className="w-full" style={{ backgroundColor: "#FFFFFF", color: "#000000" }}>
-      <CardHeader>
-        <CardTitle className="text-[#000000]">Service Status</CardTitle>
-        <CardDescription className="text-[#000000]">Track the progress of your bike service</CardDescription>
+    <Card className="w-full border-none shadow-none bg-transparent" style={{ backgroundColor: "transparent", color: "#000000" }}>
+      <CardHeader className="px-0 pt-0">
+        <CardTitle className="text-[#000000] text-base font-heading font-bold">Service Status</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-0 pb-0">
         {/* Desktop View - Horizontal */}
         <div className="hidden md:block">
           <div className="flex items-start justify-between relative">
@@ -133,18 +132,7 @@ const ServiceStatusTracker = ({ currentStage, showLabels = true }: ServiceStatus
           })}
         </div>
 
-        {/* Current Status Summary */}
-        {currentStage && (
-          <div className="mt-6 p-4 bg-primary rounded-lg">
-            <p className="text-sm text-white/80">Current Status</p>
-            <p className="font-heading font-semibold text-black">
-              {stages[currentStageIndex]?.label}
-            </p>
-            <p className="text-xs text-white/70 mt-1">
-              {stages[currentStageIndex]?.description}
-            </p>
-          </div>
-        )}
+
       </CardContent>
     </Card>
   );

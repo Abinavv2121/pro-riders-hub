@@ -161,6 +161,7 @@ const ServiceRequestForm = ({ onSubmit, loading }: ServiceRequestFormProps) => {
             onChange={(e) => setProblemDescription(e.target.value)}
             rows={4}
             disabled={loading}
+            className="text-black"
           />
           <p className="text-xs text-muted-foreground">
             {problemDescription.length}/500 characters
