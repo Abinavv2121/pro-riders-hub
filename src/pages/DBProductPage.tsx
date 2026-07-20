@@ -3,7 +3,6 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import PageShell from "@/components/PageShell";
 import { supabase, DbProduct } from "@/lib/supabase";
 import { useCart } from "@/contexts/CartContext";
-import ProductQueryForm from "@/components/ProductQueryForm";
 import ReviewSection from "@/components/ReviewSection";
 import { DbProductCard } from "@/components/DbProductCard";
 import TrimmedProductImage from "@/components/TrimmedProductImage";
@@ -11,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import {
   ShoppingBag, ArrowLeft, Loader2, CreditCard, MessageCircle,
   ShieldCheck, Truck, CheckCircle2, Users, Plus, Minus, ArrowRight,
-  Check,
+  Check, ChevronLeft, ChevronRight, X,
 } from "lucide-react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
@@ -28,6 +27,22 @@ const DBProductPage = () => {
   const [currentImg, setCurrentImg] = useState(0);
   const [selectedSize, setSelectedSize] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+
+  const openLightbox = () => {
+    setLightboxIndex(currentImg);
+    setIsLightboxOpen(true);
+  };
+
+  const handleWriteReviewClick = () => {
+    setShowReviewForm(true);
+    const reviewElement = document.getElementById("reviews-section");
+    if (reviewElement) {
+      reviewElement.scrollIntoView({ behavior: "smooth" });
+    }
+  };
   const [similarProducts, setSimilarProducts] = useState<DbProduct[]>([]);
 
   useEffect(() => {
@@ -142,7 +157,10 @@ const DBProductPage = () => {
                 </div>
               )}
 
-              <div className="product-image-stage relative overflow-hidden bg-[#fafafa]">
+              <div 
+                onClick={openLightbox}
+                className="product-image-stage relative overflow-hidden bg-[#fafafa] cursor-pointer"
+              >
                 {product.tag && (
                   <span className="absolute top-5 left-5 z-10 bg-[#111111] text-white text-[10px] font-heading font-black uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full">
                     {product.tag}
@@ -377,6 +395,7 @@ const DBProductPage = () => {
               <span className="text-[#111111] font-semibold">{product.name}</span>.
             </p>
             <Button
+              onClick={handleWriteReviewClick}
               variant="outline"
               className="border-2 border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white rounded-xl font-heading font-black uppercase text-xs tracking-wider px-7 h-11"
             >
@@ -387,14 +406,15 @@ const DBProductPage = () => {
       </section>
 
       {/* Reviews */}
-      <section className="container mx-auto px-4 md:px-6 py-12">
-        <ReviewSection productId={product.id!} productName={product.name} />
+      <section id="reviews-section" className="container mx-auto px-4 md:px-6 py-12">
+        <ReviewSection 
+          productId={product.id!} 
+          productName={product.name} 
+          showForm={showReviewForm}
+          onShowFormChange={setShowReviewForm}
+        />
       </section>
 
-      {/* Ask a Question */}
-      <section className="container mx-auto px-4 md:px-6 py-12">
-        <ProductQueryForm productId={product.id!} productName={product.name} />
-      </section>
 
       {/* Similar Products */}
       {similarProducts.length > 0 && (
@@ -418,6 +438,62 @@ const DBProductPage = () => {
         </section>
       )}
 
+      {/* Fullscreen Lightbox Modal */}
+      <AnimatePresence>
+        {isLightboxOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center p-4 md:p-8"
+          >
+            {/* Main Stage */}
+            <div className="relative w-full max-w-6xl h-[65vh] flex items-center justify-center">
+              <TrimmedProductImage
+                src={images[lightboxIndex]}
+                alt={product.name}
+                className="max-h-full max-w-full w-auto h-auto object-contain"
+                style={{ mixBlendMode: 'multiply' }}
+              />
+            </div>
+
+            {/* Bottom Controls */}
+            <div className="flex items-center justify-center gap-4 mt-8">
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const newIdx = (lightboxIndex - 1 + images.length) % images.length;
+                  setLightboxIndex(newIdx);
+                  setCurrentImg(newIdx);
+                }}
+                className="w-12 h-12 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm cursor-pointer"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsLightboxOpen(false);
+                }}
+                className="w-12 h-12 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const newIdx = (lightboxIndex + 1) % images.length;
+                  setLightboxIndex(newIdx);
+                  setCurrentImg(newIdx);
+                }}
+                className="w-12 h-12 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm cursor-pointer"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </PageShell>
   );
 };

@@ -104,3 +104,25 @@ export interface ProductQuery {
   status?: 'pending' | 'replied';
   created_at?: string;
 }
+
+export interface ServiceRequest {
+  id?: string;
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string;
+  package_id: string;
+  package_name: string;
+  service_date: string;
+  service_time_slot: string;
+  priority_booking: boolean;
+  pickup_delivery: boolean;
+  total_price: number;
+  bike_brand?: string;
+  bike_model?: string;
+  problem_description: string;
+  bike_photos?: string[];
+  invoice_url?: string;
+  status?: 'received' | 'diagnosing' | 'in-service' | 'ready' | 'delivered';
+  created_at?: string;
+}
+

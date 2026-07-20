@@ -3,15 +3,16 @@ import { useNavigate } from "react-router-dom";
 import PageShell from "@/components/PageShell";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { supabase, Enquiry, Order } from "@/lib/supabase";
+import { supabase, Enquiry, Order, ServiceRequest } from "@/lib/supabase";
 import { toast } from "sonner";
-import { ShoppingBag, Calendar, Mail, Package, ChevronDown, ChevronUp, Truck, CheckCircle2 } from "lucide-react";
+import { ShoppingBag, Calendar, Mail, Package, ChevronDown, ChevronUp, Truck, CheckCircle2, Wrench, Clock } from "lucide-react";
 
 const UserDashboard = () => {
     const { user, loading: authLoading, signOut } = useAuth();
     const navigate = useNavigate();
     const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
     const [orders, setOrders] = useState<Order[]>([]);
+    const [serviceRequests, setServiceRequests] = useState<ServiceRequest[]>([]);
     const [loading, setLoading] = useState(true);
     const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
 
@@ -25,7 +26,7 @@ const UserDashboard = () => {
 
     const fetchData = async (email: string, userId: string) => {
         try {
-            const [enquiryRes, orderRes] = await Promise.all([
+            const [enquiryRes, orderRes, servicesRes] = await Promise.all([
                 supabase
                     .from("enquiries")
                     .select("*")
@@ -36,11 +37,19 @@ const UserDashboard = () => {
                     .select("*")
                     .eq("user_id", userId)
                     .order("created_at", { ascending: false }),
+                supabase
+                    .from("service_requests")
+                    .select("*")
+                    .eq("customer_email", email)
+                    .order("created_at", { ascending: false }),
             ]);
             if (enquiryRes.error) throw enquiryRes.error;
             if (orderRes.error && orderRes.error.code !== "42703" && !orderRes.error.message?.includes("user_id")) throw orderRes.error;
+            if (servicesRes.error) throw servicesRes.error;
+
             setEnquiries(enquiryRes.data || []);
             setOrders(orderRes.data || []);
+            setServiceRequests(servicesRes.data || []);
         } catch (error) {
             console.error("Error fetching data:", error);
             toast.error("Failed to load your profile data.");
@@ -171,6 +180,74 @@ const UserDashboard = () => {
                                                         ))}
                                                     </div>
                                                 </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
+
+                {/* My Service Requests */}
+                <div className="mb-14">
+                    <h2 className="text-2xl font-heading font-bold mb-6 flex items-center gap-2">
+                        <Wrench className="w-5 h-5 text-primary" />
+                        My Service Requests
+                        {serviceRequests.length > 0 && (
+                            <span className="ml-2 bg-primary/10 text-primary text-sm font-semibold px-2.5 py-0.5 rounded-full font-body">
+                                {serviceRequests.length}
+                            </span>
+                        )}
+                    </h2>
+
+                    {serviceRequests.length === 0 ? (
+                        <div className="text-center py-12 px-4 border border-gray-200 rounded-xl bg-white shadow-sm">
+                            <Wrench className="w-10 h-10 mx-auto text-muted-foreground/40 mb-3" />
+                            <p className="text-muted-foreground font-body mb-4">You haven't requested any services yet.</p>
+                            <Button onClick={() => navigate("/servicing")}>Book a Service</Button>
+                        </div>
+                    ) : (
+                        <div className="grid gap-4">
+                            {serviceRequests.map((req) => {
+                                const date = req.created_at ? new Date(req.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "—";
+                                const isDelivered = req.status === "delivered";
+                                const statusLabel = req.status ? req.status.charAt(0).toUpperCase() + req.status.slice(1) : "Received";
+                                return (
+                                    <div key={req.id} className="border border-gray-200 rounded-xl bg-white p-5 hover:border-gray-300 transition-colors shadow-sm">
+                                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                            <div className="space-y-1">
+                                                <h3 className="font-heading font-bold text-lg text-gray-900">{req.package_name}</h3>
+                                                <p className="text-xs text-muted-foreground font-body">
+                                                    Bike: <span className="font-medium text-gray-700">{req.bike_brand || "N/A"} {req.bike_model || "N/A"}</span>
+                                                </p>
+                                                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground font-body mt-2">
+                                                    <span className="flex items-center gap-1">
+                                                        <Calendar className="w-3.5 h-3.5" />
+                                                        Scheduled: {req.service_date} ({req.service_time_slot})
+                                                    </span>
+                                                    <span>Total: ₹{Number(req.total_price).toLocaleString("en-IN")}</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center gap-3">
+                                                <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full ${
+                                                    isDelivered
+                                                        ? "bg-green-100 text-green-700"
+                                                        : "bg-blue-100 text-blue-700"
+                                                }`}>
+                                                    {isDelivered
+                                                        ? <><CheckCircle2 className="w-3.5 h-3.5" /> Completed</>
+                                                        : <><Clock className="w-3.5 h-3.5" /> {statusLabel}</>
+                                                    }
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {req.problem_description && (
+                                            <div className="mt-4 bg-gray-50 rounded-lg p-3 border border-gray-100 text-sm text-gray-600 font-body">
+                                                <span className="font-semibold text-gray-700 block mb-1">Issue reported:</span>
+                                                "{req.problem_description}"
                                             </div>
                                         )}
                                     </div>

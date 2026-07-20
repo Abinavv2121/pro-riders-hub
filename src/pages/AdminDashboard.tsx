@@ -17,20 +17,23 @@ import {
   CheckCircle2,
   AlertCircle,
   Star,
+  Wrench,
 } from "lucide-react";
 import ProductsManagement from "@/components/admin/ProductsManagement";
 import SalesManagement from "@/components/admin/SalesManagement";
 import OrdersManagement from "@/components/admin/OrdersManagement";
 import QueriesManagement from "@/components/admin/QueriesManagement";
 import ReviewsManagement from "@/components/admin/ReviewsManagement";
+import ServicesManagement from "@/components/admin/ServicesManagement";
 
-type Section = "overview" | "products" | "sales" | "orders" | "queries" | "reviews";
+type Section = "overview" | "products" | "sales" | "orders" | "queries" | "reviews" | "services";
 
 interface Stats {
   products: number;
   activeSales: number;
   pendingOrders: number;
   openQueries: number;
+  pendingServices: number;
 }
 
 const NAV = [
@@ -38,6 +41,7 @@ const NAV = [
   { id: "products" as Section, label: "Products", icon: Package },
   { id: "sales" as Section, label: "Sales", icon: Tag },
   { id: "orders" as Section, label: "Orders", icon: ShoppingBag },
+  { id: "services" as Section, label: "Services", icon: Wrench },
   { id: "queries" as Section, label: "Queries", icon: MessageSquare },
   { id: "reviews" as Section, label: "Reviews", icon: Star },
 ];
@@ -46,7 +50,7 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const [section, setSection] = useState<Section>("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [stats, setStats] = useState<Stats>({ products: 0, activeSales: 0, pendingOrders: 0, openQueries: 0 });
+  const [stats, setStats] = useState<Stats>({ products: 0, activeSales: 0, pendingOrders: 0, openQueries: 0, pendingServices: 0 });
   const [loadingStats, setLoadingStats] = useState(true);
 
   useEffect(() => {
@@ -59,17 +63,19 @@ const AdminDashboard = () => {
 
   const fetchStats = async () => {
     setLoadingStats(true);
-    const [productsRes, salesRes, ordersRes, queriesRes] = await Promise.all([
+    const [productsRes, salesRes, ordersRes, queriesRes, servicesRes] = await Promise.all([
       supabase.from("db_products").select("id", { count: "exact" }),
       supabase.from("sales").select("id", { count: "exact" }).eq("is_active", true),
       supabase.from("orders").select("id", { count: "exact" }).eq("order_status", "to_be_delivered"),
       supabase.from("product_queries").select("id", { count: "exact" }).eq("status", "pending"),
+      supabase.from("service_requests").select("id", { count: "exact" }).neq("status", "delivered"),
     ]);
     setStats({
       products: productsRes.count ?? 0,
       activeSales: salesRes.count ?? 0,
       pendingOrders: ordersRes.count ?? 0,
       openQueries: queriesRes.count ?? 0,
+      pendingServices: servicesRes.count ?? 0,
     });
     setLoadingStats(false);
   };
@@ -137,6 +143,11 @@ const AdminDashboard = () => {
                   {stats.pendingOrders}
                 </span>
               )}
+              {id === "services" && stats.pendingServices > 0 && (
+                <span className="ml-auto bg-blue-600 text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1.5">
+                  {stats.pendingServices}
+                </span>
+              )}
               {id === "queries" && stats.openQueries > 0 && (
                 <span className="ml-auto bg-red-500 text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1.5">
                   {stats.openQueries}
@@ -184,6 +195,7 @@ const AdminDashboard = () => {
           {section === "products" && <ProductsManagement />}
           {section === "sales" && <SalesManagement />}
           {section === "orders" && <OrdersManagement />}
+          {section === "services" && <ServicesManagement />}
           {section === "queries" && <QueriesManagement />}
           {section === "reviews" && <ReviewsManagement />}
         </main>
@@ -226,6 +238,13 @@ const OverviewSection = ({
       section: "orders" as Section,
     },
     {
+      label: "Pending Services",
+      value: stats.pendingServices,
+      icon: Wrench,
+      color: "indigo",
+      section: "services" as Section,
+    },
+    {
       label: "Open Queries",
       value: stats.openQueries,
       icon: AlertCircle,
@@ -238,18 +257,19 @@ const OverviewSection = ({
     blue: { bg: "bg-blue-50", icon: "text-blue-600", text: "text-blue-700" },
     purple: { bg: "bg-purple-50", icon: "text-purple-600", text: "text-purple-700" },
     amber: { bg: "bg-amber-50", icon: "text-amber-600", text: "text-amber-700" },
+    indigo: { bg: "bg-indigo-50", icon: "text-indigo-600", text: "text-indigo-700" },
     red: { bg: "bg-red-50", icon: "text-red-600", text: "text-red-700" },
   };
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Dashboard Overview</h2>
-        <p className="text-sm text-gray-500 mt-0.5">Welcome back, Admin</p>
+        <h2 className="text-2xl font-bold text-gray-900 font-heading">Dashboard Overview</h2>
+        <p className="text-sm text-gray-500 mt-0.5 font-body">Welcome back, Admin</p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
         {cards.map(({ label, value, icon: Icon, color, section }) => {
           const c = colorMap[color];
           return (
@@ -264,9 +284,9 @@ const OverviewSection = ({
               {loading ? (
                 <div className="h-8 bg-gray-100 rounded animate-pulse mb-1" />
               ) : (
-                <p className={`text-3xl font-bold ${c.text}`}>{value}</p>
+                <p className={`text-3xl font-bold ${c.text} font-heading`}>{value}</p>
               )}
-              <p className="text-xs font-medium text-gray-500 mt-1 group-hover:text-gray-700 transition-colors">{label}</p>
+              <p className="text-xs font-medium text-gray-500 mt-1 group-hover:text-gray-700 transition-colors font-body">{label}</p>
             </button>
           );
         })}
@@ -274,12 +294,13 @@ const OverviewSection = ({
 
       {/* Quick Actions */}
       <div className="bg-white border border-gray-200 rounded-xl p-6">
-        <h3 className="text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide">Quick Actions</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <h3 className="text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide font-heading">Quick Actions</h3>
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
           {[
             { label: "Add Product", icon: Package, section: "products" as Section },
             { label: "New Sale", icon: Tag, section: "sales" as Section },
             { label: "View Orders", icon: ShoppingBag, section: "orders" as Section },
+            { label: "Services", icon: Wrench, section: "services" as Section },
             { label: "Queries", icon: MessageSquare, section: "queries" as Section },
           ].map(({ label, icon: Icon, section }) => (
             <button
@@ -288,7 +309,7 @@ const OverviewSection = ({
               className="flex flex-col items-center gap-2 p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors"
             >
               <Icon className="w-6 h-6 text-gray-600" />
-              <span className="text-xs font-medium text-gray-700">{label}</span>
+              <span className="text-xs font-medium text-gray-700 font-body">{label}</span>
             </button>
           ))}
         </div>

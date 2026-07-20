@@ -125,3 +125,46 @@ ALTER TABLE orders ADD COLUMN IF NOT EXISTS user_id uuid REFERENCES auth.users O
 --    Policy name: Allow admin uploads
 --    Operation: INSERT
 --    Check: true   (allow all inserts — protected by your admin auth layer)
+
+-- ============================================================
+-- BIKE SERVICING REQUESTS
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS service_requests (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  customer_name text NOT NULL,
+  customer_email text NOT NULL,
+  customer_phone text NOT NULL,
+  package_id text NOT NULL,
+  package_name text NOT NULL,
+  service_date text NOT NULL,
+  service_time_slot text NOT NULL,
+  priority_booking boolean DEFAULT false,
+  pickup_delivery boolean DEFAULT false,
+  total_price numeric NOT NULL,
+  bike_brand text,
+  bike_model text,
+  problem_description text NOT NULL,
+  bike_photos text[] DEFAULT '{}',
+  invoice_url text,
+  status text DEFAULT 'received',          -- 'received' | 'diagnosing' | 'in-service' | 'ready' | 'delivered'
+  created_at timestamp with time zone DEFAULT now()
+);
+
+ALTER TABLE service_requests ENABLE ROW LEVEL SECURITY;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='service_requests' AND policyname='Allow public insert on service_requests') THEN
+    CREATE POLICY "Allow public insert on service_requests" ON service_requests FOR INSERT WITH CHECK (true);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='service_requests' AND policyname='Allow public select on service_requests') THEN
+    CREATE POLICY "Allow public select on service_requests" ON service_requests FOR SELECT USING (true);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='service_requests' AND policyname='Allow public update on service_requests') THEN
+    CREATE POLICY "Allow public update on service_requests" ON service_requests FOR UPDATE USING (true);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='service_requests' AND policyname='Allow public delete on service_requests') THEN
+    CREATE POLICY "Allow public delete on service_requests" ON service_requests FOR DELETE USING (true);
+  END IF;
+END $$;
+

@@ -8,6 +8,8 @@ import { motion, AnimatePresence } from "framer-motion";
 interface Props {
   productId: string;
   productName: string;
+  showForm?: boolean;
+  onShowFormChange?: (show: boolean) => void;
 }
 
 const StarInput = ({ value, onChange }: { value: number; onChange: (v: number) => void }) => {
@@ -40,10 +42,19 @@ const StarDisplay = ({ rating }: { rating: number }) => (
   </div>
 );
 
-const ReviewSection = ({ productId, productName }: Props) => {
+const ReviewSection = ({ productId, productName, showForm: propShowForm, onShowFormChange }: Props) => {
   const [reviews, setReviews] = useState<ProductReview[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
+  const [localShowForm, setLocalShowForm] = useState(false);
+
+  const showForm = propShowForm !== undefined ? propShowForm : localShowForm;
+  const setShowForm = (value: boolean) => {
+    if (onShowFormChange) {
+      onShowFormChange(value);
+    } else {
+      setLocalShowForm(value);
+    }
+  };
   const [submitting, setSubmitting] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -111,11 +122,6 @@ const ReviewSection = ({ productId, productName }: Props) => {
             </div>
           )}
         </div>
-        {!showForm && (
-          <Button onClick={() => setShowForm(true)} variant="outline" className="gap-2">
-            <MessageSquare className="w-4 h-4" /> Write a Review
-          </Button>
-        )}
       </div>
 
       {/* Review Form */}

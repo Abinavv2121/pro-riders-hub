@@ -5,14 +5,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
-import { Camera, FileText, Upload, X } from "lucide-react";
+import { Camera, FileText, Upload, X, Loader2 } from "lucide-react";
 import { useRef, useState } from "react";
 
 interface ServiceRequestFormProps {
   onSubmit?: (data: ServiceRequestData) => void;
+  loading?: boolean;
 }
 
 export interface ServiceRequestData {
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
   problemDescription: string;
   bikePhotos: File[];
   invoice: File | null;
@@ -20,7 +24,10 @@ export interface ServiceRequestData {
   bikeBrand?: string;
 }
 
-const ServiceRequestForm = ({ onSubmit }: ServiceRequestFormProps) => {
+const ServiceRequestForm = ({ onSubmit, loading }: ServiceRequestFormProps) => {
+  const [customerName, setCustomerName] = useState("");
+  const [customerEmail, setCustomerEmail] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
   const [problemDescription, setProblemDescription] = useState("");
   const [bikePhotos, setBikePhotos] = useState<File[]>([]);
   const [invoice, setInvoice] = useState<File | null>(null);
@@ -55,7 +62,14 @@ const ServiceRequestForm = ({ onSubmit }: ServiceRequestFormProps) => {
   };
 
   const handleSubmit = () => {
+    if (!customerName.trim() || !customerEmail.trim() || !customerPhone.trim() || !problemDescription.trim()) {
+      alert("Please fill in your Name, Email, Phone, and Describe the Problem.");
+      return;
+    }
     const data: ServiceRequestData = {
+      customerName,
+      customerEmail,
+      customerPhone,
       problemDescription,
       bikePhotos,
       invoice,
@@ -75,6 +89,44 @@ const ServiceRequestForm = ({ onSubmit }: ServiceRequestFormProps) => {
         <CardDescription>Provide details about your bike and the service you need</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
+        {/* Customer Information */}
+        <div className="space-y-4 border-b pb-4 border-muted">
+          <div className="space-y-2">
+            <Label htmlFor="customerName">Your Name *</Label>
+            <Input
+              id="customerName"
+              placeholder="e.g., John Doe"
+              value={customerName}
+              onChange={(e) => setCustomerName(e.target.value)}
+              disabled={loading}
+            />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="customerEmail">Email Address *</Label>
+              <Input
+                id="customerEmail"
+                type="email"
+                placeholder="e.g., john@example.com"
+                value={customerEmail}
+                onChange={(e) => setCustomerEmail(e.target.value)}
+                disabled={loading}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="customerPhone">Phone Number *</Label>
+              <Input
+                id="customerPhone"
+                type="tel"
+                placeholder="e.g., +91 98765 43210"
+                value={customerPhone}
+                onChange={(e) => setCustomerPhone(e.target.value)}
+                disabled={loading}
+              />
+            </div>
+          </div>
+        </div>
+
         {/* Bike Information */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
@@ -84,6 +136,7 @@ const ServiceRequestForm = ({ onSubmit }: ServiceRequestFormProps) => {
               placeholder="e.g., Trek, Scott, Giant"
               value={bikeBrand}
               onChange={(e) => setBikeBrand(e.target.value)}
+              disabled={loading}
             />
           </div>
           <div className="space-y-2">
@@ -93,6 +146,7 @@ const ServiceRequestForm = ({ onSubmit }: ServiceRequestFormProps) => {
               placeholder="e.g., Marlin 5, Addict RC"
               value={bikeModel}
               onChange={(e) => setBikeModel(e.target.value)}
+              disabled={loading}
             />
           </div>
         </div>
@@ -106,6 +160,7 @@ const ServiceRequestForm = ({ onSubmit }: ServiceRequestFormProps) => {
             value={problemDescription}
             onChange={(e) => setProblemDescription(e.target.value)}
             rows={4}
+            disabled={loading}
           />
           <p className="text-xs text-muted-foreground">
             {problemDescription.length}/500 characters
@@ -131,7 +186,8 @@ const ServiceRequestForm = ({ onSubmit }: ServiceRequestFormProps) => {
                 <button
                   type="button"
                   onClick={() => removePhoto(index)}
-                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                  disabled={loading}
+                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 disabled:opacity-50"
                 >
                   <X className="w-3 h-3" />
                 </button>
@@ -141,7 +197,8 @@ const ServiceRequestForm = ({ onSubmit }: ServiceRequestFormProps) => {
               <button
                 type="button"
                 onClick={() => photoInputRef.current?.click()}
-                className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground/30 hover:border-primary/50 flex flex-col items-center justify-center gap-2 transition-colors"
+                disabled={loading}
+                className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground/30 hover:border-primary/50 flex flex-col items-center justify-center gap-2 transition-colors disabled:opacity-50"
               >
                 <Camera className="w-6 h-6 text-muted-foreground" />
                 <span className="text-xs text-muted-foreground">Add Photo</span>
@@ -155,6 +212,7 @@ const ServiceRequestForm = ({ onSubmit }: ServiceRequestFormProps) => {
             multiple
             className="hidden"
             onChange={handlePhotoUpload}
+            disabled={loading}
           />
         </div>
 
@@ -174,7 +232,8 @@ const ServiceRequestForm = ({ onSubmit }: ServiceRequestFormProps) => {
                 <button
                   type="button"
                   onClick={removeInvoice}
-                  className="ml-4 text-red-500 hover:text-red-600"
+                  disabled={loading}
+                  className="ml-4 text-red-500 hover:text-red-600 disabled:opacity-50"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -183,7 +242,8 @@ const ServiceRequestForm = ({ onSubmit }: ServiceRequestFormProps) => {
               <button
                 type="button"
                 onClick={() => invoiceInputRef.current?.click()}
-                className="flex flex-col items-center gap-2"
+                disabled={loading}
+                className="flex flex-col items-center gap-2 disabled:opacity-50"
               >
                 <Upload className="w-8 h-8 text-muted-foreground" />
                 <span className="text-sm text-muted-foreground">
@@ -201,13 +261,18 @@ const ServiceRequestForm = ({ onSubmit }: ServiceRequestFormProps) => {
             accept=".pdf,.jpg,.jpeg,.png"
             className="hidden"
             onChange={handleInvoiceUpload}
+            disabled={loading}
           />
         </div>
 
         {/* Submit Button */}
-        <Button onClick={handleSubmit} className="w-full">
-          <Upload className="w-4 h-4 mr-2" />
-          Submit Service Request
+        <Button onClick={handleSubmit} className="w-full" disabled={loading}>
+          {loading ? (
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          ) : (
+            <Upload className="w-4 h-4 mr-2" />
+          )}
+          {loading ? "Submitting Request..." : "Submit Service Request"}
         </Button>
       </CardContent>
     </Card>
